@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void init(){
         // Get the Bluetooth Adapter
-        configureBluetooth();
+        bluetooth = BluetoothAdapter.getDefaultAdapter();
         // Setup the ListView of discovered devices
         setupListView();
         // Setup search button
