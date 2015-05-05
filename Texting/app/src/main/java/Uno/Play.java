@@ -1,4 +1,4 @@
-package classes;
+package Uno;
 
 import android.support.annotation.NonNull;
 
@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import interfaces.ICard;
+import IUno.ICard;
 
 /**
  * Created by Luki on 05.04.2015.

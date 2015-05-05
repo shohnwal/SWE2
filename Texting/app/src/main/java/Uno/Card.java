@@ -1,6 +1,6 @@
-package classes;
+package Uno;
 
-import interfaces.ICard;
+import IUno.ICard;
 
 /**
  * Created by Luki on 18.03.2015.
@@ -27,5 +27,8 @@ public class Card implements ICard {
         return is_action_card;
     }
 
-
+    @Override
+    public String toString(){
+        return get_name()+","+get_color()+","+isActionCard();
+    }
 }

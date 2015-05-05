@@ -1,9 +1,9 @@
-package classes;
+package Uno;
 
 import java.util.ArrayList;
 import java.util.List;
+import IUno.IStack;
 
-import interfaces.IStack;
 
 /**
  * Created by Luki on 18.03.2015.

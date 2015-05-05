@@ -1,6 +1,6 @@
-package classes;
+package Uno;
 
-import interfaces.ICard;
+import IUno.ICard;
 
 /**
  * Created by Luki on 18.03.2015.

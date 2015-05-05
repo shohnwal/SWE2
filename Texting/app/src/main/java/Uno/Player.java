@@ -1,18 +1,20 @@
-package classes;
+package Uno;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import IUno.IPlayer;
+
 /**
  * Created by Luki on 18.03.2015.
  */
-public class Player implements interfaces.IPlayer {
+public class Player implements IPlayer {
     private String _name;
     private List<Card> _hand;
 
     public Player(String _name) {
         this._name = _name;
-        this._hand = new ArrayList<Card>();
+        this._hand = new ArrayList<>();
     }
 
     @Override

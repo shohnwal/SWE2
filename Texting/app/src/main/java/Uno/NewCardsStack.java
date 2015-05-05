@@ -1,4 +1,4 @@
-package classes;
+package Uno;
 
 import android.support.annotation.NonNull;
 
@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import interfaces.IStack;
+import IUno.IStack;
 
 /**
  * Created by Luki on 18.03.2015.

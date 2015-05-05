@@ -89,8 +89,8 @@ public class BluetoothChat extends Activity {
 
         final Window window = getWindow();
         boolean useTitleFeature = false;
-// If the window has a container, then we are not free
-// to request window features.
+        // If the window has a container, then we are not free
+        // to request window features.
         if (window.getContainer() == null) {
             useTitleFeature = window
                     .requestFeature(Window.FEATURE_CUSTOM_TITLE);
