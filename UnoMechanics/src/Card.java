@@ -16,7 +16,7 @@ public class Card {
 								}
 	
 	public boolean				isActionCard() {
-									if (this.color == Card.colors.BLACK || this.value == Card.values.SKIP || this.value == Card.values.TAKE_TWO || this.value == Card.values.RETOUR) {
+									if ((this.color == Card.colors.BLACK) || (this.value == Card.values.SKIP) || (this.value == Card.values.TAKE_TWO) || (this.value == Card.values.RETOUR)) {
 										return true; }
 									else {
 										return false; }
