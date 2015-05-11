@@ -1,7 +1,8 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Deck {
-	ArrayList<Card> 				deck;
+	List<Card>		 				deck;
 	
 	public 							Deck () {
 										this.deck = new ArrayList<Card>();

@@ -21,6 +21,13 @@ public class main {
 		
 		game.putFirstCardDown(takedeck, playdeck); 				// take first card from takedeck and put it as first card in the playdeck so we have an initial card
 		
-		//game.loop();											// not yet implemented
+		//gameloop();											// not yet implemented
 	}
+	
+	public static void gameloop() {
+		while(true) {
+		}
+	}
+
 }
+

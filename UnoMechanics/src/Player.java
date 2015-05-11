@@ -5,12 +5,12 @@ import java.util.List;
 public class Player {
 
 	static int 					static_id = 0;
-	ArrayList<Card> 			hand;
+	List<Card>		 			hand;
 	int 						player_id = 0;
 	
 	public 						Player() {
 									this.player_id = Player.static_id;
-									hand = new ArrayList<Card>();
+									this.hand = new ArrayList<Card>();
 									static_id++;
 								}
 	

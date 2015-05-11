@@ -1,14 +1,15 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 
 
 public class Gamemanager {
 	
-	ArrayList<Player> 			players; 			//create list of players
+	List<Player>	 			players; 			//create list of players
 	int							num_players;
 
 	public 						Gamemanager(int num_players) {
-									players = new ArrayList();
+									players = new ArrayList<Player>();
 									this.num_players = num_players;
 								}
 	
