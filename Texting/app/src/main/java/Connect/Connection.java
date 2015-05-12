@@ -1,5 +1,7 @@
 package Connect;
 
+import IUno.ICard;
+
 /**
  * Created by Luki on 05.05.2015.
  */
@@ -8,10 +10,9 @@ public class Connection implements IConnection{
     Translator t = new Translator();
 
     @Override
-    public Object[] getHandCards(int anzahl, int id) {
-        t.translate("receive;getHandCards;null");
+    public ICard[] getHandCards(int anzahl, int id) {
 
-        return new Object[0];
+        return new ICard[0];
     }
 
     @Override
@@ -20,7 +21,7 @@ public class Connection implements IConnection{
     }
 
     @Override
-    public Object getCurrentOpenCard() {
+    public ICard getCurrentOpenCard() {
         return null;
     }
 
@@ -40,9 +41,7 @@ public class Connection implements IConnection{
     }
 
     @Override
-    public void setNextPlayer(){
-
-    }
+    public void setNextPlayer(){ }
 
     @Override
     public int getNextPlayer(){

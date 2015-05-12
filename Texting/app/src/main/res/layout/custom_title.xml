@@ -18,7 +18,7 @@
     android:layout_height="fill_parent"
     android:gravity="center_vertical"
   >
-  <TextView android:id="@+id/title_left_text"
+    <TextView android:id="@+id/title_left_text"
       android:layout_alignParentLeft="true"
       android:ellipsize="end"
       android:singleLine="true"

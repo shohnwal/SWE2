@@ -1,6 +1,10 @@
 package Connect;
 
-import java.lang.Object; /**
+import java.lang.Object;
+
+import IUno.ICard;
+
+/**
  * Created by Bernhard on 28.04.2015.
  */
 public interface IConnection {
@@ -8,7 +12,7 @@ public interface IConnection {
     //return: Karten Objekt Array
     //param: int anzahl- wieviele Karte gezogen werden sollen
     //param: int id- Spieler ID
-    public Object[] getHandCards(int anzahl, int id);
+    public ICard[] getHandCards(int anzahl, int id);
 
     //return: boolean- ob Abzulegende Karte gültig ist
     //param: Object card- Welche Karte der Spieler ablegen möchte
@@ -16,7 +20,7 @@ public interface IConnection {
     public boolean discardHandCard(Object card, int id);
 
     //return: Karten Objekt- Welche Karte aktuell offen liegt
-    public Object getCurrentOpenCard();
+    public ICard getCurrentOpenCard();
 
     public void setCurrentOpenCard();
 
