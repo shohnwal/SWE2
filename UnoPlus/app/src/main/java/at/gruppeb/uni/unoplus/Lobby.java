@@ -1,9 +1,9 @@
 package at.gruppeb.uni.unoplus;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -24,9 +24,10 @@ public class Lobby extends ActionBarActivity {
     private Button btnSpielBeitreten;
     private ImageButton iBSetting;
     private ImageButton iBVolumeOn;
+    private MediaPlayer backgroundmusic = null;
+    private int musicLength = 0;
 
-
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Set the Screen in Landscape mode
@@ -38,6 +39,50 @@ public class Lobby extends ActionBarActivity {
         setContentView(R.layout.activity_lobby);
         init();
 
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (backgroundmusic != null) {
+            try {
+                backgroundmusic.stop();
+                backgroundmusic.release();
+            } finally {
+                backgroundmusic = null;
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (backgroundmusic != null) {
+            pauseMusic();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resumeMusic();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
+        al.setTitle("Beenden!");
+        al.setMessage("Wollen Sie das Spiel wirklich beenden?");
+        al.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        al.setNegativeButton("Nein", null);
+        al.show();
     }
 
     public void init() {
@@ -45,6 +90,7 @@ public class Lobby extends ActionBarActivity {
         setupBtnSpielBeitreten();
         setupImageButtonSetting();
         setupImageButtonVolume();
+        startMusic();
     }
 
     public void setupBtnSpielErstellen() {
@@ -55,8 +101,6 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
                 System.out.println("Spiel Erstellen");
                 spielErstellenDialog();
-
-
             }
         });
     }
@@ -74,7 +118,7 @@ public class Lobby extends ActionBarActivity {
 
     }
 
-    private void setupImageButtonSetting(){
+    private void setupImageButtonSetting() {
         iBSetting = (ImageButton) findViewById(R.id.imageButton_settings);
         iBSetting.setOnClickListener(new View.OnClickListener() {
 
@@ -85,7 +129,7 @@ public class Lobby extends ActionBarActivity {
         });
     }
 
-    public void setupImageButtonVolume(){
+    public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_volumeOn);
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
 
@@ -93,11 +137,16 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
                 System.out.println("Volume");
                 v.setActivated(!v.isActivated());
+                if(v.isActivated()){
+                    pauseMusic();
+                }else{
+                    resumeMusic();
+                }
             }
         });
     }
 
-    public void spielErstellenDialog(){
+    public void spielErstellenDialog() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lobby.this);
         alertDialog.setTitle("Neue Spielrunde erstellen");
@@ -113,7 +162,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Spiel erstellt!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), input.getText()+" erstellten...!!", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -130,6 +179,40 @@ public class Lobby extends ActionBarActivity {
 
         alertDialog.show();
 
+    }
+
+    public void startMusic() {
+        if (backgroundmusic == null) {
+            backgroundmusic = MediaPlayer.create(this, R.raw.backgroundmusic);
+        }
+        //restart playback end reached
+        backgroundmusic.setLooping(true);
+        backgroundmusic.setVolume(0.3f, 0.3f);
+        backgroundmusic.start();
+
+
+    }
+
+    public void stopMusic() {
+        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
+            backgroundmusic.stop();
+            backgroundmusic.release();
+            backgroundmusic = null;
+        }
+    }
+
+    public void pauseMusic() {
+        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
+            backgroundmusic.pause();
+            musicLength = backgroundmusic.getCurrentPosition();
+        }
+    }
+
+    public void resumeMusic() {
+        if (backgroundmusic.isPlaying() == false) {
+            backgroundmusic.seekTo(musicLength);
+            backgroundmusic.start();
+        }
     }
 
 }
