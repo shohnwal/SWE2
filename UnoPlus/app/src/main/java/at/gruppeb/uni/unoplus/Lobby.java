@@ -2,6 +2,7 @@ package at.gruppeb.uni.unoplus;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -37,9 +38,15 @@ public class Lobby extends ActionBarActivity {
         //Remove the notification Bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         init();
-
-
     }
 
     @Override
@@ -113,6 +120,7 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
 
                 System.out.println("Spiel Beitreten");
+                startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
             }
         });
 
@@ -137,9 +145,9 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
                 System.out.println("Volume");
                 v.setActivated(!v.isActivated());
-                if(v.isActivated()){
+                if (v.isActivated()) {
                     pauseMusic();
-                }else{
+                } else {
                     resumeMusic();
                 }
             }
@@ -162,7 +170,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), input.getText()+" erstellten...!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), input.getText() + " erstellten...!!", Toast.LENGTH_SHORT).show();
 
             }
         });
