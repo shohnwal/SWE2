@@ -125,6 +125,23 @@ public class BluetoothChat extends Activity {
             finish();
             return;
         }
+
+        Button send = (Button)findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent serverIntent = new Intent(v.getContext(), DeviceListActivity.class);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+            }
+        });
+
+        Button receive = (Button)findViewById(R.id.receive);
+        receive.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ensureDiscoverable();
+            }
+        });
     }
 
     @Override
