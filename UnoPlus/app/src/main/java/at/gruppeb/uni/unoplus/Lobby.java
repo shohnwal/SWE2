@@ -28,6 +28,7 @@ public class Lobby extends ActionBarActivity {
     private MediaPlayer backgroundmusic = null;
     private int musicLength = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,6 @@ public class Lobby extends ActionBarActivity {
         //Remove the notification Bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
-
 
 
     }
@@ -147,8 +147,10 @@ public class Lobby extends ActionBarActivity {
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     pauseMusic();
+
                 } else {
                     resumeMusic();
+
                 }
             }
         });
@@ -170,7 +172,11 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), input.getText() + " erstellten...!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
+                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
+                //Sending the Host- Player- name to the new Activity
+                nextScreen.putExtra("hostName", input.getText().toString());
+                startActivity(nextScreen);
 
             }
         });
@@ -179,7 +185,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Abbruch!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Abbruch!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -193,10 +199,14 @@ public class Lobby extends ActionBarActivity {
         if (backgroundmusic == null) {
             backgroundmusic = MediaPlayer.create(this, R.raw.backgroundmusic);
         }
-        //restart playback end reached
-        backgroundmusic.setLooping(true);
-        backgroundmusic.setVolume(0.3f, 0.3f);
-        backgroundmusic.start();
+
+            //restart playback end reached
+            backgroundmusic.setLooping(true);
+
+            backgroundmusic.setVolume(0.3f, 0.3f);
+            backgroundmusic.start();
+
+
 
 
     }
@@ -206,6 +216,7 @@ public class Lobby extends ActionBarActivity {
             backgroundmusic.stop();
             backgroundmusic.release();
             backgroundmusic = null;
+
         }
     }
 
@@ -213,6 +224,7 @@ public class Lobby extends ActionBarActivity {
         if (backgroundmusic.isPlaying() && backgroundmusic != null) {
             backgroundmusic.pause();
             musicLength = backgroundmusic.getCurrentPosition();
+
         }
     }
 
@@ -220,6 +232,7 @@ public class Lobby extends ActionBarActivity {
         if (backgroundmusic.isPlaying() == false) {
             backgroundmusic.seekTo(musicLength);
             backgroundmusic.start();
+
         }
     }
 

@@ -1,6 +1,7 @@
 package at.gruppeb.uni.unoplus;
 
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 
 
 public class JoinGame extends ActionBarActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
