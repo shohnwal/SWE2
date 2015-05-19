@@ -25,8 +25,6 @@ public class Lobby extends ActionBarActivity {
     private Button btnSpielBeitreten;
     private ImageButton iBSetting;
     private ImageButton iBVolumeOn;
-    private MediaPlayer backgroundmusic = null;
-    private int musicLength = 0;
 
 
     @Override
@@ -39,7 +37,7 @@ public class Lobby extends ActionBarActivity {
         //Remove the notification Bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
-
+        serviceStart();
 
     }
 
@@ -47,33 +45,27 @@ public class Lobby extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         init();
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (backgroundmusic != null) {
-            try {
-                backgroundmusic.stop();
-                backgroundmusic.release();
-            } finally {
-                backgroundmusic = null;
-            }
-        }
+        serviceStop();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (backgroundmusic != null) {
-            pauseMusic();
-        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        resumeMusic();
+
+
     }
 
     @Override
@@ -97,7 +89,7 @@ public class Lobby extends ActionBarActivity {
         setupBtnSpielBeitreten();
         setupImageButtonSetting();
         setupImageButtonVolume();
-        startMusic();
+
     }
 
     public void setupBtnSpielErstellen() {
@@ -139,6 +131,10 @@ public class Lobby extends ActionBarActivity {
 
     public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_volumeOn);
+        System.out.println("Lobby serice aktive?"+MyService.isInstanceCreated());
+        if (!(MyService.isInstanceCreated())) {
+            iBVolumeOn.setActivated(!iBVolumeOn.isActivated());
+        }
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -146,11 +142,12 @@ public class Lobby extends ActionBarActivity {
                 System.out.println("Volume");
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
-                    pauseMusic();
+                    serviceStop();
+                    // myService.pauseMusic();
 
                 } else {
-                    resumeMusic();
-
+                    serviceStart();
+                    //myService.resumeMusic();
                 }
             }
         });
@@ -195,45 +192,12 @@ public class Lobby extends ActionBarActivity {
 
     }
 
-    public void startMusic() {
-        if (backgroundmusic == null) {
-            backgroundmusic = MediaPlayer.create(this, R.raw.backgroundmusic);
-        }
-
-            //restart playback end reached
-            backgroundmusic.setLooping(true);
-
-            backgroundmusic.setVolume(0.3f, 0.3f);
-            backgroundmusic.start();
-
-
-
-
+    public void serviceStart() {
+        startService(new Intent(this, MyService.class));
     }
 
-    public void stopMusic() {
-        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
-            backgroundmusic.stop();
-            backgroundmusic.release();
-            backgroundmusic = null;
-
-        }
-    }
-
-    public void pauseMusic() {
-        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
-            backgroundmusic.pause();
-            musicLength = backgroundmusic.getCurrentPosition();
-
-        }
-    }
-
-    public void resumeMusic() {
-        if (backgroundmusic.isPlaying() == false) {
-            backgroundmusic.seekTo(musicLength);
-            backgroundmusic.start();
-
-        }
+    public void serviceStop() {
+        stopService(new Intent(this, MyService.class));
     }
 
 }

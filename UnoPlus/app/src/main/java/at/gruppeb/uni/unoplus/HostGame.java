@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -12,6 +15,7 @@ public class HostGame extends ActionBarActivity {
 
     private TextView hostName;
     String hostNameString;
+    private ImageView iBVolumeOn;
 
 
     @Override
@@ -34,6 +38,12 @@ public class HostGame extends ActionBarActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        init();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
@@ -41,6 +51,7 @@ public class HostGame extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //serviceStop();
     }
 
     @Override
@@ -51,5 +62,44 @@ public class HostGame extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    public void init() {
+        setupImageButtonVolume();
+
+
+    }
+
+    public void setupImageButtonVolume() {
+        iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_host);
+        if(!(MyService.isInstanceCreated())){
+            iBVolumeOn.setActivated(!iBVolumeOn.isActivated());
+        }
+
+        iBVolumeOn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Volume");
+                v.setActivated(!v.isActivated());
+                if (v.isActivated()) {
+                    serviceStop();
+                    // myService.pauseMusic();
+
+                } else {
+                    serviceStart();
+                    //myService.resumeMusic();
+                }
+            }
+        });
+    }
+
+    public void serviceStart() {
+        startService(new Intent(this, MyService.class));
+    }
+
+    public void serviceStop() {
+        stopService(new Intent(this, MyService.class));
     }
 }

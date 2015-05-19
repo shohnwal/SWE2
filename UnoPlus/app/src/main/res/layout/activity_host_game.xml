@@ -64,4 +64,13 @@
         android:layout_alignBottom="@+id/textView_DeinName"
         android:layout_alignLeft="@+id/textView_SpielErstellen"
         android:layout_alignStart="@+id/textView_SpielErstellen" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton_host"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/imagebuttonvolume_xml" />
 </RelativeLayout>
