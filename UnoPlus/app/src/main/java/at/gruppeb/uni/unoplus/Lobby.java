@@ -131,9 +131,10 @@ public class Lobby extends ActionBarActivity {
 
     public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_volumeOn);
-        System.out.println("Lobby serice aktive?"+MyService.isInstanceCreated());
         if (!(MyService.isInstanceCreated())) {
-            iBVolumeOn.setActivated(!iBVolumeOn.isActivated());
+            iBVolumeOn.setActivated(true);
+        }else{
+            iBVolumeOn.setActivated(false);
         }
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
 
