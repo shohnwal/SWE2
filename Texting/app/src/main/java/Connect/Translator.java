@@ -1,25 +1,16 @@
 package Connect;
 
-import android.bluetooth.BluetoothAdapter;
-import android.content.Intent;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import Uno.Card;
-import at.gruppeb.uni.texting.BluetoothChat;
-import at.gruppeb.uni.texting.BluetoothChatService;
+import at.gruppeb.uni.server.BluetoothChatService_Server;
+import at.gruppeb.uni.server.BluetoothChat_Server;
 
 /**
  * Created by Luki on 05.05.2015.
  */
 public class Translator {
 
-    BluetoothChat btc = new BluetoothChat();
-    BluetoothChatService btcs = new BluetoothChatService();
+    BluetoothChat_Server btc = new BluetoothChat_Server();
+   // BluetoothChatService_Server btcs = new BluetoothChatService_Server();
     Card c;
     public Translator(){
     }
