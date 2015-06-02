@@ -53,21 +53,4 @@ public class MyService extends Service {
         super.onDestroy();
     }
 
-/*
-    public void pauseMusic() {
-        if (mp.isPlaying() && mp != null) {
-            mp.pause();
-            musicLength = mp.getCurrentPosition();
-
-        }
-    }
-
-    public void resumeMusic() {
-        if (mp.isPlaying() == false) {
-            mp.seekTo(musicLength);
-            mp.start();
-
-        }
-    }
-*/
 }

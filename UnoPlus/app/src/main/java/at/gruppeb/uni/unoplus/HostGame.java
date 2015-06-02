@@ -50,17 +50,23 @@ public class HostGame extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
+        serviceStop();
         super.onDestroy();
-        //serviceStop();
     }
 
     @Override
     protected void onPause() {
+        if (MyService.isInstanceCreated()) {
+            serviceStop();
+        }
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        if (MyService.isInstanceCreated()) {
+            serviceStart();
+        }
         super.onResume();
     }
 
@@ -73,7 +79,7 @@ public class HostGame extends ActionBarActivity {
 
     public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_host);
-        if(!(MyService.isInstanceCreated())){
+        if (!(MyService.isInstanceCreated())) {
             iBVolumeOn.setActivated(!iBVolumeOn.isActivated());
         }
 
@@ -85,11 +91,8 @@ public class HostGame extends ActionBarActivity {
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     serviceStop();
-                    // myService.pauseMusic();
-
                 } else {
                     serviceStart();
-                    //myService.resumeMusic();
                 }
             }
         });

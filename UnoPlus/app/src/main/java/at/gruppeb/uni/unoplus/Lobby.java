@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -21,8 +20,8 @@ import android.widget.Toast;
  */
 public class Lobby extends ActionBarActivity {
 
-    private Button btnSpielErstellen;
-    private Button btnSpielBeitreten;
+    private Button btnCreateGame;
+    private Button btnJoinGame;
     private ImageButton iBSetting;
     private ImageButton iBVolumeOn;
 
@@ -50,19 +49,24 @@ public class Lobby extends ActionBarActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         serviceStop();
-
+        super.onDestroy();
     }
 
     @Override
     protected void onPause() {
+        if (MyService.isInstanceCreated()) {
+            serviceStop();
+        }
         super.onPause();
 
     }
 
     @Override
     protected void onResume() {
+        if (MyService.isInstanceCreated()) {
+            serviceStart();
+        }
         super.onResume();
 
 
@@ -85,33 +89,33 @@ public class Lobby extends ActionBarActivity {
     }
 
     public void init() {
-        setupBtnSpielErstellen();
-        setupBtnSpielBeitreten();
+        setupBtnCreateGame();
+        setupBtnJoinGame();
         setupImageButtonSetting();
         setupImageButtonVolume();
 
     }
 
-    public void setupBtnSpielErstellen() {
-        btnSpielErstellen = (Button) findViewById(R.id.button_start);
-        btnSpielErstellen.setOnClickListener(new View.OnClickListener() {
+    public void setupBtnCreateGame() {
+        btnCreateGame = (Button) findViewById(R.id.button_start);
+        btnCreateGame.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Spiel Erstellen");
-                spielErstellenDialog();
+                System.out.println("Create Game");
+                CreateGameDialog();
             }
         });
     }
 
 
-    public void setupBtnSpielBeitreten() {
-        btnSpielBeitreten = (Button) findViewById(R.id.button_join);
-        btnSpielBeitreten.setOnClickListener(new View.OnClickListener() {
+    public void setupBtnJoinGame() {
+        btnJoinGame = (Button) findViewById(R.id.button_join);
+        btnJoinGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                System.out.println("Spiel Beitreten");
+                System.out.println("Join Game");
                 startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
             }
         });
@@ -133,7 +137,7 @@ public class Lobby extends ActionBarActivity {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_volumeOn);
         if (!(MyService.isInstanceCreated())) {
             iBVolumeOn.setActivated(true);
-        }else{
+        } else {
             iBVolumeOn.setActivated(false);
         }
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
@@ -144,17 +148,14 @@ public class Lobby extends ActionBarActivity {
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     serviceStop();
-                    // myService.pauseMusic();
-
                 } else {
                     serviceStart();
-                    //myService.resumeMusic();
                 }
             }
         });
     }
 
-    public void spielErstellenDialog() {
+    public void CreateGameDialog() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lobby.this);
         alertDialog.setTitle("Neue Spielrunde erstellen");

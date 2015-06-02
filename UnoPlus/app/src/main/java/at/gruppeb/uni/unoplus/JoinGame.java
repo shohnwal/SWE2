@@ -43,17 +43,23 @@ public class JoinGame extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
+        serviceStop();
         super.onDestroy();
-        // serviceStop();
     }
 
     @Override
     protected void onPause() {
+        if (MyService.isInstanceCreated()) {
+            serviceStop();
+        }
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        if (MyService.isInstanceCreated()) {
+            serviceStart();
+        }
         super.onResume();
     }
 
@@ -65,7 +71,9 @@ public class JoinGame extends ActionBarActivity {
     public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_join);
         if (!(MyService.isInstanceCreated())) {
-            iBVolumeOn.setActivated(!iBVolumeOn.isActivated());
+            iBVolumeOn.setActivated(true);
+        } else {
+            iBVolumeOn.setActivated(false);
         }
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
 
@@ -75,11 +83,9 @@ public class JoinGame extends ActionBarActivity {
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     serviceStop();
-                    // myService.pauseMusic();
 
                 } else {
                     serviceStart();
-                    //myService.resumeMusic();
                 }
             }
         });
