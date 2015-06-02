@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import at.gruppeb.uni.start.R;
 
 /**
  * This is the main Activity that displays the current chat session.

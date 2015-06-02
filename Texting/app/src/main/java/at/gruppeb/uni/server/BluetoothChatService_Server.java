@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import at.gruppeb.uni.start.R;
 
 public class BluetoothChatService_Server {
     // Debugging

@@ -31,7 +31,9 @@ import at.gruppeb.uni.common.logger.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.String;import java.lang.Thread;import java.util.UUID;
+import java.lang.String;
+import java.lang.Thread;
+import java.util.UUID;
 
 /**
  * This class does all the work for setting up and managing Bluetooth

@@ -33,7 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import at.gruppeb.uni.common.logger.Log;
-import at.gruppeb.uni.server.R;
+import at.gruppeb.uni.start.R;
 
 import java.util.Set;
 

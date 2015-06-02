@@ -28,7 +28,7 @@ import at.gruppeb.uni.common.logger.LogFragment;
 import at.gruppeb.uni.common.logger.LogWrapper;
 import at.gruppeb.uni.common.logger.MessageOnlyLogFilter;
 import java.lang.Override;import java.lang.String;
-import at.gruppeb.uni.server.R;
+import at.gruppeb.uni.start.R;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom

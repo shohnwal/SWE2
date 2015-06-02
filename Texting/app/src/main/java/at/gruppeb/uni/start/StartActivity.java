@@ -10,7 +10,6 @@ import android.widget.Button;
 
 import at.gruppeb.uni.client.BluetoothChatService_Client;
 import at.gruppeb.uni.server.BluetoothChat_Server;
-import at.gruppeb.uni.server.R;
 
 public class StartActivity extends ActionBarActivity {
 

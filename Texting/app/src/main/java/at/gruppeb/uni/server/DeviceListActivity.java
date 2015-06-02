@@ -36,6 +36,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import at.gruppeb.uni.start.R;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and

@@ -45,7 +45,7 @@ import android.widget.Toast;
 import at.gruppeb.uni.client.BluetoothChatService_Client;
 import at.gruppeb.uni.client.Constants_Client;
 import at.gruppeb.uni.client.DeviceListActivity;
-import at.gruppeb.uni.server.R;
+import at.gruppeb.uni.start.R;
 import at.gruppeb.uni.common.logger.Log;
 import java.lang.CharSequence;import java.lang.Override;
 import java.lang.String;import java.lang.StringBuffer;
