@@ -19,7 +19,7 @@ import at.gruppeb.uni.texting.BluetoothChatService;
 public class Translator {
 
     BluetoothChat btc = new BluetoothChat();
-    BluetoothChatService btcs = new BluetoothChatService();
+    //BluetoothChatService btcs = new BluetoothChatService();
     Card c;
     public Translator(){
     }
