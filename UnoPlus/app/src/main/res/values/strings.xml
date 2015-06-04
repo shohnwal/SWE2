@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_host_game">HostGame</string>
     <string name="title_activity_join_game">JoinGame</string>
+    <string name="title_activity_game">HostGame</string>
+
 
 </resources>
