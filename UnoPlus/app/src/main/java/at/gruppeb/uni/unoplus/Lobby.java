@@ -2,8 +2,8 @@ package at.gruppeb.uni.unoplus;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -20,12 +20,11 @@ import android.widget.Toast;
  */
 public class Lobby extends ActionBarActivity {
 
-    private Button btnSpielErstellen;
-    private Button btnSpielBeitreten;
+    private Button btnCreateGame;
+    private Button btnJoinGame;
     private ImageButton iBSetting;
     private ImageButton iBVolumeOn;
-    private MediaPlayer backgroundmusic = null;
-    private int musicLength = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,36 +36,40 @@ public class Lobby extends ActionBarActivity {
         //Remove the notification Bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
-        init();
+        serviceStart();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        init();
 
     }
 
     @Override
     public void onDestroy() {
+        serviceStop();
         super.onDestroy();
-        if (backgroundmusic != null) {
-            try {
-                backgroundmusic.stop();
-                backgroundmusic.release();
-            } finally {
-                backgroundmusic = null;
-            }
-        }
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        if (backgroundmusic != null) {
-            pauseMusic();
+        if (MyService.isInstanceCreated()) {
+            serviceStop();
         }
+        super.onPause();
+
     }
 
     @Override
     protected void onResume() {
+        if (MyService.isInstanceCreated()) {
+            serviceStart();
+        }
         super.onResume();
-        resumeMusic();
+
+
     }
 
     @Override
@@ -86,33 +89,34 @@ public class Lobby extends ActionBarActivity {
     }
 
     public void init() {
-        setupBtnSpielErstellen();
-        setupBtnSpielBeitreten();
+        setupBtnCreateGame();
+        setupBtnJoinGame();
         setupImageButtonSetting();
         setupImageButtonVolume();
-        startMusic();
+
     }
 
-    public void setupBtnSpielErstellen() {
-        btnSpielErstellen = (Button) findViewById(R.id.button_start);
-        btnSpielErstellen.setOnClickListener(new View.OnClickListener() {
+    public void setupBtnCreateGame() {
+        btnCreateGame = (Button) findViewById(R.id.button_start);
+        btnCreateGame.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Spiel Erstellen");
-                spielErstellenDialog();
+                System.out.println("Create Game");
+                CreateGameDialog();
             }
         });
     }
 
 
-    public void setupBtnSpielBeitreten() {
-        btnSpielBeitreten = (Button) findViewById(R.id.button_join);
-        btnSpielBeitreten.setOnClickListener(new View.OnClickListener() {
+    public void setupBtnJoinGame() {
+        btnJoinGame = (Button) findViewById(R.id.button_join);
+        btnJoinGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                System.out.println("Spiel Beitreten");
+                System.out.println("Join Game");
+                startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
             }
         });
 
@@ -131,22 +135,27 @@ public class Lobby extends ActionBarActivity {
 
     public void setupImageButtonVolume() {
         iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_volumeOn);
+        if (!(MyService.isInstanceCreated())) {
+            iBVolumeOn.setActivated(true);
+        } else {
+            iBVolumeOn.setActivated(false);
+        }
         iBVolumeOn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 System.out.println("Volume");
                 v.setActivated(!v.isActivated());
-                if(v.isActivated()){
-                    pauseMusic();
-                }else{
-                    resumeMusic();
+                if (v.isActivated()) {
+                    serviceStop();
+                } else {
+                    serviceStart();
                 }
             }
         });
     }
 
-    public void spielErstellenDialog() {
+    public void CreateGameDialog() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lobby.this);
         alertDialog.setTitle("Neue Spielrunde erstellen");
@@ -162,7 +171,11 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), input.getText()+" erstellten...!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
+                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
+                //Sending the Host- Player- name to the new Activity
+                nextScreen.putExtra("hostName", input.getText().toString());
+                startActivity(nextScreen);
 
             }
         });
@@ -171,7 +184,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Abbruch!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Abbruch!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -181,38 +194,12 @@ public class Lobby extends ActionBarActivity {
 
     }
 
-    public void startMusic() {
-        if (backgroundmusic == null) {
-            backgroundmusic = MediaPlayer.create(this, R.raw.backgroundmusic);
-        }
-        //restart playback end reached
-        backgroundmusic.setLooping(true);
-        backgroundmusic.setVolume(0.3f, 0.3f);
-        backgroundmusic.start();
-
-
+    public void serviceStart() {
+        startService(new Intent(this, MyService.class));
     }
 
-    public void stopMusic() {
-        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
-            backgroundmusic.stop();
-            backgroundmusic.release();
-            backgroundmusic = null;
-        }
-    }
-
-    public void pauseMusic() {
-        if (backgroundmusic.isPlaying() && backgroundmusic != null) {
-            backgroundmusic.pause();
-            musicLength = backgroundmusic.getCurrentPosition();
-        }
-    }
-
-    public void resumeMusic() {
-        if (backgroundmusic.isPlaying() == false) {
-            backgroundmusic.seekTo(musicLength);
-            backgroundmusic.start();
-        }
+    public void serviceStop() {
+        stopService(new Intent(this, MyService.class));
     }
 
 }

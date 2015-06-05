@@ -4,7 +4,7 @@
     <string name="app_name">Texting</string>
     <string name="action_settings">Settings</string>
 
-    <!--  BluetoothChat -->
+    <!-- BluetoothChat -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
@@ -12,7 +12,7 @@
     <string name="title_connected_to">connected: </string>
     <string name="title_not_connected">not connected</string>
 
-    <!--  DeviceListActivity -->
+    <!-- DeviceListActivity -->
     <string name="scanning">scanning for devices...</string>
     <string name="select_device">select a device to connect</string>
     <string name="none_paired">No devices have been paired</string>
@@ -24,5 +24,11 @@
     <!-- Options Menu -->
     <string name="connect">Connect a device</string>
     <string name="discoverable">Make discoverable</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Options Menu -->
+    <string name="secure_connect">Connect a device - Secure</string>
+    <string name="insecure_connect">Connect a device - Insecure</string>
 
 </resources>
