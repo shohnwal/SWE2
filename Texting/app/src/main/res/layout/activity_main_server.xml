@@ -30,5 +30,22 @@
             />
 
     </LinearLayout>
+HEAD:Texting/app/src/main/res/layout/activity_main.xml
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="367dp"
+            android:layout_height="64dp" />
+        <Button
+            android:id="@+id/receive"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

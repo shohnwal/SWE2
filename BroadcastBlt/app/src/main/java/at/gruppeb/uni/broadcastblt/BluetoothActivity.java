@@ -39,6 +39,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * This is the main Activity that displays the current chat session.
  */
@@ -78,6 +80,9 @@ public class BluetoothActivity extends Activity {
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
     private BluetoothService mChatService = null;
+
+    //get messages from other devices --> Juliane
+    private ArrayList<String> stringList=new ArrayList<String>();;
 
 
     @Override
@@ -291,6 +296,8 @@ public class BluetoothActivity extends Activity {
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     if (readMessage.length() > 0) {
                         mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                        //incoming message add to stringList --> Juliane
+                        stringList.add(readMessage);
                     }
                     break;
                 case MESSAGE_DEVICE_NAME:
