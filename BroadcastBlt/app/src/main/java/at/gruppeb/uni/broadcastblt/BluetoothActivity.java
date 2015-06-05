@@ -44,7 +44,7 @@ import android.widget.Toast;
  */
 public class BluetoothActivity extends Activity {
     // Debugging
-    private static final String TAG = "BluetoothChat";
+    private static final String TAG = "Bluetooth Activity";
     private static final boolean D = true;
 
     // Message types sent from the BluetoothChatService Handler
@@ -87,26 +87,26 @@ public class BluetoothActivity extends Activity {
 
         // Set up the window layout
 
-        final Window window = getWindow();
-        boolean useTitleFeature = false;
+        //final Window window = getWindow();
+        //boolean useTitleFeature = false;
         // If the window has a container, then we are not free
         // to request window features.
-        if (window.getContainer() == null) {
-            useTitleFeature = window
-                    .requestFeature(Window.FEATURE_CUSTOM_TITLE);
-        }
-        setContentView(R.layout.activity_bluetooth);
+        //if (window.getContainer() == null) {
+        //    useTitleFeature = window
+        //            .requestFeature(Window.FEATURE_CUSTOM_TITLE);
+        //}
+        //setContentView(R.layout.activity_bluetooth);
 
-        if (useTitleFeature) {
-            window.setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-                    R.layout.custom_title);
+        //if (useTitleFeature) {
+        //    window.setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+        //            R.layout.custom_title);
             // Set up the custom title
 
-            mTitle = (TextView) findViewById(R.id.title_left_text);
-            mTitle.setText(R.string.app_name);
-            mTitle = (TextView) findViewById(R.id.title_right_text);
+        //    mTitle = (TextView) findViewById(R.id.title_left_text);
+        //    mTitle.setText(R.string.app_name);
+        //    mTitle = (TextView) findViewById(R.id.title_right_text);
 
-        }
+        //}
         //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         //setContentView(R.layout.main);
         //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
