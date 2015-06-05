@@ -56,17 +56,12 @@ public class HostGame extends ActionBarActivity {
 
     @Override
     protected void onPause() {
-        if (MyService.isInstanceCreated()) {
-            serviceStop();
-        }
+        serviceStop();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        if (MyService.isInstanceCreated()) {
-            serviceStart();
-        }
         super.onResume();
     }
 

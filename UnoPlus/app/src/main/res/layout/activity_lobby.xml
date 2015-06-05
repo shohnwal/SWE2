@@ -13,8 +13,8 @@
         android:text="    Spiel starten    "
         android:id="@+id/button_start"
         android:layout_below="@+id/imageView2"
-        android:layout_toRightOf="@+id/imageButton_settings"
-        android:layout_toEndOf="@+id/imageButton_settings" />
+        android:layout_toRightOf="@+id/imageButton_about"
+        android:layout_toEndOf="@+id/imageButton_about" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,22 +26,22 @@
         android:layout_toStartOf="@+id/imageView" />
 
     <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/imageButton_settings"
-        android:background="@drawable/settings"
-        android:layout_alignParentTop="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageButton_about"
+        android:background="@drawable/about"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageButton_volumeOn"
+        android:background="@drawable/imagebuttonvolume_xml"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageButton_settings"
-        android:layout_toEndOf="@+id/imageButton_settings"
-        android:background="@drawable/imagebuttonvolume_xml" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="wrap_content"

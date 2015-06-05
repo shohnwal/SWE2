@@ -55,18 +55,13 @@ public class Lobby extends ActionBarActivity {
 
     @Override
     protected void onPause() {
-        if (MyService.isInstanceCreated()) {
-            serviceStop();
-        }
+        serviceStop();
         super.onPause();
 
     }
 
     @Override
     protected void onResume() {
-        if (MyService.isInstanceCreated()) {
-            serviceStart();
-        }
         super.onResume();
 
 
@@ -91,7 +86,7 @@ public class Lobby extends ActionBarActivity {
     public void init() {
         setupBtnCreateGame();
         setupBtnJoinGame();
-        setupImageButtonSetting();
+        setupImageButtonAbout();
         setupImageButtonVolume();
 
     }
@@ -122,13 +117,13 @@ public class Lobby extends ActionBarActivity {
 
     }
 
-    private void setupImageButtonSetting() {
-        iBSetting = (ImageButton) findViewById(R.id.imageButton_settings);
+    private void setupImageButtonAbout() {
+        iBSetting = (ImageButton) findViewById(R.id.imageButton_about);
         iBSetting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Settings");
+                System.out.println("About");
             }
         });
     }
@@ -166,7 +161,7 @@ public class Lobby extends ActionBarActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
         alertDialog.setView(input);
-        alertDialog.setPositiveButton("Los gehts", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
