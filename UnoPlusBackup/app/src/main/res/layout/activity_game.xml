@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_2"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iview_playerOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/player1"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/iview_playerTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/player1"
+        android:visibility="invisible"/>
+    />
+
+
+    <ImageView
+        android:id="@+id/iview_playerThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/player1"
+        android:visibility="invisible"/>
+    />
+
+    <ImageView
+        android:id="@+id/iview_playerFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/player1"
+        android:visibility="invisible"/>
+    />
+
+
+    <ImageView
+        android:id="@+id/iview_currentCard"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/iview_stackCard"
+        android:layout_marginEnd="154dp"
+        android:layout_marginRight="154dp"
+        android:background="#ff773eff" />
+
+    <ImageView
+        android:id="@+id/iview_stackCard"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_alignBottom="@+id/iview_playerThree"
+        android:layout_toLeftOf="@+id/iview_playerFour"
+        android:layout_toStartOf="@+id/iview_playerFour"
+        android:background="#ff59ff74" />
+
+    <LinearLayout
+        android:id="@+id/ll_handCards"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffff9322"
+        android:orientation="horizontal"></LinearLayout>
+
+</RelativeLayout>
