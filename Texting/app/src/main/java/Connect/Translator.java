@@ -9,8 +9,10 @@ import at.gruppeb.uni.server.BluetoothChat_Server;
  */
 public class Translator {
 
+
     BluetoothChat_Server btc = new BluetoothChat_Server();
    // BluetoothChatService_Server btcs = new BluetoothChatService_Server();
+
     Card c;
     public Translator(){
     }
