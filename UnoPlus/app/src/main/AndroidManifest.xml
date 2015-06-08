@@ -42,6 +42,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="bluetooth.DeviceListActivity"
+            android:label="@string/device_list_title" >
+            <intent-filter>
+                <action android:name="bluetooth.DeviceListActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <service android:enabled="true" android:name=".MyService" />
     </application>
 
