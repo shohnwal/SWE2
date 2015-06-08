@@ -56,7 +56,7 @@ public class Lobby extends ActionBarActivity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothService mChatService = null;
+    private BluetoothService mBltService = null;
 
     private ActivityHelper aHelper;
 
@@ -94,9 +94,9 @@ public class Lobby extends ActionBarActivity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
         } else {
-            if (mChatService == null) {
+            if (mBltService == null) {
                 // Initialize the BluetoothChatService to perform bluetooth connections
-                mChatService = new BluetoothService(this, mHandler,aHelper);
+                mBltService = new BluetoothService(this, mHandler,aHelper);
 
                 // Initialize the buffer for outgoing messages
                 mOutStringBuffer = new StringBuffer("");
@@ -109,7 +109,7 @@ public class Lobby extends ActionBarActivity {
         serviceStop();
         super.onDestroy();
 
-        if (mChatService != null) mChatService.stop();
+        if (mBltService != null) mBltService.stop();
         if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
@@ -127,11 +127,11 @@ public class Lobby extends ActionBarActivity {
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
-        if (mChatService != null) {
+        if (mBltService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothService.STATE_NONE) {
+            if (mBltService.getState() == BluetoothService.STATE_NONE) {
                 // Start the Bluetooth chat services
-                mChatService.start();
+                mBltService.start();
             }
         }
     }
@@ -173,6 +173,10 @@ public class Lobby extends ActionBarActivity {
         });
     }
 
+    private String getPlayerName(){
+        return mBltService.getPlayerName();
+    }
+
 
     public void setupBtnJoinGame() {
         btnJoinGame = (Button) findViewById(R.id.button_join);
@@ -184,6 +188,12 @@ public class Lobby extends ActionBarActivity {
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(v.getContext(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+
+                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
+                //Sending the Host- Player- name to the new Activity
+                nextScreen.putExtra("hostName", getPlayerName());
+                nextScreen.putExtra("bltService", mBltService);
+                startActivity(nextScreen);
 
                 //System.out.println("Join Game");
                 //startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
@@ -199,6 +209,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("About");
+                InformationAbout();
             }
         });
     }
@@ -228,8 +239,24 @@ public class Lobby extends ActionBarActivity {
     public void InformationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
-        al.setMessage("Spielregeln:");
-        a1.setNeutralButton("OK");
+        al.setMessage("Spielregeln: \n Credits: \n Die Karten werden gemischt und jeder Spieler erhält 7 Karten, die er auf die Hand nimmt. " +
+                "Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel." +
+                " Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt. " +
+                "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+                        "Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel." +
+                " Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt. " +
+                        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+                        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt.");
+        al.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+        al.show();
+        //a1.setNeutralButton("OK");
     }
 
     public void CreateGameDialog() {
@@ -252,6 +279,7 @@ public class Lobby extends ActionBarActivity {
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
                 nextScreen.putExtra("hostName", input.getText().toString());
+                nextScreen.putExtra("bltService", mBltService);
                 startActivity(nextScreen);
 
             }
@@ -295,7 +323,7 @@ public class Lobby extends ActionBarActivity {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -304,7 +332,7 @@ public class Lobby extends ActionBarActivity {
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
-            mChatService.write(send);
+            mBltService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -385,7 +413,7 @@ public class Lobby extends ActionBarActivity {
                     // Get the BLuetoothDevice object
                     BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                     // Attempt to connect to the device
-                    mChatService.connect(device);
+                    mBltService.connect(device);
                 }
                 break;
             case REQUEST_ENABLE_BT:
@@ -393,7 +421,7 @@ public class Lobby extends ActionBarActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
                     // Initialize the BluetoothChatService to perform bluetooth connections
-                    mChatService = new BluetoothService(this, mHandler,aHelper);
+                    mBltService = new BluetoothService(this, mHandler,aHelper);
 
                     // Initialize the buffer for outgoing messages
                     mOutStringBuffer = new StringBuffer("");
