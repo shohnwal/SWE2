@@ -239,7 +239,7 @@ public class Lobby extends ActionBarActivity {
     public void InformationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
-        al.setMessage("Spielregeln: \n Credits: \n Die Karten werden gemischt und jeder Spieler erhält 7 Karten, die er auf die Hand nimmt. " +
+        al.setMessage("Spielregeln: \n Credits: \n Die Karten werden gemischt und jeder Spieler erh\u00e4lt 7 Karten, die er auf die Hand nimmt. " +
                 "Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel." +
                 " Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt. " +
                 "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
