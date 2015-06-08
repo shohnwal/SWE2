@@ -134,12 +134,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         public void run() {
 
             //This method runs in the same thread as the UI.
+
+            //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
             removeAllViews();
             renderAllViews();
 
             Log.i(TAG, "loop refresh");
             //TODO finde where to check uno was shaked
-            if (mAccel>5){
+            if (mAccel > 5) {
                 Log.i(TAG, "shake it!!! ~(^o^~) (~^o^)~");
             }
             //Do something to the UI thread here
@@ -305,6 +307,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         ArrayList<ImageViewCard> temp = new ArrayList<ImageViewCard>();
 
         //TODO get GameMech PlayerHandcards
+        //-->testHCSet= this.player.hand();
         //from here...
         Card cr1 = new Card(Card.colors.BLUE, Card.values.TAKE_TWO), cr2 = new Card(Card.colors.RED, Card.values.TWO), cg1 = new Card(Card.colors.GREEN, Card.values.ONE), cg2 = new Card(Card.colors.GREEN, Card.values.TWO);
         Card cb1 = new Card(Card.colors.BLUE, Card.values.ZERO), cy1 = new Card(Card.colors.YELLOW, Card.values.ONE);
@@ -380,7 +383,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         if (f > 5) f = 1;
 
         //... to here Debug test cards
-
+//TODO GUI recive handcards as arraylist
         for (int i = 0; i < testHCSet.length; i++) {
             // Log.i(TAG, "genCard test" + i + "" + testHCSet[i].get_name());
             // Log.i(TAG, testHCSet[i].toString());
@@ -404,6 +407,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 break;
             case DragEvent.ACTION_DROP:
                 //TODO GameMech player layed Card (to get the (Hand)Card that was drooped -> view.getCard();)
+                //-> player.playcard(view.toString());
                 //TODO GUI add PopUp to ask which color if color choice
 
                 Log.i(TAG, " card drop name over ImageViewCard: " + view.toString());
