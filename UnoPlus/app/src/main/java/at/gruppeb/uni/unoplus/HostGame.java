@@ -67,7 +67,9 @@ public class HostGame extends ActionBarActivity {
         hostNameString = i.getStringExtra("hostName");
         hostName.setText(hostNameString);
 
-        mBltService = new BltSingelton(this,mHandler,aHelper).getInstance();
+        mBltService = new BltSingelton(null,null).getInstance();
+        mBltService.setmActivity(this);
+        aHelper = mBltService.getmActivity();
 
         btn_start = (Button)findViewById(R.id.btnStart);
     }

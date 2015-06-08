@@ -72,10 +72,10 @@ public class BluetoothService implements Serializable{
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
-     * @param context  The UI Activity Context
      * @param handler  A Handler to send messages back to the UI Activity
+     * @param activity A Class to help different activitys
      */
-    public BluetoothService(Context context, Handler handler, ActivityHelper activity) {
+    public BluetoothService(Handler handler, ActivityHelper activity) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -96,11 +96,14 @@ public class BluetoothService implements Serializable{
 
     /**
      * returns the player id
-     * */
-
+     */
     public int getPlayerId(){
         return mActivity.getPlayerNr();
     }
+
+    public void setmActivity(Activity a){this.mActivity.setActivity(a);}
+
+    public ActivityHelper getmActivity() {return mActivity;}
 
     /**
      * Set the current state of the chat connection

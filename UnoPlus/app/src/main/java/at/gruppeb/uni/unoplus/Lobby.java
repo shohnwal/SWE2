@@ -98,7 +98,7 @@ public class Lobby extends ActionBarActivity {
             if (mBltService == null) {
                 // Initialize the BluetoothChatService to perform bluetooth connections
 
-                mBltService = new BltSingelton(this,mHandler,aHelper).getInstance();//new BluetoothService(this, mHandler,aHelper);
+                mBltService = new BltSingelton(mHandler,aHelper).getInstance();//new BluetoothService(this, mHandler,aHelper);
 
                 // Initialize the buffer for outgoing messages
                 mOutStringBuffer = new StringBuffer("");
@@ -424,7 +424,7 @@ public class Lobby extends ActionBarActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
                     // Initialize the BluetoothChatService to perform bluetooth connections
-                    mBltService = new BluetoothService(this, mHandler,aHelper);
+                    mBltService = new BluetoothService( mHandler,aHelper);
 
                     // Initialize the buffer for outgoing messages
                     mOutStringBuffer = new StringBuffer("");
