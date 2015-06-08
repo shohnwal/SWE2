@@ -64,7 +64,7 @@ public class JoinGame extends ActionBarActivity {
     }
 
     public void setupImageButtonVolume() {
-        iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_join);
+        iBVolumeOn = (ImageButton) findViewById(R.id.imageButton_joinVolume);
         if (!(MyService.isInstanceCreated())) {
             iBVolumeOn.setActivated(true);
         } else {

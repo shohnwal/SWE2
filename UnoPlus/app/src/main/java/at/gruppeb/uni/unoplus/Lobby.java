@@ -225,6 +225,13 @@ public class Lobby extends ActionBarActivity {
         });
     }
 
+    public void InformationAbout(){
+        AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
+        al.setTitle("Information");
+        al.setMessage("Spielregeln:");
+        a1.setNeutralButton("OK");
+    }
+
     public void CreateGameDialog() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lobby.this);
