@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import at.gruppeb.uni.unoplus.Lobby;
-
-public class BluetoothService {
+import java.io.Serializable;
+public class BluetoothService implements Serializable{
     // Debugging
     private static final String TAG = "BluetoothChatService";
     private static final boolean D = true;
@@ -92,6 +92,14 @@ public class BluetoothService {
         mUuids.add(UUID.fromString("aa91eab1-d8ad-448e-abdb-95ebba4a9b55"));
         mUuids.add(UUID.fromString("4d34da73-d0a4-4f40-ac38-917e0a9dee97"));
         mUuids.add(UUID.fromString("5e14d4df-9c8a-4db7-81e4-c937564c86e0"));
+    }
+
+    /**
+     * returns the player id
+     * */
+
+    public int getPlayerId(){
+        return mActivity.getPlayerNr();
     }
 
     /**
@@ -257,6 +265,21 @@ public class BluetoothService {
         bundle.putString(mActivity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+    }
+
+    /**
+     * return the name of the player
+     */
+    public String getPlayerName() {
+        return mAdapter.getName().toString();
+    }
+
+    public void setIsServer(boolean isServer){
+        mActivity.setIsServer(isServer);
+    }
+
+    public boolean isServer(){
+        return mActivity.isServer();
     }
 
     /**
@@ -445,5 +468,15 @@ public class BluetoothService {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
         }
+
+        /**
+         * returns the actual number of connected player
+         * */
+        public int getNrOfPlayer(){
+            return mSockets.size();
+        }
+
+
+
     }
 }
