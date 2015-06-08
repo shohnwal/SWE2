@@ -168,6 +168,7 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
                 System.out.println("Create Game");
                 ensureDiscoverable();
+                mBltService.setIsServer(true);
                 CreateGameDialog();
             }
         });
@@ -195,7 +196,11 @@ public class Lobby extends ActionBarActivity {
                 nextScreen.putExtra("bltService", mBltService);
                 startActivity(nextScreen);
 
-                //System.out.println("Join Game");
+
+                mBltService.setIsServer(false);
+
+                //TODO     start host game
+                // System.out.println("Join Game");
                 //startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
             }
         });
@@ -261,7 +266,9 @@ public class Lobby extends ActionBarActivity {
                 Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
+
                 nextScreen.putExtra("hostName", input.getText().toString());
+
                 nextScreen.putExtra("bltService", mBltService);
                 startActivity(nextScreen);
 
