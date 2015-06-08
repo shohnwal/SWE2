@@ -27,6 +27,7 @@ import android.widget.Toast;
 import bluetooth.ActivityHelper;
 import bluetooth.BluetoothService;
 import bluetooth.DeviceListActivity;
+import bluetooth.BltSingelton;
 
 
 /**
@@ -96,7 +97,8 @@ public class Lobby extends ActionBarActivity {
         } else {
             if (mBltService == null) {
                 // Initialize the BluetoothChatService to perform bluetooth connections
-                mBltService = new BluetoothService(this, mHandler,aHelper);
+
+                mBltService = new BltSingelton(this,mHandler,aHelper).getInstance();//new BluetoothService(this, mHandler,aHelper);
 
                 // Initialize the buffer for outgoing messages
                 mOutStringBuffer = new StringBuffer("");
@@ -108,9 +110,6 @@ public class Lobby extends ActionBarActivity {
     public void onDestroy() {
         serviceStop();
         super.onDestroy();
-
-        if (mBltService != null) mBltService.stop();
-        if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
     @Override
@@ -190,16 +189,16 @@ public class Lobby extends ActionBarActivity {
                 Intent serverIntent = new Intent(v.getContext(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 
+                mBltService.setIsServer(false);
+
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
                 nextScreen.putExtra("hostName", getPlayerName());
-                nextScreen.putExtra("bltService", mBltService);
                 startActivity(nextScreen);
 
 
-                mBltService.setIsServer(false);
 
-                //TODO     start host game
+
                 // System.out.println("Join Game");
                 //startActivity(new Intent("at.gruppeb.uni.unoplus.JoinGame"));
             }
@@ -214,6 +213,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("About");
+                InformationAbout();
             }
         });
     }
@@ -243,8 +243,24 @@ public class Lobby extends ActionBarActivity {
     public void InformationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
-        al.setMessage("Spielregeln:");
-        a1.setNeutralButton("OK");
+        al.setMessage("Spielregeln: \n Credits: \n Die Karten werden gemischt und jeder Spieler erhält 7 Karten, die er auf die Hand nimmt. " +
+                "Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel." +
+                " Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt. " +
+                "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+                        "Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel." +
+                " Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt. " +
+                        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt."+
+                        "Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt.");
+        al.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+        al.show();
+        //a1.setNeutralButton("OK");
     }
 
     public void CreateGameDialog() {
@@ -266,10 +282,7 @@ public class Lobby extends ActionBarActivity {
                 Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
-
                 nextScreen.putExtra("hostName", input.getText().toString());
-
-                nextScreen.putExtra("bltService", mBltService);
                 startActivity(nextScreen);
 
             }
@@ -347,7 +360,7 @@ public class Lobby extends ActionBarActivity {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==aHelper.MESSAGE_STATE_CHANGE){
+            if(msg.what== ActivityHelper.MESSAGE_STATE_CHANGE){
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                     case BluetoothService.STATE_CONNECTED:
@@ -360,13 +373,13 @@ public class Lobby extends ActionBarActivity {
                         break;
                 }
             }
-            if(msg.what==aHelper.MESSAGE_WRITE){
+            if(msg.what== ActivityHelper.MESSAGE_WRITE){
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
                 mConversationArrayAdapter.add("Me:  " + writeMessage);
             }
-            if(msg.what==aHelper.MESSAGE_READ){
+            if(msg.what== ActivityHelper.MESSAGE_READ){
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
@@ -374,15 +387,15 @@ public class Lobby extends ActionBarActivity {
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 }
             }
-            if(msg.what==aHelper.MESSAGE_DEVICE_NAME){
+            if(msg.what== ActivityHelper.MESSAGE_DEVICE_NAME){
                 // save the connected device's name
-                mConnectedDeviceName = msg.getData().getString(aHelper.DEVICE_NAME);
+                mConnectedDeviceName = msg.getData().getString(ActivityHelper.DEVICE_NAME);
                 Toast.makeText(getApplicationContext(), "Connected to "
                         + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
             }
-            if(msg.what==aHelper.MESSAGE_TOAST){
+            if(msg.what== ActivityHelper.MESSAGE_TOAST){
                 //if (!msg.getData().getString(TOAST).contains("Unable to connect device")) {
-                Toast.makeText(getApplicationContext(), msg.getData().getString(aHelper.TOAST),
+                Toast.makeText(getApplicationContext(), msg.getData().getString(ActivityHelper.TOAST),
                         Toast.LENGTH_SHORT).show();
                 //}
             }

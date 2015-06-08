@@ -3,8 +3,11 @@ package at.gruppeb.uni.unoplus;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -12,8 +15,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import bluetooth.ActivityHelper;
+import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
 
 
@@ -62,7 +67,7 @@ public class HostGame extends ActionBarActivity {
         hostNameString = i.getStringExtra("hostName");
         hostName.setText(hostNameString);
 
-        mBltService = (BluetoothService)i.getSerializableExtra("bltService");
+        mBltService = new BltSingelton(this,mHandler,aHelper).getInstance();
 
         btn_start = (Button)findViewById(R.id.btnStart);
     }
@@ -134,4 +139,52 @@ public class HostGame extends ActionBarActivity {
     public void serviceStop() {
         stopService(new Intent(this, MyService.class));
     }
+
+    // The Handler that gets information back from the BluetoothChatService
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what== ActivityHelper.MESSAGE_STATE_CHANGE){
+                if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                switch (msg.arg1) {
+                    case BluetoothService.STATE_CONNECTED:
+                        mConversationArrayAdapter.clear();
+                        break;
+                    case BluetoothService.STATE_CONNECTING:
+                        break;
+                    case BluetoothService.STATE_LISTEN:
+                    case BluetoothService.STATE_NONE:
+                        break;
+                }
+            }
+            if(msg.what== ActivityHelper.MESSAGE_WRITE){
+                byte[] writeBuf = (byte[]) msg.obj;
+                // construct a string from the buffer
+                String writeMessage = new String(writeBuf);
+                mConversationArrayAdapter.add("Me:  " + writeMessage);
+            }
+            if(msg.what== ActivityHelper.MESSAGE_READ){
+                byte[] readBuf = (byte[]) msg.obj;
+                // construct a string from the valid bytes in the buffer
+                String readMessage = new String(readBuf, 0, msg.arg1);
+                if (readMessage.length() > 0) {
+                    mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                }
+            }
+            if(msg.what== ActivityHelper.MESSAGE_DEVICE_NAME){
+                // save the connected device's name
+                mConnectedDeviceName = msg.getData().getString(ActivityHelper.DEVICE_NAME);
+                Toast.makeText(getApplicationContext(), "Connected to "
+                        + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+            }
+            if(msg.what== ActivityHelper.MESSAGE_TOAST){
+                //if (!msg.getData().getString(TOAST).contains("Unable to connect device")) {
+                Toast.makeText(getApplicationContext(), msg.getData().getString(ActivityHelper.TOAST),
+                        Toast.LENGTH_SHORT).show();
+                //}
+            }
+
+
+        }
+    };
 }

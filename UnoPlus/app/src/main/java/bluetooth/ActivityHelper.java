@@ -43,6 +43,10 @@ public class ActivityHelper implements Serializable{
         return activity;
     }
 
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
     public int getPlayerNr(){
         return this.getPlayerNr();
     }

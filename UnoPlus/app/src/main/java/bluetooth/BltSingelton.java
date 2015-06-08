@@ -9,12 +9,20 @@ import android.os.Handler;
 public class BltSingelton {
 
     static BluetoothService singleService;
+    private static Context c;
+    private static Handler h;
+    private static ActivityHelper ah;
     public BltSingelton(Context context, Handler handler, ActivityHelper activity){
-        if(singleService==null)
-            singleService=new BluetoothService(context,  handler, activity);
+        if(singleService==null){
+            this.c = context;
+            this.h = handler;
+            this.ah = activity;
+        }
     }
 
-    private BluetoothService getService(){
+    public static BluetoothService getInstance(){
+        if(singleService==null)
+            singleService=new BluetoothService(c,  h, ah);
         return singleService;
     }
 }
