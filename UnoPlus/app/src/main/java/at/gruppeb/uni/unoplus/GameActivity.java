@@ -42,13 +42,15 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private Timer Timer;
     private int playerId, height, width, NumberOfPlayers;
     //TODO GUI grey out HandCards not curentPlayer
-    private boolean currentPlayer;
 
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
 
+    //Game mechanics variables
+    private boolean thisPlayersTurn;
+    private ArrayList<String> eventList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +101,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         //TODO get id from Lobby
         playerId = 0;
         //TODO  if this player is curentPlayer from Lobby/GameMech
-        currentPlayer = false;
+        thisPlayersTurn = false;
 
 
         this.initIvCurrentCard();
