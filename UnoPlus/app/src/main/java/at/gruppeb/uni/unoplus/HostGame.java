@@ -76,6 +76,7 @@ public class HostGame extends ActionBarActivity {
         mBltService.setmActivity(this);
         mBltService.setHandler(mHandler);
         aHelper = mBltService.getmActivity();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         btn_start = (Button)findViewById(R.id.btnStart);
     }
