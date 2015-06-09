@@ -1,15 +1,16 @@
 package at.gruppeb.uni.unoplus;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,13 +29,17 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import bluetooth.ActivityHelper;
+import bluetooth.BltSingelton;
+import bluetooth.BluetoothService;
+
 /**
  * Created by Natascha on 28/05/2015.
  */
 public class GameActivity extends ActionBarActivity implements View.OnTouchListener, View.OnDragListener {
 
 
-    private static final String TAG = "at.gruppeb.uni.unoplus";
+    private static final String DEBUGTAG = "at.gruppeb.uni.unoplus";
 
     private ImageView ivcCurrentCard, ivcStackCard;
     private ImageView[] ivPlayers;
@@ -52,6 +58,28 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private boolean thisPlayersTurn;
     private ArrayList<String> eventList;
 
+    //Bluetooth
+    private static final boolean D = true;
+    private static final String TAG = "Lobby";
+
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
+    // Array adapter for the conversation thread
+    private ArrayAdapter<String> mConversationArrayAdapter;
+    // String buffer for outgoing messages
+    private StringBuffer mOutStringBuffer;
+    // Local Bluetooth adapter
+    private BluetoothAdapter mBluetoothAdapter = null;
+    // Member object for the chat services
+    private BluetoothService mBltService = null;
+
+    private ActivityHelper aHelper;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -63,6 +91,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_game);
+
+        mBltService = new BltSingelton(null, null).getInstance();
+        mBltService.setmActivity(this);
+        aHelper = mBltService.getmActivity();
     }
 
     @Override
@@ -86,13 +118,15 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor
+                (Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void init() {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+        WindowManager wm = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+// the results will be higher than using the activity context object or the getWindowManager() shortcut
         wm.getDefaultDisplay().getMetrics(displayMetrics);
 
         this.setHeight(displayMetrics.heightPixels);
@@ -139,10 +173,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             removeAllViews();
             renderAllViews();
 
-            Log.i(TAG, "loop refresh");
+            Log.i(DEBUGTAG, "loop refresh");
             //TODO finde where to check uno was shaked
             if (mAccel > 5) {
-                Log.i(TAG, "shake it!!! ~(^o^~) (~^o^)~");
+                Log.i(DEBUGTAG, "shake it!!! ~(^o^~) (~^o^)~");
             }
             //Do something to the UI thread here
 
@@ -151,7 +185,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private void initShakeListener() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor
+                (Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -215,7 +250,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             ivPlayers[i].setVisibility(View.VISIBLE);
             ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
 //TODO GUI Set position & size of other players
-            /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f), Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
+            /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f), 
+Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
             ivPlayers[i].setBaselineAlignBottom(true);
 
             this.addContentView(ivPlayers[i], ivPlayers[i].getLayoutParams());
@@ -263,7 +299,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private void renderCurrentCard() {
         //TODO get CurrentCard from GameMech and set it as viewBackground (red 1 = test/debug)
-        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(new Card(Card.colors.RED, Card.values.ONE), ivcCurrentCard));
+        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(new Card(Card.colors.RED, Card.values.ONE),
+                ivcCurrentCard));
     }
 
     private void renderHandCards() {
@@ -309,11 +346,18 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         //TODO get GameMech PlayerHandcards
         //-->testHCSet= this.player.hand();
         //from here...
-        Card cr1 = new Card(Card.colors.BLUE, Card.values.TAKE_TWO), cr2 = new Card(Card.colors.RED, Card.values.TWO), cg1 = new Card(Card.colors.GREEN, Card.values.ONE), cg2 = new Card(Card.colors.GREEN, Card.values.TWO);
-        Card cb1 = new Card(Card.colors.BLUE, Card.values.ZERO), cy1 = new Card(Card.colors.YELLOW, Card.values.ONE);
+        Card cr1 = new Card(Card.colors.BLUE, Card.values.TAKE_TWO), cr2 = new Card(Card.colors.RED,
+                Card.values.TWO), cg1 = new Card(Card.colors.GREEN, Card.values.ONE), cg2 = new Card(Card.colors.GREEN,
+                Card.values.TWO);
+        Card cb1 = new Card(Card.colors.BLUE, Card.values.ZERO), cy1 = new Card(Card.colors.YELLOW,
+                Card.values.ONE);
         Card csr = new Card(Card.colors.RED, Card.values.SKIP), cy2 = new Card(Card.colors.RED, Card.values.TWO);
-        Card cb3 = new Card(Card.colors.RED, Card.values.THREE), cg3 = new Card(Card.colors.YELLOW, Card.values.THREE), cr3 = new Card(Card.colors.GREEN, Card.values.THREE), cy3 = new Card(Card.colors.BLUE, Card.values.THREE);
-        Card cb4 = new Card(Card.colors.GREEN, Card.values.FOUR), cg4 = new Card(Card.colors.YELLOW, Card.values.FOUR), cr4 = new Card(Card.colors.BLUE, Card.values.FOUR), cy4 = new Card(Card.colors.GREEN, Card.values.FOUR);
+        Card cb3 = new Card(Card.colors.RED, Card.values.THREE), cg3 = new Card(Card.colors.YELLOW,
+                Card.values.THREE), cr3 = new Card(Card.colors.GREEN, Card.values.THREE), cy3 = new Card(Card.colors.BLUE,
+                Card.values.THREE);
+        Card cb4 = new Card(Card.colors.GREEN, Card.values.FOUR), cg4 = new Card(Card.colors.YELLOW,
+                Card.values.FOUR), cr4 = new Card(Card.colors.BLUE, Card.values.FOUR), cy4 = new Card(Card.colors.GREEN,
+                Card.values.FOUR);
 
 
         Card[] testHCSet = new Card[4];
@@ -385,8 +429,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         //... to here Debug test cards
 //TODO GUI recive handcards as arraylist
         for (int i = 0; i < testHCSet.length; i++) {
-            // Log.i(TAG, "genCard test" + i + "" + testHCSet[i].get_name());
-            // Log.i(TAG, testHCSet[i].toString());
+            // Log.i(DEBUGTAG, "genCard test" + i + "" + testHCSet[i].get_name());
+            // Log.i(DEBUGTAG, testHCSet[i].toString());
             temp.add(new ImageViewCard(this, testHCSet[i]));
         }
         this.ivcHandCards = temp;
@@ -410,8 +454,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 //-> player.playcard(view.toString());
                 //TODO GUI add PopUp to ask which color if color choice
 
-                Log.i(TAG, " card drop name over ImageViewCard: " + view.toString());
-                Log.i(TAG, " card drop name over Card Object in ImageViewCard: " + view.getCard().get_name());
+                Log.i(DEBUGTAG, " card drop name over ImageViewCard: " + view.toString());
+                Log.i(DEBUGTAG, " card drop name over Card Object in ImageViewCard: " + view.getCard().get_name());
 
                 break;
             case DragEvent.ACTION_DRAG_ENDED:
@@ -436,9 +480,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 // draged image
                 View.DragShadowBuilder sb = new View.DragShadowBuilder(v);
                 v.startDrag(cd, sb, v, 0);
-                Log.i(TAG, "Touch HandCard");
+                Log.i(DEBUGTAG, "Touch HandCard");
             } else if (v.getId() == ivcStackCard.getId()) {
-                Log.i(TAG, "Not Touch Hand Card! StackCard to pull");
+                Log.i(DEBUGTAG, "Not Touch Hand Card! StackCard to pull");
                 //TODO GameMech pull card
                 removeHandCards();
                 renderHandCards();
@@ -464,6 +508,79 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // The Handler that gets information back from the BluetoothChatService
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == ActivityHelper.MESSAGE_STATE_CHANGE) {
+                if (D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                switch (msg.arg1) {
+                    case BluetoothService.STATE_CONNECTED:
+                        mConversationArrayAdapter.clear();
+                        break;
+                    case BluetoothService.STATE_CONNECTING:
+                        break;
+                    case BluetoothService.STATE_LISTEN:
+                    case BluetoothService.STATE_NONE:
+                        break;
+                }
+            }
+            if (msg.what == ActivityHelper.MESSAGE_WRITE) {
+                byte[] writeBuf = (byte[]) msg.obj;
+                // construct a string from the buffer
+                String writeMessage = new String(writeBuf);
+                mConversationArrayAdapter.add("Me:  " + writeMessage);
+            }
+            if (msg.what == ActivityHelper.MESSAGE_READ) {
+                byte[] readBuf = (byte[]) msg.obj;
+                // construct a string from the valid bytes in the buffer
+                String readMessage = new String(readBuf, 0, msg.arg1);
+                if (readMessage.length() > 0) {
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                }
+            }
+            if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
+                // save the connected device's name
+                mConnectedDeviceName = msg.getData().getString(ActivityHelper.DEVICE_NAME);
+                Toast.makeText(getApplicationContext(), "Connected to "
+                        + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+            }
+            if (msg.what == ActivityHelper.MESSAGE_TOAST) {
+                //if (!msg.getData().getString(TOAST).contains("Unable to connect device")) {
+                Toast.makeText(getApplicationContext(), msg.getData().getString(ActivityHelper.TOAST),
+                        Toast.LENGTH_SHORT).show();
+                //}
+            }
+
+
+        }
+    };
+
+    /**
+     * Sends a message.
+     *
+     * @param message A string of text to send.
+     */
+    private void sendMessage(String message) {
+        // Check that we're actually connected before trying anything
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            mBltService.write(send);
+
+            // Reset out string buffer to zero and clear the edit text field
+            mOutStringBuffer.setLength(0);
+        }
+    }
 
 }
 
