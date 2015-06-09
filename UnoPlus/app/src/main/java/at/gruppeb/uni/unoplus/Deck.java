@@ -1,8 +1,10 @@
-
+package at.gruppeb.uni.unoplus;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import at.gruppeb.uni.unoplus.Card;
 
 public class Deck {
     List<Card>		 				deck;

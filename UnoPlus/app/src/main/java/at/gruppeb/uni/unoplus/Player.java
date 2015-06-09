@@ -1,11 +1,13 @@
-
+package at.gruppeb.uni.unoplus;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import at.gruppeb.uni.unoplus.Card;
+
 
 public class Player {
-
+/*
     static int 					static_id = 0;
     List<Card>		 			hand;
     int 						player_id = 0;
@@ -115,5 +117,5 @@ public class Player {
             }
         }
     }
-
+*/
 }
