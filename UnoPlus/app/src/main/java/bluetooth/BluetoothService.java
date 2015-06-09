@@ -45,7 +45,7 @@ public class BluetoothService implements Serializable{
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private final Handler mHandler;
+    private Handler mHandler;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -283,6 +283,10 @@ public class BluetoothService implements Serializable{
 
     public boolean isServer(){
         return mActivity.isServer();
+    }
+
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
     }
 
     /**

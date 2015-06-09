@@ -123,6 +123,12 @@ public class Lobby extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        mBltService = new BltSingelton(null,null).getInstance();
+        mBltService.setmActivity(this);
+        aHelper = mBltService.getmActivity();
+
+
+
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
@@ -166,7 +172,6 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("Create Game");
-                ensureDiscoverable();
                 mBltService.setIsServer(true);
                 CreateGameDialog();
             }
@@ -279,6 +284,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                mBltService.setIsServer(true);
                 Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
@@ -310,7 +316,7 @@ public class Lobby extends ActionBarActivity {
         stopService(new Intent(this, MyService.class));
     }
 
-    private void ensureDiscoverable() {
+    /*private void ensureDiscoverable() {
         if(D) Log.d(TAG, "ensure discoverable");
         if (mBluetoothAdapter.getScanMode() !=
                 BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
@@ -318,7 +324,7 @@ public class Lobby extends ActionBarActivity {
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             startActivity(discoverableIntent);
         }
-    }
+    }*/
 
     /**
      * Sends a message.
