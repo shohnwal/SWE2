@@ -307,6 +307,7 @@ public class BluetoothService implements Serializable{
             try {
             	// Listen for all 7 UUIDs
             	for (int i = 0; i < 7; i++) {
+                    //TODO find alternative to Rfcomm
             		serverSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, mUuids.get(i));
                     socket = serverSocket.accept();
                     if (socket != null) {

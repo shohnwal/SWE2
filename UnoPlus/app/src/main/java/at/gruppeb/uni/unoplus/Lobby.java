@@ -276,7 +276,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                mBltService.setIsServer(true);
+
                 Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
