@@ -45,7 +45,7 @@ public class BluetoothService implements Serializable{
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private final Handler mHandler;
+    private Handler mHandler;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -72,10 +72,10 @@ public class BluetoothService implements Serializable{
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
-     * @param context  The UI Activity Context
      * @param handler  A Handler to send messages back to the UI Activity
+     * @param activity A Class to help different activitys
      */
-    public BluetoothService(Context context, Handler handler, ActivityHelper activity) {
+    public BluetoothService(Handler handler, ActivityHelper activity) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -96,11 +96,14 @@ public class BluetoothService implements Serializable{
 
     /**
      * returns the player id
-     * */
-
+     */
     public int getPlayerId(){
         return mActivity.getPlayerNr();
     }
+
+    public void setmActivity(Activity a){this.mActivity.setActivity(a);}
+
+    public ActivityHelper getmActivity() {return mActivity;}
 
     /**
      * Set the current state of the chat connection
@@ -282,6 +285,10 @@ public class BluetoothService implements Serializable{
         return mActivity.isServer();
     }
 
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
+
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted
@@ -300,6 +307,7 @@ public class BluetoothService implements Serializable{
             try {
             	// Listen for all 7 UUIDs
             	for (int i = 0; i < 7; i++) {
+                    //TODO find alternative to Rfcomm
             		serverSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, mUuids.get(i));
                     socket = serverSocket.accept();
                     if (socket != null) {

@@ -22,7 +22,7 @@ public class ActivityHelper implements Serializable{
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
-    public static int playerNR;
+    public static int playerNR =-1;
 
     public boolean isServer;
 
@@ -41,6 +41,10 @@ public class ActivityHelper implements Serializable{
 
     public Activity getActivity() {
         return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     public int getPlayerNr(){
