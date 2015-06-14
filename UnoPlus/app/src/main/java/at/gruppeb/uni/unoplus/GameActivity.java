@@ -47,6 +47,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
     private int playerId, height, width, NumberOfPlayers;
+    private Gamemanager game;
+    private Player player;
     //TODO GUI grey out HandCards not curentPlayer
 
     private SensorManager mSensorManager;
@@ -100,10 +102,22 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     @Override
     protected void onStart() {
         super.onStart();
+        if(this.mBltService.getPlayerId()==0) {
+            this.serverinit();
+        }
+        this.player=new Player(this.mBltService.getPlayerId());
         init();
-
+        if(this.mBltService.getPlayerId()==0){
+            this.game.dealCards(mBltService);
+        }
+    player.prepareHand(mBltService);
     }
-
+    protected void serverinit(){
+    this.game= new Gamemanager(this.mBltService.getNrOfPlayer());
+        this.game.decksinit();
+        this.game.createCards();
+        this.game.putFirstCardDown();
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -7,18 +7,34 @@ import at.gruppeb.uni.unoplus.Card;
 
 
 public class Player {
-/*
-    static int 					static_id = 0;
+
     List<Card>		 			hand;
     int 						player_id = 0;
-    private boolean				isMyTurn = false;
-    Gamemanager					game;
 
-    public 						Player(Gamemanager game) {
-        this.player_id = Player.static_id;
+
+
+    public 						Player(int id) {
+        this.player_id = id;
         this.hand = new ArrayList<Card>();
-        this.game = game;
-        static_id++;
+    }
+
+    public void prepareHand(BluetoothService mBlt){
+        String temp="p"+mBlt.getPlayerId();
+        String superstring="";
+        String cStr,color,value;
+        for(int i=0;i<mBlt.getNrOfPlayer()-2;i++){
+            if(temp==(mBlt.mConnThreads.get(i).substring(0,2))){
+                superstring=mBlt.mConnThreads.get(i).substring(2,mBlt.mConnThreads.get(i).length());
+                mBlt.mConnThreads.remove(i);
+            } else mBlt.mConnThreads.remove(i);
+        }
+        while(superstring.length() > 0){
+            cStr=superstring.substring(0,2);
+            color = cStr.substring(0,1);
+            value = cStr.substring(1,2);
+            this.hand.add(new Card (color,value));
+            superstring=superstring.substring(2);
+        }
     }
 
 
@@ -32,21 +48,13 @@ public class Player {
         return help;
     }
 
-    public boolean				getIsMyTurn() {
-        return this.isMyTurn;
-    }
-
-    public void					setIsMyTurn(boolean myturn) {
-        this.isMyTurn = myturn;
-    }
-
     public void					takeCard (Deck takedeck) {				// take card from takedeck
         this.hand.add(0, takedeck.deck.get(0));
         //send_data(this.hand.get(0).get_name())
         takedeck.deck.remove(0);
     }
 
-    public void					playCard (Card card) {
+   /* public void					playCard (Card card) {
         Player player = this.game.getCurrentPlayer();
         if (card.color == this.game.playdeck.deck.get(0).color) {					// if color matches
             this.game.playdeck.deck.add(0, card);
@@ -107,7 +115,7 @@ public class Player {
             }
         } else
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!That's not possible!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    }
+    }*/
 
     public void					removeCardFromPlayer(Card card, Player player) {
         for (Card i : this.hand) {
@@ -117,5 +125,5 @@ public class Player {
             }
         }
     }
-*/
+
 }
