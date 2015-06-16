@@ -102,22 +102,48 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     @Override
     protected void onStart() {
         super.onStart();
-        if(this.mBltService.getPlayerId()==0) {
-            this.serverinit();
-        }
-        this.player=new Player(this.mBltService.getPlayerId());
+                                                                                    if(this.mBltService.getPlayerId()==0) {
+                                                                                        this.serverinit();
+                                                                                    }
+                                                                                    this.player=new Player(this.mBltService.getPlayerId());
+                                                                                    if(this.mBltService.getPlayerId()==0){
+                                                                                        this.game.dealCards(mBltService);
+
+                                                                                        String cStr="";
+                                                                                        if(this.playdeck.get(0).color != BLACK){
+                                                                                            cStr+=playdeck.get(0).color.toString().substring(0,1);
+                                                                                        }else {
+                                                                                            cStr+='S';
+                                                                                        }
+                                                                                        int Ord=playdeck.get(0).value.ordinal();
+                                                                                        if(Ord>=9){
+                                                                                            cStr+=Ord;
+                                                                                        }else if(Ord==10){
+                                                                                            cStr+='S';
+                                                                                        }else if(Ord==11){
+                                                                                            cStr+='X';
+                                                                                        }else if(Ord==12){
+                                                                                            cStr+='R';
+                                                                                        }else if(Ord==13){
+                                                                                            cStr+='Y';
+                                                                                        }else if(Ord==14){
+                                                                                            cStr+='C';
+                                                                                        }
+                                                                                        this.mBltService.write("playdeck" + cStr);
+                                                                                    }
+                                                                                    while (this.player.hand.size() < 7) {
+                                                                                        player.prepareHand(mBltService);
+                                                                                    }
         init();
-        if(this.mBltService.getPlayerId()==0){
-            this.game.dealCards(mBltService);
-        }
-    player.prepareHand(mBltService);
+
+
     }
-    protected void serverinit(){
-    this.game= new Gamemanager(this.mBltService.getNrOfPlayer());
-        this.game.decksinit();
-        this.game.createCards();
-        this.game.putFirstCardDown();
-    }
+                                                                                    protected void serverinit(){
+                                                                                    this.game= new Gamemanager(this.mBlt);
+                                                                                        this.game.decksinit();
+                                                                                        this.game.createCards();
+                                                                                        this.game.putFirstCardDown();
+                                                                                    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -184,6 +210,13 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
+                                                                                        if (this.player.game_id == 0) {
+                                                                                            this.game.serverloop(mBltService);
+                                                                                        }
+                                                                                        this.player.clientloop(mBltService);
+
+
+
             removeAllViews();
             renderAllViews();
 
@@ -468,6 +501,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //-> player.playcard(view.toString());
                 //TODO GUI add PopUp to ask which color if color choice
 
+                                                                        this.player.playCard(view.getCard());
+
                 Log.i(DEBUGTAG, " card drop name over ImageViewCard: " + view.toString());
                 Log.i(DEBUGTAG, " card drop name over Card Object in ImageViewCard: " + view.getCard().get_name());
 
@@ -475,7 +510,15 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             case DragEvent.ACTION_DRAG_ENDED:
                 initTimer();
                 //TODO GUI + GameMech Say Uno
-
+                                                                        if(this.player.hand.size() == 1) {
+                                                                            //TODO offer so say uno
+                                                                            String sendstring = "p" + this.player.player_id + "uno1";
+                                                                            mBltService.write(sendstring);
+                                                                        } else if (this.player.hand.size() == 0) {
+                                                                            //TODO offer to say unouno
+                                                                            String sendstring = "p" + this.player.player_id + "uno2";
+                                                                            mBltService.write(sendstring);
+                                                                        }
                 break;
             default:
                 break;

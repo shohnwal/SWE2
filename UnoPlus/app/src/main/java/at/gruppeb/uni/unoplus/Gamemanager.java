@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Collections;
 import java.math.*;
 
-
 public class Gamemanager {
 
     int							num_players;
@@ -18,8 +17,10 @@ public class Gamemanager {
     Deck						playdeck;
     Deck						takedeck;
 
-    public 						Gamemanager(int num_players) {
-        this.num_players = num_players;
+    public 						Gamemanager(BluetoothService mBlt) {
+        this.num_players = mBlt.getNrOfPlayer();
+        int randomplayer = Math.random(0, this.num_players-1);
+        this.current_player = randomplayer;
 
     }
 
@@ -78,11 +79,95 @@ public class Gamemanager {
         }
     }
 
-    public void 				dealCards(BluetoothService mBlt) {
-        String superstring="";
-        String cStr="";
+    public void serverloop(BluetoothService mBlt) {
+        for (String messagestring: mBlt.mConnThreads) {
+
+            int playernumber =(int) messagestring.substring(1, 2);
+            if (playernumber == this.current_player) {
+                String command = messagestring.substring(3,6);
+                switch (command)
+                {
+                    case get:
+                        break;
+                    case tak:
+                        String sendstring = "p" + current_player + "get";
+                        String cStr="";
+                        if(this.takedeck.get(0).color != BLACK){
+                            cStr+=takedeck.get(0).color.toString().substring(0,1);
+                        }else {
+                            cStr+='S';
+                        }
+                        int Ord=takedeck.get(0).value.ordinal();
+                        if(Ord>=9){
+                            cStr+=Ord;
+                        }else if(Ord==10){
+                            cStr+='S';
+                        }else if(Ord==11){
+                            cStr+='X';
+                        }else if(Ord==12){
+                            cStr+='R';
+                        }else if(Ord==13){
+                            cStr+='Y';
+                        }else if(Ord==14){
+                            cStr+='C';
+                        }
+                        sendstring += cStr;
+                        mBlt.mConnThreads.remove(messagestring);
+                        mBlt.write(sendstring);
+                        mBlt.write(this.getEndTurnString(0));
+                        this.takedeck.remove(0);
+                    case ply:
+                        String color = messagestring.substring(6,7);
+                        String value = messagestring.substring(messagestring.length()-1);
+                        this.playdeck.add(new Card(color, value));
+                        if (color == "S" && value == "Y"){
+                            this.howManyCardsToTake += 4;
+                        } else if (value == "X") {
+                            this.howManyCardsToTake += 2;
+                        }
+                        String playdeckString = "playdeck" + color + value;
+                        mBlt.write(playdeckString);
+                        if (value == "S") {
+                            mBlt.write(this.getEndTurnString(1));
+                        } else {
+                            mBlt.write(this.getEndTurnString(0));
+                        }
+                        mBlt.mConnThreads.remove(messagestring);
+                        break;
+                    case set:
+                        break;
+                    case uno:
+                        (int)unonr = messagestring.substring(messagestring.length()-1);
+                        if (unonr == 1) {
+                            //..
+                        } else if (unonr == 2) {
+                            mBlt.write("gameend");
+                        } break;
+                    default:break;
+                }
+            }
+        }
+    }
+
+    public String getEndTurnString(int offset) {
+        String endturnString = "P";
+        if (this.turns_clockwise == true) {
+            this.current_player = (this.current_player + offset + 1)%this.num_players;
+        } else if(this.turns_clockwise == false) {
+            if (this.current_player == 0) {
+                this.current_player = num_players -1 - offset;
+            } else {
+                this.current_player = (this.current_player - offset - 1) % this.num_players;
+            }
+        }
+        endturnString += this.current_player + "set";
+        return endturnstring;
+    }
+
+    public void dealCards(BluetoothService mBlt) {
         for (int i=1 ; i<this.num_players-1;i++){
-            superstring = "p"+mBlt.getPlayerId();
+            String superstring= "p"+mBlt.getPlayerId();
+            String cStr="";
             for (int j=0;j<7;j++){
                 cStr="";
                 if(this.takedeck.get(0).color != BLACK){
