@@ -80,7 +80,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private BluetoothService mBltService = null;
 
     private ActivityHelper aHelper;
-
+    private ArrayList<String> stringList=new ArrayList<String>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -597,6 +597,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    stringList.add(readMessage);
                 }
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
