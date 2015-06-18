@@ -52,8 +52,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
     private int playerId, height, width, NumberOfPlayers;
-    private Gamemanager game;
-    private Player player;
+    protected Gamemanager game;
+    protected Player player;
     //TODO GUI grey out HandCards not curentPlayer
 
     private SensorManager mSensorManager;
@@ -82,10 +82,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothService mBltService = null;
+    protected BluetoothService mBltService = null;
 
     private ActivityHelper aHelper;
-    private ArrayList<String> stringList=new ArrayList<String>();
+    protected ArrayList<String> stringList=new ArrayList<String>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,15 +112,15 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     }
                                                                                     this.player=new Player(this.mBltService.getPlayerId());
                                                                                     if(this.mBltService.getPlayerId()==0){
-                                                                                        this.game.dealCards(mBltService);
+                                                                                        this.game.dealCards(this.mBltService);
 
                                                                                         String cStr="";
-                                                                                        if(this.playdeck.get(0).color != BLACK){
-                                                                                            cStr+=playdeck.get(0).color.toString().substring(0,1);
+                                                                                        if(this.game.playdeck.deck.get(0).color != Card.colors.BLACK){
+                                                                                            cStr+=this.game.playdeck.deck.get(0).color.toString().substring(0,1);
                                                                                         }else {
                                                                                             cStr+='S';
                                                                                         }
-                                                                                        int Ord=playdeck.get(0).value.ordinal();
+                                                                                        int Ord=this.game.playdeck.deck.get(0).value.ordinal();
                                                                                         if(Ord>=9){
                                                                                             cStr+=Ord;
                                                                                         }else if(Ord==10){
@@ -134,17 +134,17 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                         }else if(Ord==14){
                                                                                             cStr+='C';
                                                                                         }
-                                                                                        this.mBltService.write("playdeck" + cStr);
+                                                                                        this.sendMessage("playdeck" + cStr);
                                                                                     }
                                                                                     while (this.player.hand.size() < 7) {
-                                                                                        player.prepareHand(mBltService);
+                                                                                        player.prepareHand();
                                                                                     }
         init();
 
 
     }
                                                                                     protected void serverinit(){
-                                                                                    this.game= new Gamemanager(this.mBlt);
+                                                                                    this.game= new Gamemanager(this.mBltService);
                                                                                         this.game.decksinit();
                                                                                         this.game.createCards();
                                                                                         this.game.putFirstCardDown();
@@ -215,11 +215,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
-                                                                                        if (this.player.game_id == 0) {
-                                                                                            this.game.serverloop(mBltService);
+                                                                                        if (player.player_id == 0) {
+                                                                                            game.serverloop(mBltService);
                                                                                         }
-                                                                                        this.player.clientloop(mBltService);
-
+                                                                                        player.clientloop();
 
 
             removeAllViews();
@@ -552,11 +551,11 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                         if(this.player.hand.size() == 1) {
                                                                             //TODO offer so say uno
                                                                             String sendstring = "p" + this.player.player_id + "uno1";
-                                                                            mBltService.write(sendstring);
+                                                                            this.sendMessage(sendstring);
                                                                         } else if (this.player.hand.size() == 0) {
                                                                             //TODO offer to say unouno
                                                                             String sendstring = "p" + this.player.player_id + "uno2";
-                                                                            mBltService.write(sendstring);
+                                                                            this.sendMessage(sendstring);
                                                                         }
                 break;
             default:
@@ -693,7 +692,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
      *
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {
+    protected void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();

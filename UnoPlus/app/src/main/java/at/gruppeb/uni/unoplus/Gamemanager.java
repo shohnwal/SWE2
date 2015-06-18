@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.math.*;
+import bluetooth.*;
 
 public class Gamemanager {
 
@@ -205,7 +206,7 @@ public class Gamemanager {
     }
 
 
-    public void					decks_init() {
+    public void	decksinit() {
         this.takedeck = new Deck(); 							//create takedeck deck where players take cards from
         this.playdeck = new Deck(); 							// create deck where players put cards down
 

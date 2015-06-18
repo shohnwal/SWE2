@@ -453,13 +453,13 @@ public class BluetoothService implements Serializable{
             }
         }
 
-        /**
-         * Write to the connected OutStream.
-         * @param buffer  The bytes to write
          */
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
+                /**
+                 * Write to the connected OutStream.
+                 * @param buffer  The bytes to write
 
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, buffer)
