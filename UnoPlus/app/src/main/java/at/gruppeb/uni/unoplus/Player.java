@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gruppeb.uni.unoplus.Card;
+import bluetooth.BluetoothService;
 
 
 public class Player {
 
     List<Card> hand;
     public int player_id = 0;
-    boolean itsmyturn = false, // TALK TO NATASHA ABOUT THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    boolean itsmyturn = false; // TALK TO NATASHA ABOUT THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    GameActivity gameActivity;
     Card playdeckTop;
 
 
-    public Player(int id) {
+    public Player(int id,GameActivity gameActivity) {
         this.player_id = id;
         this.hand = new ArrayList<Card>();
+        this.gameActivity=gameActivity;
     }
 
     public void setPlaydeckCard(String color, String value) {
@@ -28,10 +31,10 @@ public class Player {
         String superstring="";
         String cStr,color,value;
         for(int i=0;i<mBlt.getNrOfPlayer()-2;i++){
-            if(temp==(mBlt.mConnThreads.get(i).substring(0,2))){
-                superstring=mBlt.mConnThreads.get(i).substring(2,mBlt.mConnThreads.get(i).length());
-                mBlt.mConnThreads.remove(i);
-            } else mBlt.mConnThreads.remove(i);
+            if(temp==(this.gameActivity.stringList.get(i).substring(0,2))){
+                superstring=this.gameActivity.stringList.get(i).substring(2,this.gameActivity.stringList.get(i).length());
+                this.gameActivity.stringList.remove(i);
+            } else this.gameActivity.stringList.remove(i);
         }
         while(superstring.length() > 0){
             cStr=superstring.substring(0,2);
@@ -53,19 +56,20 @@ public class Player {
         return help;
     }
 
-    public void clientloop(BluetoothService mBlt) {
-        while (mBlt.mConnThreads.size() > 0) {
-            String messagestring = mBlt.connThreads.get(0);
+    protected void clientloop() {
+        while (this.gameActivity.stringList.size() > 0) {
+            String messagestring = this.gameActivity.stringList.get(0);
             if (messagestring == "gameend") {
                 //...
             }
             else if (messagestring.substring(0,5) == "playd") {
                 String color = messagestring.substring(8,9);
                 String value = messagestring.substring(messagestring.length()-1);
-                this.setPlaydeckCard();aydeckCard(color, value);
+                this.setPlaydeckCard(color, value);
+
             }
             else {
-                int playernumber =(int) messagestring.substring(1, 2);
+                 int playernumber =Integer.parseInt(messagestring.substring(1,2));
                 String command = messagestring.substring(3,6);
                 if (playernumber == this.player_id) {
                     switch (command)
@@ -83,7 +87,7 @@ public class Player {
                         case tak:
                             break;
                         case uno:
-                            (int)unonr = messagestring.substring(messagestring.length()-1);
+                            int unonr = Integer.parseInt(messagestring.substring(messagestring.length()-1));
                             if (unonr == 1) {
                                 //..
                             } else if (unonr == 2) {
@@ -102,7 +106,7 @@ public class Player {
 
 
             }
-            mBlt.connThreads.remove(0);
+            this.gameActivity.stringList.remove(0);
         }
     }
 
@@ -113,14 +117,14 @@ public class Player {
 
     public void					takeCard (BluetoothService mBlt) {				// take card from takedec
         String sendstring = "p" + this.player_id + "tak";
-      mBlt.write(sendstring);
+      this.gameActivity.sendMessage(sendstring);
     }
 
-   public void					playCard (Card card, BluetoothService mBlt) {
+   public void					playCard (Card card) {
 
        String cStr="";
-       cStr += "p"+mBlt.getPlayerId()+"ply";
-       if(card.color != BLACK){
+       cStr += "p"+this.player_id+"ply";
+       if(card.color != Card.colors.BLACK){
            cStr += card.toString().substring(0,1);
        }else {
            cStr+='S';
@@ -142,7 +146,7 @@ public class Player {
        this.removeCardFromPlayer(card);
        //TODO : REMOVE CARD FROM HAND, ASK NATASHA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-       mBlt.write(cStr);
+       this.gameActivity.sendMessage(cStr);
    }
 
 
@@ -225,7 +229,7 @@ public class Player {
     public void					removeCardFromPlayer(Card card) {
         for (Card i : this.hand) {
             if ((i.color == card.color) && (i.value == card.value)) {
-                this.hand.remove(player.hand.indexOf(i));
+                this.hand.remove(this.hand.indexOf(i));
                 break;
             }
         }
