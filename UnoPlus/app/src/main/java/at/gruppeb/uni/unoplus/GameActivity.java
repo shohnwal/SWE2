@@ -51,9 +51,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ArrayList<ImageViewCard> ivcHandCards;
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
-    private int playerId, height, width, NumberOfPlayers;
+    private int height, width, NumberOfPlayers;
     protected Gamemanager game;
     protected Player player;
+
     //TODO GUI grey out HandCards not curentPlayer
 
     private SensorManager mSensorManager;
@@ -62,8 +63,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private float mAccelLast; // last acceleration including gravity
 
     //Game mechanics variables
-    private boolean thisPlayersTurn;
-    private ArrayList<String> eventList;
+    private boolean thisPlayersTurn = false;
+    protected int currentPlayerID = 0;
+    protected Card.colors playdeckColor;        //Color of the top playdeck card after CHOOSE_COLOR event
 
     //Bluetooth
     private static final boolean D = true;
@@ -110,6 +112,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     if(this.mBltService.getPlayerId()==0) {
                                                                                         this.serverinit();
                                                                                     }
+                                                                                    this.NumberOfPlayers = this.mBltService.getNrOfPlayer();
                                                                                     this.player=new Player(this.mBltService.getPlayerId());
                                                                                     if(this.mBltService.getPlayerId()==0){
                                                                                         this.game.dealCards(this.mBltService);
@@ -178,9 +181,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.setWidth(displayMetrics.widthPixels);
 
         //TODO get id from Lobby
-        playerId = 0;
+        //playerId = this.player.player_id;
         //TODO  if this player is curentPlayer from Lobby/GameMech
-        thisPlayersTurn = false;
+        thisPlayersTurn = this.player.itsmyturn;
 
 
         this.initIvCurrentCard();
@@ -273,8 +276,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     }
 
     private void initIvPlayers() {
-        //TODO get number of players from Lobby/GameMech
-        NumberOfPlayers = 4;
 
 
         if (NumberOfPlayers == 2) {
@@ -346,11 +347,10 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         //TODO get currentPlayerId & name from Lobby/GameMech
         //TODO GUI highlight player
 
-        int getCurrentPlayer = 0;
         for (int i = 0; i < ivPlayers.length; i++) {
             System.out.println("ivp[i]= " + i + "ivp[i] Tag= " + ivPlayers[i].getTag());
             //white = curr player
-            if (ivPlayers[i].getTag() == getCurrentPlayer)
+            if (ivPlayers[i].getTag().equals(this.currentPlayerID))
                 ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             else
                 ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
@@ -376,13 +376,11 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     private void renderCurrentCard() {
-        //TODO get CurrentCard from GameMech and set it as viewBackground (red 1 = test/debug)
-        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(new Card(Card.colors.RED, Card.values.ONE),
+        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(this.player.playdeckTop,
                 ivcCurrentCard));
     }
 
     private void renderHandCards() {
-        //TODO GameMech Get Handcards (generateHandCards = debug)
         generateHandCards();
 
         int cardSize = getCardSize();
@@ -421,101 +419,14 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    int f = 0;
 
     protected void generateHandCards() {
         ArrayList<ImageViewCard> temp = new ArrayList<ImageViewCard>();
 
-        //TODO get GameMech PlayerHandcards
-        //-->testHCSet= this.player.hand();
-        //from here...
-        Card cr1 = new Card(Card.colors.BLUE, Card.values.TAKE_TWO), cr2 = new Card(Card.colors.RED,
-                Card.values.TWO), cg1 = new Card(Card.colors.GREEN, Card.values.ONE), cg2 = new Card(Card.colors.GREEN,
-                Card.values.TWO);
-        Card cb1 = new Card(Card.colors.BLUE, Card.values.ZERO), cy1 = new Card(Card.colors.YELLOW,
-                Card.values.ONE);
-        Card csr = new Card(Card.colors.RED, Card.values.SKIP), cy2 = new Card(Card.colors.RED, Card.values.TWO);
-        Card cb3 = new Card(Card.colors.RED, Card.values.THREE), cg3 = new Card(Card.colors.YELLOW,
-                Card.values.THREE), cr3 = new Card(Card.colors.GREEN, Card.values.THREE), cy3 = new Card(Card.colors.BLUE,
-                Card.values.THREE);
-        Card cb4 = new Card(Card.colors.GREEN, Card.values.FOUR), cg4 = new Card(Card.colors.YELLOW,
-                Card.values.FOUR), cr4 = new Card(Card.colors.BLUE, Card.values.FOUR), cy4 = new Card(Card.colors.GREEN,
-                Card.values.FOUR);
 
+        for (Card c:this.player.getHand())
+            temp.add(new ImageViewCard(this, c));
 
-        Card[] testHCSet = new Card[4];
-        if (f % 5 == 0) {
-            testHCSet = new Card[6];
-            testHCSet[0] = cr1;
-            testHCSet[1] = cr2;
-            testHCSet[2] = cg1;
-            testHCSet[3] = cg2;
-            testHCSet[4] = csr;
-            testHCSet[5] = cy1;
-
-        } else if (f % 5 == 1) {
-            testHCSet = new Card[15];
-            testHCSet[0] = cb1;
-            testHCSet[1] = cr1;
-            testHCSet[2] = cg1;
-            testHCSet[3] = cy1;
-            testHCSet[4] = cr1;
-            testHCSet[5] = cr2;
-            testHCSet[6] = cg1;
-            testHCSet[7] = cg2;
-            testHCSet[8] = cg1;
-            testHCSet[9] = cy1;
-            testHCSet[10] = cb1;
-            testHCSet[11] = cr1;
-            testHCSet[12] = cg1;
-            testHCSet[13] = cy1;
-            testHCSet[14] = cr1;
-
-        } else if (f % 5 == 2) {
-            testHCSet = new Card[1];
-
-            testHCSet[0] = cg2;
-
-        } else if (f % 5 == 3) {
-
-            testHCSet[2] = cy3;
-            testHCSet[3] = cg3;
-            testHCSet[0] = cb3;
-            testHCSet[1] = cr3;
-        } else if (f % 5 == 4) {
-
-            testHCSet = new Card[20];
-            testHCSet[0] = cb1;
-            testHCSet[1] = cr1;
-            testHCSet[2] = cg1;
-            testHCSet[3] = cy1;
-            testHCSet[4] = cr1;
-            testHCSet[5] = cr2;
-            testHCSet[6] = cg1;
-            testHCSet[7] = cg2;
-            testHCSet[8] = cg1;
-            testHCSet[9] = cy1;
-            testHCSet[10] = cb1;
-            testHCSet[11] = cr1;
-            testHCSet[12] = cg1;
-            testHCSet[13] = cy1;
-            testHCSet[14] = cr1;
-            testHCSet[15] = cr2;
-            testHCSet[16] = cg1;
-            testHCSet[17] = cg2;
-            testHCSet[18] = cg1;
-            testHCSet[19] = cy1;
-        }
-        f++;
-        if (f > 5) f = 1;
-
-        //... to here Debug test cards
-//TODO GUI recive handcards as arraylist
-        for (int i = 0; i < testHCSet.length; i++) {
-            // Log.i(DEBUGTAG, "genCard test" + i + "" + testHCSet[i].get_name());
-            // Log.i(DEBUGTAG, testHCSet[i].toString());
-            temp.add(new ImageViewCard(this, testHCSet[i]));
-        }
         this.ivcHandCards = temp;
     }
 
@@ -536,10 +447,18 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //TODO GameMech player layed Card (to get the (Hand)Card that was drooped -> view.getCard();)
                 //-> player.playcard(view.toString());
                 //PopUp to ask which color if color choice
-                if (view.getCard().actionCard)
-                    this.playerColorChoice();
 
-                                                                        this.player.playCard(view.getCard());
+                //view.getCard() = card that the player wants to play
+                //TODO : check : is playcard compatible with playdeck card (-> player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop))
+                //if(player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop)) {
+                    //TODO : Implement action card mechanics (game mechanics)
+                    if (view.getCard().actionCard && (view.getCard().value == Card.values.CHOOSE_COLOR) || (view.getCard().value == Card.values.TAKE_FOUR))
+                        this.playerColorChoice();
+
+                    this.player.playCard(view.getCard());
+                //}
+
+
 
                 Log.i(DEBUGTAG, " card drop name over ImageViewCard: " + view.toString());
                 Log.i(DEBUGTAG, " card drop name over Card Object in ImageViewCard: " + view.getCard().get_name());
@@ -550,12 +469,28 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //TODO GUI + GameMech Say Uno
                                                                         if(this.player.hand.size() == 1) {
                                                                             //TODO offer so say uno
-                                                                            String sendstring = "p" + this.player.player_id + "uno1";
-                                                                            this.sendMessage(sendstring);
+                                                                            boolean saysuno = true;
+                                                                            if (saysuno) {
+                                                                                String sendstring = "p" + this.player.player_id + "uno1";
+                                                                                this.sendMessage(sendstring);
+                                                                            }else
+                                                                            {
+                                                                                this.player.takeCard(mBltService);
+                                                                            }
+
                                                                         } else if (this.player.hand.size() == 0) {
-                                                                            //TODO offer to say unouno
+                                                                            boolean saysuno = true;
+
+                                                                            if (saysuno) {
+                                                                            //TODO offer to say unouno (Button)
                                                                             String sendstring = "p" + this.player.player_id + "uno2";
                                                                             this.sendMessage(sendstring);
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                this.player.takeCard(mBltService);
+                                                                                //maybe TODO : implement so player takes 2 cards
+                                                                            }
                                                                         }
                 break;
             default:
@@ -607,10 +542,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 // draged image
                 View.DragShadowBuilder sb = new View.DragShadowBuilder(v);
                 v.startDrag(cd, sb, v, 0);
-                Log.i(DEBUGTAG, "Touch HandCard");
             } else if (v.getId() == ivcStackCard.getId()) {
-                Log.i(DEBUGTAG, "Not Touch Hand Card! StackCard to pull");
-                //TODO GameMech pull card
+                this.player.takeCard(mBltService);
                 removeHandCards();
                 renderHandCards();
             }
@@ -711,4 +644,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
 }
+
+
+
+//
 

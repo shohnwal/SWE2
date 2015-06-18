@@ -57,6 +57,8 @@ public class Player {
     }
 
     protected void clientloop() {
+
+        //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
         while (this.gameActivity.stringList.size() > 0) {
             String messagestring = this.gameActivity.stringList.get(0);
             if (messagestring == "gameend") {
@@ -164,6 +166,7 @@ public class Player {
 
 
 /*
+        //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
         Player player = this.game.getCurrentPlayer();
         if (card.color == this.game.playdeck.deck.get(0).color) {					// if color matches
             this.game.playdeck.deck.add(0, card);

@@ -34,8 +34,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import at.gruppeb.uni.unoplus.Lobby;
+
 import java.io.Serializable;
-public class BluetoothService implements Serializable{
+
+public class BluetoothService implements Serializable {
     // Debugging
     private static final String TAG = "BluetoothChatService";
     private static final boolean D = true;
@@ -57,11 +59,11 @@ public class BluetoothService implements Serializable{
     /**
      * A bluetooth piconet can support up to 7 connections. This array holds 7 unique UUIDs.
      * When attempting to make a connection, the UUID on the client must match one that the server
-     * is listening for. When accepting incoming connections server listens for all 7 UUIDs. 
-     * When trying to form an outgoing connection, the client tries each UUID one at a time. 
+     * is listening for. When accepting incoming connections server listens for all 7 UUIDs.
+     * When trying to form an outgoing connection, the client tries each UUID one at a time.
      */
     private ArrayList<UUID> mUuids;
-    
+
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
@@ -72,6 +74,7 @@ public class BluetoothService implements Serializable{
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
+     *
      * @param handler  A Handler to send messages back to the UI Activity
      * @param activity A Class to help different activitys
      */
@@ -97,17 +100,22 @@ public class BluetoothService implements Serializable{
     /**
      * returns the player id
      */
-    public int getPlayerId(){
+    public int getPlayerId() {
         return mActivity.getPlayerNr();
     }
 
-    public void setmActivity(Activity a){this.mActivity.setActivity(a);}
+    public void setmActivity(Activity a) {
+        this.mActivity.setActivity(a);
+    }
 
-    public ActivityHelper getmActivity() {return mActivity;}
+    public ActivityHelper getmActivity() {
+        return mActivity;
+    }
 
     /**
      * Set the current state of the chat connection
-     * @param state  An integer defining the current connection state
+     *
+     * @param state An integer defining the current connection state
      */
     private synchronized void setState(int state) {
         if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
@@ -118,22 +126,30 @@ public class BluetoothService implements Serializable{
     }
 
     /**
-     * Return the current connection state. */
+     * Return the current connection state.
+     */
     public synchronized int getState() {
         return mState;
     }
 
     /**
      * Start the chat service. Specifically start AcceptThread to begin a
-     * session in listening (server) mode. Called by the Activity onResume() */
+     * session in listening (server) mode. Called by the Activity onResume()
+     */
     public synchronized void start() {
         if (D) Log.d(TAG, "start");
 
         // Cancel any thread attempting to make a connection
-        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
 
         // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
 
         // Start the thread to listen on a BluetoothServerSocket
         if (mAcceptThread == null) {
@@ -145,34 +161,42 @@ public class BluetoothService implements Serializable{
 
     /**
      * Start the ConnectThread to initiate a connection to a remote device.
-     * @param device  The BluetoothDevice to connect
+     *
+     * @param device The BluetoothDevice to connect
      */
     public synchronized void connect(BluetoothDevice device) {
         if (D) Log.d(TAG, "connect to: " + device);
 
         // Cancel any thread attempting to make a connection
         if (mState == STATE_CONNECTING) {
-            if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
+            if (mConnectThread != null) {
+                mConnectThread.cancel();
+                mConnectThread = null;
+            }
         }
 
         // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
 
         // Create a new thread and attempt to connect to each UUID one-by-one.    
         for (int i = 0; i < 7; i++) {
-        	try {
+            try {
                 mConnectThread = new ConnectThread(device, mUuids.get(i));
                 mConnectThread.start();
                 setState(STATE_CONNECTING);
-        	} catch (Exception e) {
-        	}
+            } catch (Exception e) {
+            }
         }
     }
 
     /**
      * Start the ConnectedThread to begin managing a Bluetooth connection
-     * @param socket  The BluetoothSocket on which the connection was made
-     * @param device  The BluetoothDevice that has been connected
+     *
+     * @param socket The BluetoothSocket on which the connection was made
+     * @param device The BluetoothDevice that has been connected
      */
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
         if (D) Log.d(TAG, "connected");
@@ -210,21 +234,31 @@ public class BluetoothService implements Serializable{
      */
     public synchronized void stop() {
         if (D) Log.d(TAG, "stop");
-        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
-        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
-        if (mAcceptThread != null) {mAcceptThread.cancel(); mAcceptThread = null;}
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+        if (mAcceptThread != null) {
+            mAcceptThread.cancel();
+            mAcceptThread = null;
+        }
         setState(STATE_NONE);
     }
 
     /**
      * Write to the ConnectedThread in an unsynchronized manner
+     *
      * @param out The bytes to write
      * @see BluetoothService.ConnectedThread#write(byte[])
      */
     public void write(byte[] out) {
-    	// When writing, try to write out to all connected threads 
-    	for (int i = 0; i < mConnThreads.size(); i++) {
-    		try {
+        // When writing, try to write out to all connected threads
+        for (int i = 0; i < mConnThreads.size(); i++) {
+            try {
                 // Create temporary object
                 ConnectedThread r;
                 // Synchronize a copy of the ConnectedThread
@@ -234,9 +268,9 @@ public class BluetoothService implements Serializable{
                 }
                 // Perform the write unsynchronized
                 r.write(out);
-    		} catch (Exception e) {
-    		}
-    	}
+            } catch (Exception e) {
+            }
+        }
     }
 
     /**
@@ -277,11 +311,11 @@ public class BluetoothService implements Serializable{
         return mAdapter.getName().toString();
     }
 
-    public void setIsServer(boolean isServer){
+    public void setIsServer(boolean isServer) {
         mActivity.setIsServer(isServer);
     }
 
-    public boolean isServer(){
+    public boolean isServer() {
         return mActivity.isServer();
     }
 
@@ -289,14 +323,16 @@ public class BluetoothService implements Serializable{
         this.mHandler = handler;
     }
 
+
+
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted
      * (or until cancelled).
      */
     private class AcceptThread extends Thread {
-    	BluetoothServerSocket serverSocket = null;
-        
+        BluetoothServerSocket serverSocket = null;
+
         public AcceptThread() {
         }
 
@@ -305,18 +341,18 @@ public class BluetoothService implements Serializable{
             setName("AcceptThread");
             BluetoothSocket socket = null;
             try {
-            	// Listen for all 7 UUIDs
-            	for (int i = 0; i < 7; i++) {
+                // Listen for all 7 UUIDs
+                for (int i = 0; i < 7; i++) {
                     //TODO find alternative to Rfcomm
-            		serverSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, mUuids.get(i));
+                    serverSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, mUuids.get(i));
                     socket = serverSocket.accept();
                     if (socket != null) {
-                    	String address = socket.getRemoteDevice().getAddress();
-	                    mSockets.add(socket);
-	                    mDeviceAddresses.add(address);
-	                    connected(socket, socket.getRemoteDevice());
-                    }	                    
-            	}
+                        String address = socket.getRemoteDevice().getAddress();
+                        mSockets.add(socket);
+                        mDeviceAddresses.add(address);
+                        connected(socket, socket.getRemoteDevice());
+                    }
+                }
             } catch (IOException e) {
                 Log.e(TAG, "accept() failed", e);
             }
@@ -352,7 +388,7 @@ public class BluetoothService implements Serializable{
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                tmp = device.createRfcommSocketToServiceRecord(uuidToTry);        	
+                tmp = device.createRfcommSocketToServiceRecord(uuidToTry);
             } catch (IOException e) {
                 Log.e(TAG, "create() failed", e);
             }
@@ -372,9 +408,9 @@ public class BluetoothService implements Serializable{
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
-            	if (tempUuid.toString().contentEquals(mUuids.get(6).toString())) {
+                if (tempUuid.toString().contentEquals(mUuids.get(6).toString())) {
                     connectionFailed();
-            	}
+                }
                 // Close the socket
                 try {
                     mmSocket.close();
@@ -453,14 +489,14 @@ public class BluetoothService implements Serializable{
             }
         }
 
-         */
+
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write
-
+                 */
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
@@ -479,11 +515,11 @@ public class BluetoothService implements Serializable{
 
         /**
          * returns the actual number of connected player
-         * */
-        public int getNrOfPlayer(){
+         */
+
+        public int getNrOfPlayer() {
             return mSockets.size();
         }
-
 
 
     }
