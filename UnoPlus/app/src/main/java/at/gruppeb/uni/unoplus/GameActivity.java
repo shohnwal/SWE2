@@ -1,9 +1,14 @@
 package at.gruppeb.uni.unoplus;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -342,6 +347,33 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         //TODO get currentPlayerId & name from Lobby/GameMech
         //TODO GUI highlight player
 
+        int getCurrentPlayer = 0;
+        for (int i = 0; i < ivPlayers.length; i++) {
+            System.out.println("ivp[i]= " + i + "ivp[i] Tag= " + ivPlayers[i].getTag());
+            //white = curr player
+            if (ivPlayers[i].getTag() == getCurrentPlayer)
+                ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            else
+                ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
+
+        }
+    }
+
+    private int getCurrentPlayerColor(int id) {
+        int temp = 0;
+
+        if (id == 0) {
+            temp = Color.GREEN;
+        } else if (id == 1) {
+            temp = Color.BLUE;
+        } else if (id == 2) {
+            temp = Color.RED;
+        } else if (id == 3) {
+            temp = Color.YELLOW;
+        } else if (id == 4) {
+            temp = Color.CYAN;
+        }
+        return temp;
     }
 
     private void renderCurrentCard() {
@@ -369,9 +401,14 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
             ivc.setLayoutParams(lp);
             ivc.setBaselineAlignBottom(true);
-
             this.addContentView(ivc, ivc.getLayoutParams());
-            ivc.setOnTouchListener(this);
+
+            if (this.thisPlayersTurn){
+                ivc.setOnTouchListener(this);
+                ivc.getBackground().clearColorFilter();}
+            else {
+                ivc.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            }
         }
     }
 
@@ -499,7 +536,9 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             case DragEvent.ACTION_DROP:
                 //TODO GameMech player layed Card (to get the (Hand)Card that was drooped -> view.getCard();)
                 //-> player.playcard(view.toString());
-                //TODO GUI add PopUp to ask which color if color choice
+                //PopUp to ask which color if color choice
+                if (view.getCard().actionCard)
+                    this.playerColorChoice();
 
                                                                         this.player.playCard(view.getCard());
 
@@ -524,6 +563,38 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 break;
         }
         return true;
+    }
+
+    private void playerColorChoice() {
+
+        Dialog d = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT)
+                .setTitle("Choose a Color")
+                .setItems(new String[]{"Red", "Blue", "Yellow", "Green"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dlg, int position) {
+                        //TODO GameMech set the chosen color in the following TODOs
+                        if (position == 0) {
+                            //TODO Red is clicked!
+                            System.out.println("RED");
+                            dlg.cancel();
+                        } else if (position == 1) {
+                            //TODO Blue is clicked!
+                            System.out.println("BLUE");
+                            dlg.cancel();
+                        } else if (position == 2) {
+                            //TODO Yellow is clicked!
+                            System.out.println("YELLOW");
+                            dlg.cancel();
+                        } else if (position == 3) {
+                            //TODO Green is clicked!
+                            System.out.println("GREEN");
+                            dlg.cancel();
+                        }
+
+                    }
+                })
+                .create();
+        d.show();
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
