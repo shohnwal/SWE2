@@ -55,7 +55,7 @@ public class BluetoothService implements Serializable {
 
     private ArrayList<String> mDeviceAddresses;
     private ArrayList<ConnectedThread> mConnThreads;
-    private ArrayList<BluetoothSocket> mSockets;
+    public ArrayList<BluetoothSocket> mSockets;
     /**
      * A bluetooth piconet can support up to 7 connections. This array holds 7 unique UUIDs.
      * When attempting to make a connection, the UUID on the client must match one that the server

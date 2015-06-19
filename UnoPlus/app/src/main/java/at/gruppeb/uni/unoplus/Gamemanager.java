@@ -22,7 +22,7 @@ public class Gamemanager {
     GameActivity                gameActivity;
 
     public 						Gamemanager(BluetoothService mBlt,GameActivity gameActivity) {
-        this.num_players = mBlt.getNrOfPlayer();
+        this.num_players = mBlt.mSockets.size();
         int randomplayer = (int) (Math.random()*this.num_players-1);
         this.current_player = randomplayer;
         this.gameActivity=gameActivity;
@@ -92,9 +92,9 @@ public class Gamemanager {
                 String command = messagestring.substring(3,6);
                 switch (command)
                 {
-                    case get:
+                    case "get":
                         break;
-                    case tak:
+                    case "tak":
                         String sendstring = "p" + current_player + "get";
                         String cStr="";
                         if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
@@ -121,7 +121,7 @@ public class Gamemanager {
                         this.gameActivity.sendMessage(sendstring);
                         this.gameActivity.sendMessage(this.getEndTurnString(0));
                         this.takedeck.deck.remove(0);
-                    case ply:
+                    case "ply":
                         String color = messagestring.substring(6,7);
                         String value = messagestring.substring(messagestring.length()-1);
                         this.playdeck.deck.add(new Card(color, value));
@@ -139,9 +139,9 @@ public class Gamemanager {
                         }
                         this.gameActivity.stringList.remove(messagestring);
                         break;
-                    case set:
+                    case "set":
                         break;
-                    case uno:
+                    case "uno":
                         int unonr = Integer.parseInt(messagestring.substring(messagestring.length() - 1));
                         if (unonr == 1) {
                             //..
@@ -210,29 +210,10 @@ public class Gamemanager {
     }
 
 
-    public void					decks_init() {
+    public void					decksinit() {
         this.takedeck = new Deck(); 							//create takedeck deck where players take cards from
         this.playdeck = new Deck(); 							// create deck where players put cards down
 
     }
 
-    public void 				endTurn() {
-        this.getCurrentPlayer().setIsMyTurn(false);
-        this.current_player = ( this.current_player + 1 ) % (this.num_players);
-        this.getCurrentPlayer().setIsMyTurn(true);
-        System.out.println("next player....");
-        this.turn_ended = false;
-    }
-    public void 				fillEmptyTakeDeck(){
-        while(this.playdeck.deck.size()>1){// The loop will remove cards from playdeck and putting it in takedeck until only one card remains in playdeck
-            this.takedeck.deck.add(this.playdeck.deck.size()-1);//Taking the last card from playdeck
-            this.playdeck.deck.remove(this.playdeck.deck.size()-1);//Removing the card from playdeck
-        }
-        if(this.playdeck.deck.checkEmptyDeck()){ // this is not necessary,it's like an exception
-            this.playdeck.deck.add(this.takedeck.deck.get(0));
-            this.takedeck.deck.remove(0);
-        }
-
-        Collections.shuffle(this.takedeck.deck);//shuffle the deck
-    }
 }

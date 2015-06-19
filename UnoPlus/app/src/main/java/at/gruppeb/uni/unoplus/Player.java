@@ -26,11 +26,11 @@ public class Player {
         this.playdeckTop = new Card(color, value);
     }
 
-    public void prepareHand(BluetoothService mBlt){
-        String temp="p"+mBlt.getPlayerId();
+    public void prepareHand(int NumberOfPlayer){
+        String temp="p"+this.player_id;
         String superstring="";
         String cStr,color,value;
-        for(int i=0;i<mBlt.getNrOfPlayer()-2;i++){
+        for(int i=0;i<NumberOfPlayer-2;i++){
             if(temp==(this.gameActivity.stringList.get(i).substring(0,2))){
                 superstring=this.gameActivity.stringList.get(i).substring(2,this.gameActivity.stringList.get(i).length());
                 this.gameActivity.stringList.remove(i);
@@ -76,19 +76,19 @@ public class Player {
                 if (playernumber == this.player_id) {
                     switch (command)
                     {
-                        case get:
+                        case "get":
                             String color = messagestring.substring(6,7);
                             String value = messagestring.substring(messagestring.length()-1);
                             this.hand.add( new Card(color, value) );
                             break;
-                        case set:
+                        case "set":
                             this.itsmyturn = true;
                             break;
-                        case ply:
+                        case "ply":
                             break;
-                        case tak:
+                        case "tak":
                             break;
-                        case uno:
+                        case "uno":
                             int unonr = Integer.parseInt(messagestring.substring(messagestring.length()-1));
                             if (unonr == 1) {
                                 //..
@@ -99,7 +99,7 @@ public class Player {
                     }
                 } else {
                     switch (command) {
-                        case set:
+                        case "set":
                             this.itsmyturn = false;
                             break;
                         default: break;

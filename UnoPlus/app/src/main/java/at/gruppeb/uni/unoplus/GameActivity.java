@@ -82,7 +82,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
-    private BluetoothAdapter mBluetoothAdapter = null;
+    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     // Member object for the chat services
     protected BluetoothService mBltService = null;
 
@@ -112,8 +112,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     if(this.mBltService.getPlayerId()==0) {
                                                                                         this.serverinit();
                                                                                     }
-                                                                                    this.NumberOfPlayers = this.mBltService.getNrOfPlayer();
-                                                                                    this.player=new Player(this.mBltService.getPlayerId());
+                                                                                    this.NumberOfPlayers = this.mBltService.mSockets.size();;
+                                                                                    this.player=new Player(this.mBltService.getPlayerId(),this);
                                                                                     if(this.mBltService.getPlayerId()==0){
                                                                                         this.game.dealCards(this.mBltService);
 
@@ -140,14 +140,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                         this.sendMessage("playdeck" + cStr);
                                                                                     }
                                                                                     while (this.player.hand.size() < 7) {
-                                                                                        player.prepareHand();
+                                                                                        player.prepareHand(this.NumberOfPlayers);
                                                                                     }
         init();
 
 
     }
                                                                                     protected void serverinit(){
-                                                                                    this.game= new Gamemanager(this.mBltService);
+                                                                                    this.game= new Gamemanager(this.mBltService,this);
                                                                                         this.game.decksinit();
                                                                                         this.game.createCards();
                                                                                         this.game.putFirstCardDown();
