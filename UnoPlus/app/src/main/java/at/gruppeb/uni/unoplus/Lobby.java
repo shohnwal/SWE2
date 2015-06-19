@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ public class Lobby extends ActionBarActivity {
     //Bluetooth
     private static final boolean D = true;
     private static final String TAG = "Lobby";
+    public static BltSingelton bltSingl=null;
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
@@ -97,8 +99,8 @@ public class Lobby extends ActionBarActivity {
         } else {
             if (mBltService == null) {
                 // Initialize the BluetoothChatService to perform bluetooth connections
-
-                mBltService = new BltSingelton(mHandler,aHelper).getInstance();//new BluetoothService(this, mHandler,aHelper);
+                bltSingl=new BltSingelton(mHandler,aHelper);
+                mBltService = bltSingl.getInstance();//new BluetoothService(this, mHandler,aHelper);
 
                 // Initialize the buffer for outgoing messages
                 mOutStringBuffer = new StringBuffer("");
@@ -123,7 +125,7 @@ public class Lobby extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        mBltService = new BltSingelton(null,null).getInstance();
+        mBltService =  bltSingl.getInstance();
         mBltService.setmActivity(this);
         aHelper = mBltService.getmActivity();
 
@@ -248,7 +250,7 @@ public class Lobby extends ActionBarActivity {
     public void InformationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
-        al.setMessage(R.string.information);
+        al.setMessage(Html.fromHtml(getString(R.string.information)));
         al.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
@@ -257,7 +259,6 @@ public class Lobby extends ActionBarActivity {
             }
         });
         al.show();
-        //a1.setNeutralButton("OK");
     }
 
     public void CreateGameDialog() {
