@@ -165,70 +165,21 @@ public class Player {
 
 
 
-/*
-        //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
-        Player player = this.game.getCurrentPlayer();
-        if (card.color == this.game.playdeck.deck.get(0).color) {					// if color matches
-            this.game.playdeck.deck.add(0, card);
-            removeCardFromPlayer(card, player);
-            this.game.turn_ended = true;
-        } else if (card.value== this.game.playdeck.deck.get(0).value) {			// if amount matches
-            this.game.playdeck.deck.add(0, card);
-            removeCardFromPlayer(card, player);
-            this.game.turn_ended = true;
-        } else if (this.game.playdeck.deck.get(0).color == Card.colors.BLACK) {
-            this.game.playdeck.deck.add(0, card);
-            removeCardFromPlayer(card, player);
-            this.game.turn_ended = true;
-        } else if (card.isActionCard()) {
-            switch (card.value) {
-                case TAKEFOUR: {
-                    this.game.howManyCardsToTake += 4;
-                    this.game.playdeck.deck.add(0, card);
-                    removeCardFromPlayer(card, player);
-                    this.game.turn_ended = true;
-                    break;
-                }
-                case TAKETWO: {
-                    this.game.howManyCardsToTake += 2;
-                    this.game.playdeck.deck.add(0, card);
-                    removeCardFromPlayer(card, player);
-                    this.game.turn_ended = true;
-                    break;
-                }
-                case SKIP: {
-                    this.game.playdeck.deck.add(0, card);
-                    removeCardFromPlayer(card, player);
-                    this.game.skipNextPlayer = true;
-                    this.game.turn_ended = true;
-                    break;
-                }
-                case CHOOSECOLOR: {
-                    this.game.playdeck.deck.add(0, card);
-                    removeCardFromPlayer(card, player);
-                    this.game.turn_ended = true;
-                    // nothing else yet
-                    break;
-                }
-                case RETOUR: {
-                    if (this.game.turns_clockwise) {
-                        this.game.turns_clockwise = false;
-                    } else {
-                        this.game.turns_clockwise = true;
-                    }
-                    this.game.playdeck.deck.add(0, card);
-                    removeCardFromPlayer(card, player);
-                    this.game.turn_ended = true;
-                }
-                default:  {
-                    this.game.turn_ended = true;
-                }
 
-            }
-        } else
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!That's not possible!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    }
-*/
+        //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
+        public boolean CheckCard(Card playCard,Card topCard){
+
+        if (playCard.color == topCard.color) {					// if color matches
+            return true;
+        } else if (playCard.value== topCard.value) {			// if amount matches
+            return true;
+        } else if (playCard.color == Card.colors.BLACK) {
+            return true;
+        }
+            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!That's not possible!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return false;
+        }
+
     public void					removeCardFromPlayer(Card card) {
         for (Card i : this.hand) {
             if ((i.color == card.color) && (i.value == card.value)) {

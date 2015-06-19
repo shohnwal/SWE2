@@ -180,8 +180,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.setHeight(displayMetrics.heightPixels);
         this.setWidth(displayMetrics.widthPixels);
 
-        //TODO get id from Lobby
-        //playerId = this.player.player_id;
         //TODO  if this player is curentPlayer from Lobby/GameMech
         thisPlayersTurn = this.player.itsmyturn;
 
@@ -344,7 +342,6 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     private void renderPlayers() {
-        //TODO get currentPlayerId & name from Lobby/GameMech
         //TODO GUI highlight player
 
         for (int i = 0; i < ivPlayers.length; i++) {
@@ -450,13 +447,13 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
                 //view.getCard() = card that the player wants to play
                 //TODO : check : is playcard compatible with playdeck card (-> player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop))
-                //if(player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop)) {
+                if(player.CheckCard(view.getCard(), this.player.playdeckTop)) {
                     //TODO : Implement action card mechanics (game mechanics)
                     if (view.getCard().actionCard && (view.getCard().value == Card.values.CHOOSE_COLOR) || (view.getCard().value == Card.values.TAKE_FOUR))
                         this.playerColorChoice();
 
                     this.player.playCard(view.getCard());
-                //}
+                }
 
 
 
@@ -495,7 +492,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 break;
             default:
                 break;
-        }
+    }
         return true;
     }
 
@@ -506,22 +503,17 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 .setItems(new String[]{"Red", "Blue", "Yellow", "Green"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dlg, int position) {
-                        //TODO GameMech set the chosen color in the following TODOs
                         if (position == 0) {
-                            //TODO Red is clicked!
-                            System.out.println("RED");
+                           playdeckColor=Card.colors.RED;
                             dlg.cancel();
                         } else if (position == 1) {
-                            //TODO Blue is clicked!
-                            System.out.println("BLUE");
+                            playdeckColor=Card.colors.BLUE;
                             dlg.cancel();
                         } else if (position == 2) {
-                            //TODO Yellow is clicked!
-                            System.out.println("YELLOW");
+                            playdeckColor=Card.colors.YELLOW;
                             dlg.cancel();
                         } else if (position == 3) {
-                            //TODO Green is clicked!
-                            System.out.println("GREEN");
+                            playdeckColor=Card.colors.GREEN;
                             dlg.cancel();
                         }
 
@@ -529,6 +521,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 })
                 .create();
         d.show();
+
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
