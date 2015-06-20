@@ -30,6 +30,9 @@ public class ImageViewCard extends ImageView {
         if (card.color.equals(Card.colors.RED)) {
 
             switch (card.value) {
+                case ZERO:
+                    img = imageView.getResources().getDrawable(R.drawable.red0);
+                    break;
                 case ONE:
                     img = imageView.getResources().getDrawable(R.drawable.red1);
                     break;
@@ -67,11 +70,14 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.red_skip);
                     break;
                 default:
-                    img = imageView.getResources().getDrawable(R.drawable.blackcolor);
+                    img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
         } else if (card.color.equals(Card.colors.GREEN)) {
             switch (card.value) {
+                case ZERO:
+                    img = imageView.getResources().getDrawable(R.drawable.green0);
+                    break;
                 case ONE:
                     img = imageView.getResources().getDrawable(R.drawable.green1);
                     break;
@@ -109,11 +115,14 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.green_skip);
                     break;
                 default:
-                    img = imageView.getResources().getDrawable(R.drawable.blackcolor);
+                    img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
         } else if (card.color.equals(Card.colors.BLUE)) {
             switch (card.value) {
+                case ZERO:
+                    img = imageView.getResources().getDrawable(R.drawable.blue0);
+                    break;
                 case ONE:
                     img = imageView.getResources().getDrawable(R.drawable.blue1);
                     break;
@@ -151,11 +160,14 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.blue_skip);
                     break;
                 default:
-                    img = imageView.getResources().getDrawable(R.drawable.blackcolor);
+                    img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
         } else if (card.color.equals(Card.colors.YELLOW)) {
             switch (card.value) {
+                case ZERO:
+                    img = imageView.getResources().getDrawable(R.drawable.yellow0);
+                    break;
                 case ONE:
                     img = imageView.getResources().getDrawable(R.drawable.yellow1);
                     break;
@@ -193,9 +205,22 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.yellow_skip);
                     break;
                 default:
-                    img = imageView.getResources().getDrawable(R.drawable.blackcolor);
+                    img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
+        } else if (card.color.equals(Card.colors.BLACK)) {
+            switch (card.value) {
+                case TAKE_FOUR:
+                    img = imageView.getResources().getDrawable(R.drawable.black4);
+                    break;
+                case CHOOSE_COLOR:
+                    img = imageView.getResources().getDrawable(R.drawable.blackcolor);
+                    break;
+                default:
+                    img = imageView.getResources().getDrawable(R.drawable.back);
+                    break;
+            }
+
         }
         return img;
     }
