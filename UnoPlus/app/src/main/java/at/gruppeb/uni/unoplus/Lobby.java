@@ -182,9 +182,7 @@ public class Lobby extends ActionBarActivity {
         });
     }
 
-    private String getPlayerName(){
-        return mBltService.getPlayerName();
-    }
+
 
 
     public void setupBtnJoinGame() {
@@ -200,10 +198,6 @@ public class Lobby extends ActionBarActivity {
 
                 mBltService.setIsServer(false);
 
-                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
-                //Sending the Host- Player- name to the new Activity
-                nextScreen.putExtra("hostName", getPlayerName());
-                startActivity(nextScreen);
 
 
 
