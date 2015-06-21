@@ -1,5 +1,7 @@
 package at.gruppeb.uni.unoplus;
 
+import android.util.Log;
+
 public class Card {
 
 	static enum 				colors { RED, BLUE, GREEN, YELLOW, BLACK };
@@ -7,8 +9,11 @@ public class Card {
 	colors 						color;
 	values 						value;
 	boolean						actionCard = false;
-	
+	private static final String DEBUGTAG = "at.gruppeb.uni.unoplus";
+
+
 	public Card(Card.colors color, Card.values value) {
+									Log.i(DEBUGTAG, " card created ");
 									this.color = color;
 									this.value = value;
 									if 	(this.color.equals(Card.colors.BLACK)

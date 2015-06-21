@@ -38,6 +38,7 @@ public class Gamemanager {
         createZeroCards();
         createNormalCards();
         createSpecialCards();
+        Collections.shuffle(takedeck.deck);
         System.out.println(this.takedeck.deck.size() + " cards created and put in takedeck");
     }
 
