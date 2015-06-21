@@ -64,7 +64,7 @@ public class ActivityHelper implements Serializable{
     }
 
     public int getPlayerNr(){
-        return this.getPlayerNr();
+        return this.playerNR;
     }
 
     public boolean isServer() {

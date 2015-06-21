@@ -130,6 +130,12 @@ public class DeviceListActivity extends Activity {
 
         // Unregister broadcast listeners
         this.unregisterReceiver(mReceiver);
+
+        Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
+        //Sending the Host- Player- name to the new Activity
+        nextScreen.putExtra("hostName", mBtAdapter.getName());
+        startActivity(nextScreen);
+
     }
 
     /**

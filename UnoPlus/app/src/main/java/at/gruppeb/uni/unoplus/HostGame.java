@@ -79,6 +79,15 @@ public class HostGame extends ActionBarActivity {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         btn_start = (Button)findViewById(R.id.btnStart);
+
+        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.GameActivity");
+                startActivity(nextScreen);
+
+            }
+        });
     }
 
     @Override
@@ -208,9 +217,11 @@ public class HostGame extends ActionBarActivity {
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                     case BluetoothService.STATE_CONNECTED:
-                        mConversationArrayAdapter.clear();
+                        Log.i("connected","pairing ok");
+                        //mConversationArrayAdapter.clear();
                         break;
                     case BluetoothService.STATE_CONNECTING:
+                        Log.i("conecting..","try to connect");
                         break;
                     case BluetoothService.STATE_LISTEN:
                     case BluetoothService.STATE_NONE:
