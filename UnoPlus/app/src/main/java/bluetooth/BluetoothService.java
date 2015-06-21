@@ -112,7 +112,8 @@ public class BluetoothService implements Serializable {
         return mActivity;
     }
 
-    public void setmHandler(Handler h) { this.mActivity.setHandler(h);}
+    public void setmHandler(Handler h) { this.mHandler = h;}
+
     /**
      * Set the current state of the chat connection
      *

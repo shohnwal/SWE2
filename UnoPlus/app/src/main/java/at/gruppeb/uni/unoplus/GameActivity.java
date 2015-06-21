@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,7 +70,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     //Bluetooth
     private static final boolean D = true;
-    private static final String TAG = "Lobby";
+    private static final String TAG = "GameActivity";
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
@@ -78,7 +79,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     // Name of the connected device
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
-    private ArrayAdapter<String> mConversationArrayAdapter;
+    private List<String> mConversationArrayAdapter;
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
@@ -106,6 +107,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mBltService.setHandler(mHandler);
         aHelper = mBltService.getmActivity();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mOutStringBuffer = new StringBuffer("");
+        mConversationArrayAdapter = new ArrayList<>();
+
+
     }
 
     @Override

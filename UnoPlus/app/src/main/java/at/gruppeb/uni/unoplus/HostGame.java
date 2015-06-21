@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bluetooth.ActivityHelper;
 import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
@@ -45,7 +48,7 @@ public class HostGame extends ActionBarActivity {
     // Name of the connected device
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
-    private ArrayAdapter<String> mConversationArrayAdapter;
+    private List<String> mConversationArrayAdapter;
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
@@ -77,15 +80,16 @@ public class HostGame extends ActionBarActivity {
         mBltService.setHandler(mHandler);
         aHelper = mBltService.getmActivity();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mOutStringBuffer = new StringBuffer("");
+        mConversationArrayAdapter = new ArrayList<>();
 
         btn_start = (Button)findViewById(R.id.btnStart);
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.GameActivity");
-                startActivity(nextScreen);
-
+                sendMessage("start_game");
+                startNextActivity();
             }
         });
     }
@@ -95,7 +99,7 @@ public class HostGame extends ActionBarActivity {
         super.onStart();
         init();
 
-        btn_start.setClickable(mBltService.isServer());
+        btn_start.setVisibility(mBltService.isServer()?View.VISIBLE:View.INVISIBLE);
 
         if(mBltService.isServer()){
             ensureDiscoverable();
@@ -240,6 +244,10 @@ public class HostGame extends ActionBarActivity {
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+
+                    if(readMessage.equals("start_game")){
+                        startNextActivity();
+                    }
                 }
             }
             if(msg.what== ActivityHelper.MESSAGE_DEVICE_NAME){
@@ -258,6 +266,11 @@ public class HostGame extends ActionBarActivity {
 
         }
     };
+
+    private void startNextActivity(){
+        Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.GameActivity");
+        startActivity(nextScreen);
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
