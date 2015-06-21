@@ -51,7 +51,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ArrayList<ImageViewCard> ivcHandCards;
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
-    private int height, width, NumberOfConnectedPlayers;
+    private int height, width, NumberOfPlayers;
     protected Gamemanager game;
     protected Player player;
 
@@ -109,7 +109,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mOutStringBuffer = new StringBuffer("");
         mConversationArrayAdapter = new ArrayList<>();
         Toast.makeText(this.getApplicationContext(),"Player "+this.mBltService.getPlayerId() + this.mBltService.getPlayerName(),Toast.LENGTH_LONG).show();
-        Log.i(TAG,"Game startet");
+        Log.i(TAG, "Game startet");
     }
 
     @Override
@@ -119,7 +119,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                    if(this.mBltService.isServer()) {
                                                                                         this.serverinit();
                                                                                     }
-                                                                                    this.NumberOfConnectedPlayers = this.mBltService.mSockets.size();;
+                                                                                    this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
                                                                                     this.player=new Player(this.mBltService.getPlayerId(),this);
                                                                                     if(this.mBltService.getPlayerId()==0){
                                                                                         this.game.dealCards(this.mBltService);
@@ -147,7 +147,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                         this.sendMessage("playdeck" + cStr);
                                                                                     }
                                                                                      while (this.player.hand.size() < 7) {
-                                                                                        player.prepareHand(this.NumberOfConnectedPlayers);
+                                                                                        player.prepareHand(this.NumberOfPlayers);
                                                                                     }
         init();
 
@@ -289,19 +289,19 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private void initIvPlayers() {
 
 
-        if (NumberOfConnectedPlayers == 1) {
+        if (NumberOfPlayers == 2) {
             ivPlayers = new ImageView[1];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-        } else if (NumberOfConnectedPlayers == 2) {
+        } else if (NumberOfPlayers == 3) {
             ivPlayers = new ImageView[2];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-        } else if (NumberOfConnectedPlayers == 3) {
+        } else if (NumberOfPlayers == 4) {
             ivPlayers = new ImageView[3];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
             ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-        } else if (NumberOfConnectedPlayers == 4) {
+        } else if (NumberOfPlayers == 5) {
             ivPlayers = new ImageView[4];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
@@ -313,8 +313,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             ivPlayers[i].setVisibility(View.VISIBLE);
             ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
 //TODO GUI Set position & size of other players
-            /*ivPlayers[i].layout(Math.round(this.width / NumberOfConnectedPlayers),  (int) Math.round(this.height * .99f),
-Math.round((i + 1) * this.width / NumberOfConnectedPlayers), (int) Math.round(this.height * .99f));
+            /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f),
+Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
             ivPlayers[i].setBaselineAlignBottom(true);
 
             this.addContentView(ivPlayers[i], ivPlayers[i].getLayoutParams());

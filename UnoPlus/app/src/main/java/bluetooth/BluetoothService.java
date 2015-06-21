@@ -114,6 +114,10 @@ public class BluetoothService implements Serializable {
 
     public void setmHandler(Handler h) { this.mHandler = h;}
 
+    public int getNrOfPlayers(){
+        return mSockets.size() +1;
+    }
+
     /**
      * Set the current state of the chat connection
      *
