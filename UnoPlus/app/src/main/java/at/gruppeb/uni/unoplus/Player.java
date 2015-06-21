@@ -98,7 +98,7 @@ public class Player {
                             } else if (unonr == 2) {
                                 //...
                             }
-                        default:break;
+                         default:break;
                     }
                 } else {
                     switch (command) {
