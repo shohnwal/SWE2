@@ -13,10 +13,8 @@ public class Gamemanager {
     int							num_players;
     int                         current_player;
     int							howManyCardsToTake = 0;
-    boolean                     turn_ended=false;
     boolean 					turns_clockwise = true;
     boolean 					game_ended = false;
-    boolean						skipNextPlayer = false;
     Deck						playdeck;
     Deck						takedeck;
     GameActivity                gameActivity;
@@ -87,9 +85,13 @@ public class Gamemanager {
     public void serverloop(BluetoothService mBlt) {
         for (String messagestring: this.gameActivity.stringList) {
 
+            if(howManyCardsToTake > 0 )
+                this.takeManyCards();
+
+
             int playernumber = Integer.parseInt(messagestring.substring(1, 2));
             if (playernumber == this.current_player) {
-                String command = messagestring.substring(3,6);
+                String command = messagestring.substring(3, 6);
                 switch (command)
                 {
                     case "get":
@@ -129,6 +131,8 @@ public class Gamemanager {
                             this.howManyCardsToTake += 4;
                         } else if (value == "X") {
                             this.howManyCardsToTake += 2;
+                        } else if (value== "R"){
+                            turns_clockwise=!turns_clockwise;
                         }
                         String playdeckString = "playdeck" + color + value;
                         this.gameActivity.sendMessage(playdeckString);
@@ -137,6 +141,8 @@ public class Gamemanager {
                         } else {
                             this.gameActivity.sendMessage(this.getEndTurnString(0));
                         }
+                        if(howManyCardsToTake > 0 )
+                            this.takeManyCards();
                         this.gameActivity.stringList.remove(messagestring);
                         break;
                     case "set":
@@ -144,9 +150,10 @@ public class Gamemanager {
                     case "uno":
                         int unonr = Integer.parseInt(messagestring.substring(messagestring.length() - 1));
                         if (unonr == 1) {
-                            //..
+
                         } else if (unonr == 2) {
-                            this.gameActivity.sendMessage("gameend");
+                            String temp="gameend"+current_player;
+                            this.gameActivity.sendMessage(temp);
                         } break;
                     default:break;
                 }
@@ -170,6 +177,12 @@ public class Gamemanager {
     }
 
     public void dealCards(BluetoothService mBlt) {
+        if(current_player == 0){
+            for(int i=0; i<7;i++){
+                this.gameActivity.player.hand.add(this.takedeck.deck.get(0));
+                this.takedeck.deck.remove(0);
+            }
+        }
         for (int i=1 ; i<this.num_players-1;i++){
             String superstring= "p"+mBlt.getPlayerId();
             String cStr="";
@@ -215,5 +228,34 @@ public class Gamemanager {
         this.playdeck = new Deck(); 							// create deck where players put cards down
 
     }
+    public void takeManyCards(){
+        String cStr="";
+        while(this.howManyCardsToTake > 0){
+            cStr="p"+current_player+"get";
+            if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
+                cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+            }else {
+                cStr+='S';
+            }
+            int Ord=takedeck.deck.get(0).value.ordinal();
+            if(Ord>=9){
+                cStr+=Ord;
+            }else if(Ord==10){
+                cStr+='S';
+            }else if(Ord==11){
+                cStr+='X';
+            }else if(Ord==12){
+                cStr+='R';
+            }else if(Ord==13){
+                cStr+='Y';
+            }else if(Ord==14){
+                cStr+='C';
+            }
+            //superstring+=cStr;
+            this.gameActivity.sendMessage(cStr);
+            this.takedeck.deck.remove(0);
+            this.howManyCardsToTake--;
+        }
 
-}
+        }
+    }

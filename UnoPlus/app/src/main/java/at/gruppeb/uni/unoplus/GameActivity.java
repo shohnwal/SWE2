@@ -216,10 +216,11 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
-                                                                                        if (player.player_id == 0) {
+                                                                                        if (player.player_id == 0 && !game.game_ended) {
                                                                                             game.serverloop(mBltService);
                                                                                         }
                                                                                         player.clientloop();
+
 
 
             removeAllViews();
@@ -229,6 +230,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //TODO finde where to check uno was shaked
             if (mAccel > 5) {
                 Log.i(DEBUGTAG, "shake it!!! ~(^o^~) (~^o^)~");
+                //TODO cheat mechanics
             }
             //Do something to the UI thread here
 

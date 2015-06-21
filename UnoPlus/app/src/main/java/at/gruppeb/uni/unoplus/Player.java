@@ -59,10 +59,12 @@ public class Player {
     protected void clientloop() {
 
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
+
         while (this.gameActivity.stringList.size() > 0) {
             String messagestring = this.gameActivity.stringList.get(0);
-            if (messagestring == "gameend") {
-                //...
+            if (messagestring.substring(0,8).equals("gameend")) {
+                int winningPlayer= Integer.parseInt(messagestring.substring(messagestring.length()-1));
+                //TODO implement windows with the winning player
             }
             else if (messagestring.substring(0,5) == "playd") {
                 String color = messagestring.substring(8,9);
@@ -83,6 +85,7 @@ public class Player {
                             break;
                         case "set":
                             this.itsmyturn = true;
+                            this.setCurrentPlayerId(playernumber);
                             break;
                         case "ply":
                             break;
@@ -101,6 +104,7 @@ public class Player {
                     switch (command) {
                         case "set":
                             this.itsmyturn = false;
+                            this.setCurrentPlayerId(playernumber);
                             break;
                         default: break;
                     }
@@ -110,6 +114,12 @@ public class Player {
             }
             this.gameActivity.stringList.remove(0);
         }
+
+
+    }
+
+    public void setCurrentPlayerId(int id){
+        this.gameActivity.currentPlayerID=id;
     }
 
 
@@ -118,37 +128,57 @@ public class Player {
 
 
     public void					takeCard (BluetoothService mBlt) {				// take card from takedec
-        String sendstring = "p" + this.player_id + "tak";
-      this.gameActivity.sendMessage(sendstring);
+        if(this.gameActivity.currentPlayerID==0){
+            this.hand.add(this.gameActivity.game.takedeck.deck.get(0));
+            this.gameActivity.game.takedeck.deck.remove(0);
+            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+        }
+        else {
+            String sendstring = "p" + this.player_id + "tak";
+            this.gameActivity.sendMessage(sendstring);
+            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+        }
     }
 
    public void					playCard (Card card) {
+        if(player_id==0){
+            this.gameActivity.game.playdeck.deck.add(card);
+            if(!this.hand.remove(card)){
+                //problem to play the card
+            }
+            if(card.value == Card.values.SKIP) {
+                this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(1));
+            }
+            else
+            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
 
-       String cStr="";
-       cStr += "p"+this.player_id+"ply";
-       if(card.color != Card.colors.BLACK){
-           cStr += card.toString().substring(0,1);
-       }else {
-           cStr+='S';
-       }
-       int Ord=card.value.ordinal();
-       if(Ord>=9){
-           cStr+=Ord;
-       }else if(Ord==10){
-           cStr+='S';
-       }else if(Ord==11){
-           cStr+='X';
-       }else if(Ord==12){
-           cStr+='R';
-       }else if(Ord==13){
-           cStr+='Y';
-       }else if(Ord==14){
-           cStr+='C';
-       }
-       this.removeCardFromPlayer(card);
-       //TODO : REMOVE CARD FROM HAND, ASK NATASHA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }else {
+            String cStr = "";
+            cStr += "p" + this.player_id + "ply";
+            if (card.color != Card.colors.BLACK) {
+                cStr += card.toString().substring(0, 1);
+            } else {
+                cStr += 'S';
+            }
+            int Ord = card.value.ordinal();
+            if (Ord >= 9) {
+                cStr += Ord;
+            } else if (Ord == 10) {
+                cStr += 'S';
+            } else if (Ord == 11) {
+                cStr += 'X';
+            } else if (Ord == 12) {
+                cStr += 'R';
+            } else if (Ord == 13) {
+                cStr += 'Y';
+            } else if (Ord == 14) {
+                cStr += 'C';
+            }
+            this.removeCardFromPlayer(card);
+            //TODO : REMOVE CARD FROM HAND, ASK NATASHA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-       this.gameActivity.sendMessage(cStr);
+            this.gameActivity.sendMessage(cStr);
+        }
    }
 
 
