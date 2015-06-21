@@ -1,6 +1,7 @@
 package bluetooth;
 
 import android.app.Activity;
+import android.os.Handler;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  */
 public class ActivityHelper implements Serializable{
     Activity activity;
+    Handler handler;
     int messageState;
 
     // Message types sent from the BluetoothChatService Handler
@@ -25,6 +27,12 @@ public class ActivityHelper implements Serializable{
     public static int playerNR =-1;
 
     public boolean isServer;
+
+    public ActivityHelper(Activity a,Handler h){
+        activity = a;
+        handler = h;
+        playerNR++;
+    }
 
     public ActivityHelper(Activity a){
         activity = a;
@@ -45,6 +53,14 @@ public class ActivityHelper implements Serializable{
 
     public void setActivity(Activity activity) {
         this.activity = activity;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public int getPlayerNr(){

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -125,6 +126,7 @@ public class Lobby extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        bltSingl=new BltSingelton(mHandler,aHelper);
         mBltService =  bltSingl.getInstance();
         mBltService.setmActivity(this);
         aHelper = mBltService.getmActivity();
