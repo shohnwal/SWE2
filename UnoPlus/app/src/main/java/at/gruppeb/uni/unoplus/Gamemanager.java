@@ -11,7 +11,7 @@ import bluetooth.BluetoothService;
 public class Gamemanager {
 
     int							num_players;
-    int                         current_player;
+    int                         current_player=0;
     int							howManyCardsToTake = 0;
     boolean 					turns_clockwise = true;
     boolean 					game_ended = false;
@@ -21,8 +21,6 @@ public class Gamemanager {
 
     public 						Gamemanager(BluetoothService mBlt,GameActivity gameActivity) {
         this.num_players = mBlt.mSockets.size();
-        int randomplayer = (int) (Math.random()*this.num_players-1);
-        this.current_player = randomplayer;
         this.gameActivity=gameActivity;
 
     }
