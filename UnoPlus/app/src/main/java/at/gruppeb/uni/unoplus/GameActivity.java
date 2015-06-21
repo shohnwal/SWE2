@@ -24,7 +24,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -52,7 +51,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ArrayList<ImageViewCard> ivcHandCards;
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
-    private int height, width, NumberOfPlayers;
+    private int height, width, NumberOfConnectedPlayers;
     protected Gamemanager game;
     protected Player player;
 
@@ -109,18 +108,18 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mOutStringBuffer = new StringBuffer("");
         mConversationArrayAdapter = new ArrayList<>();
-
-
+        Toast.makeText(this.getApplicationContext(),"Player "+this.mBltService.getPlayerId() + this.mBltService.getPlayerName(),Toast.LENGTH_LONG).show();
+        Log.i(TAG,"Game startet");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-                                                                                    if(this.mBltService.isServer()) {
+                                                                                   if(this.mBltService.isServer()) {
                                                                                         this.serverinit();
                                                                                     }
-                                                                                    this.NumberOfPlayers = this.mBltService.mSockets.size();;
+                                                                                    this.NumberOfConnectedPlayers = this.mBltService.mSockets.size();;
                                                                                     this.player=new Player(this.mBltService.getPlayerId(),this);
                                                                                     if(this.mBltService.getPlayerId()==0){
                                                                                         this.game.dealCards(this.mBltService);
@@ -147,14 +146,18 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                         }
                                                                                         this.sendMessage("playdeck" + cStr);
                                                                                     }
-                                                                                    while (this.player.hand.size() < 7) {
-                                                                                        player.prepareHand(this.NumberOfPlayers);
+                                                                                     while (this.player.hand.size() < 7) {
+                                                                                        player.prepareHand(this.NumberOfConnectedPlayers);
                                                                                     }
         init();
 
 
+
+        sendMessage("Test");
+
+
     }
-                                                                                    protected void serverinit(){
+    protected void serverinit(){
                                                                                     this.game= new Gamemanager(this.mBltService,this);
                                                                                         this.game.decksinit();
                                                                                         this.game.createCards();
@@ -286,19 +289,19 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private void initIvPlayers() {
 
 
-        if (NumberOfPlayers == 2) {
+        if (NumberOfConnectedPlayers == 1) {
             ivPlayers = new ImageView[1];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-        } else if (NumberOfPlayers == 3) {
+        } else if (NumberOfConnectedPlayers == 2) {
             ivPlayers = new ImageView[2];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-        } else if (NumberOfPlayers == 4) {
+        } else if (NumberOfConnectedPlayers == 3) {
             ivPlayers = new ImageView[3];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
             ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-        } else if (NumberOfPlayers == 5) {
+        } else if (NumberOfConnectedPlayers == 4) {
             ivPlayers = new ImageView[4];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
@@ -310,8 +313,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             ivPlayers[i].setVisibility(View.VISIBLE);
             ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
 //TODO GUI Set position & size of other players
-            /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f), 
-Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
+            /*ivPlayers[i].layout(Math.round(this.width / NumberOfConnectedPlayers),  (int) Math.round(this.height * .99f),
+Math.round((i + 1) * this.width / NumberOfConnectedPlayers), (int) Math.round(this.height * .99f));
             ivPlayers[i].setBaselineAlignBottom(true);
 
             this.addContentView(ivPlayers[i], ivPlayers[i].getLayoutParams());
@@ -582,7 +585,6 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 if (D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                     case BluetoothService.STATE_CONNECTED:
-                        mConversationArrayAdapter.clear();
                         break;
                     case BluetoothService.STATE_CONNECTING:
                         break;
@@ -595,15 +597,14 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
-                mConversationArrayAdapter.add("Me:  " + writeMessage);
             }
             if (msg.what == ActivityHelper.MESSAGE_READ) {
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     stringList.add(readMessage);
+                    Log.i(TAG,readMessage);
                 }
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
