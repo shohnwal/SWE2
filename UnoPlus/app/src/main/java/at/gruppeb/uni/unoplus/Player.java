@@ -17,26 +17,32 @@ public class Player {
 
 
     public Player(int id,GameActivity gameActivity) {
+        System.out.println("\n====================\ncreating player\n====================\n");
         this.player_id = id;
         this.hand = new ArrayList<Card>();
         this.gameActivity=gameActivity;
+        System.out.println("\n====================\nplayer " + this.player_id + " created\n====================\n");
     }
 
     public void setPlaydeckCard(String color, String value) {
         this.playdeckTop = new Card(color, value);
+        System.out.println("\n====================\nPlaydeckcard set...\n====================\n");
     }
 
     public void prepareHand(int NumberOfPlayer){
+        System.out.println("\n====================\nPreparing hand...\n====================\n");
         String temp="p"+this.player_id;
         String superstring="";
         String cStr,color,value;
         for(int i=0;i<NumberOfPlayer-2;i++){
+            System.out.println("\n====================\nforloop...\n====================\n");
             if(temp==(this.gameActivity.stringList.get(i).substring(0,2))){
                 superstring=this.gameActivity.stringList.get(i).substring(2,this.gameActivity.stringList.get(i).length());
                 this.gameActivity.stringList.remove(i);
             } else this.gameActivity.stringList.remove(i);
         }
         while(superstring.length() > 0){
+            System.out.println("\n====================\nwhileloop...\n====================\n");
             cStr=superstring.substring(0,2);
             color = cStr.substring(0,1);
             value = cStr.substring(1,2);
@@ -57,6 +63,7 @@ public class Player {
     }
 
     protected void clientloop() {
+        System.out.println("\n====================\nClientloop active...\n====================\n");
 
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
@@ -114,6 +121,7 @@ public class Player {
             }
             this.gameActivity.stringList.remove(0);
         }
+        System.out.println("\n====================\nClientloop ended...\n====================\n");
 
 
     }
@@ -128,6 +136,7 @@ public class Player {
 
 
     public void					takeCard (BluetoothService mBlt) {				// take card from takedec
+        System.out.println("\n====================\nPlayer takes card\n====================\n");
         if(this.gameActivity.currentPlayerID==0){
             this.hand.add(this.gameActivity.game.takedeck.deck.get(0));
             this.gameActivity.game.takedeck.deck.remove(0);
@@ -141,8 +150,10 @@ public class Player {
     }
 
    public void					playCard (Card card) {
+       System.out.println("\n====================\nPlayer plays card...\n====================\n");
         if(player_id==0){
             this.gameActivity.game.playdeck.deck.add(card);
+            this.gameActivity.player.setPlaydeckCard(card.getCodedName().substring(0, 1), card.getCodedName().substring(1));
             if(!this.hand.remove(card)){
                 //problem to play the card
             }

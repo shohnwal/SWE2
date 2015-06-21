@@ -63,7 +63,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private float mAccelLast; // last acceleration including gravity
 
     //Game mechanics variables
-    private boolean thisPlayersTurn = false;
     protected int currentPlayerID = 0;
     protected Card.colors playdeckColor;        //Color of the top playdeck card after CHOOSE_COLOR event
 
@@ -115,40 +114,17 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     @Override
     protected void onStart() {
         super.onStart();
-
+                                                                                   this.player=new Player(this.mBltService.getPlayerId(),this);
                                                                                    if(this.mBltService.isServer()) {
                                                                                         this.serverinit();
                                                                                     }
+        System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
                                                                                     this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
-                                                                                    this.player=new Player(this.mBltService.getPlayerId(),this);
-                                                                                    if(this.mBltService.getPlayerId()==0){
-                                                                                        this.game.dealCards(this.mBltService);
+        System.out.println("\n====================\nnow trying to create player\n====================\n");
 
-                                                                                        String cStr="";
-                                                                                        if(this.game.playdeck.deck.get(0).color != Card.colors.BLACK){
-                                                                                            cStr+=this.game.playdeck.deck.get(0).color.toString().substring(0,1);
-                                                                                        }else {
-                                                                                            cStr+='S';
-                                                                                        }
-                                                                                        int Ord=this.game.playdeck.deck.get(0).value.ordinal();
-                                                                                        if(Ord>=9){
-                                                                                            cStr+=Ord;
-                                                                                        }else if(Ord==10){
-                                                                                            cStr+='S';
-                                                                                        }else if(Ord==11){
-                                                                                            cStr+='X';
-                                                                                        }else if(Ord==12){
-                                                                                            cStr+='R';
-                                                                                        }else if(Ord==13){
-                                                                                            cStr+='Y';
-                                                                                        }else if(Ord==14){
-                                                                                            cStr+='C';
-                                                                                        }
-                                                                                        this.sendMessage("playdeck" + cStr);
-                                                                                    }
-                                                                                     while (this.player.hand.size() < 7) {
-                                                                                        player.prepareHand(this.NumberOfPlayers);
-                                                                                    }
+                                                                                    // while (this.player.hand.size() < 7) {
+                                                                                     //   player.prepareHand(this.NumberOfPlayers);
+                                                                                    //}
         init();
 
 
@@ -157,15 +133,43 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
 
     }
-    protected void serverinit(){
-                                                                                    this.game= new Gamemanager(this.mBltService,this);
-                                                                                        this.game.decksinit();
-                                                                                        this.game.createCards();
-                                                                                        this.game.putFirstCardDown();
-                                                                                    }
+    protected void serverinit() {
+        this.game = new Gamemanager(this.mBltService, this);
+        this.game.decksinit();
+        this.game.createCards();
+        this.game.putFirstCardDown();
+
+        this.game.dealCards(this.mBltService);
+        System.out.println("this player now has so many cards : " + this.player.hand.size());
+
+        String cStr = "";
+        if (this.game.playdeck.deck.get(0).color != Card.colors.BLACK) {
+            cStr += this.game.playdeck.deck.get(0).color.toString().substring(0, 1);
+        } else {
+            cStr += 'S';
+        }
+        int Ord = this.game.playdeck.deck.get(0).value.ordinal();
+        if (Ord >= 9) {
+            cStr += Ord;
+        } else if (Ord == 10) {
+            cStr += 'S';
+        } else if (Ord == 11) {
+            cStr += 'X';
+        } else if (Ord == 12) {
+            cStr += 'R';
+        } else if (Ord == 13) {
+            cStr += 'Y';
+        } else if (Ord == 14) {
+            cStr += 'C';
+        }
+        this.sendMessage("playdeck" + cStr);
+        this.sendMessage("p0set");
+        this.player.itsmyturn = true;
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     @Override
@@ -191,8 +195,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.setHeight(displayMetrics.heightPixels);
         this.setWidth(displayMetrics.widthPixels);
 
-        //TODO  if this player is curentPlayer from Lobby/GameMech
-        thisPlayersTurn = this.player.itsmyturn;
 
 
         this.initIvCurrentCard();
@@ -204,7 +206,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         initTimer();
 
     }
-
     private void initTimer() {
         int refreshTime = 1000;
         Timer = new Timer();
@@ -292,7 +293,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         if (NumberOfPlayers == 2) {
             ivPlayers = new ImageView[1];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-        } else if (NumberOfPlayers == 3) {
+        } else if (NumberOfPlayers == 1) { //TODO Debug
+            ivPlayers = new ImageView[1];
+            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerFour);
+        }else if (NumberOfPlayers == 3) {
             ivPlayers = new ImageView[2];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
@@ -309,9 +313,12 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             ivPlayers[3] = (ImageView) findViewById(R.id.iview_playerFour);
         }
 
-        for (int i = 0; i < ivPlayers.length; i++) {
+        for (int i = 0,j=0; i < ivPlayers.length; i++, j++) {
             ivPlayers[i].setVisibility(View.VISIBLE);
             ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
+            if (!(this.player.player_id == i)){
+                ivPlayers[i].setTag(j);
+            }else j++;
 //TODO GUI Set position & size of other players
             /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f),
 Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
@@ -360,7 +367,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         for (int i = 0; i < ivPlayers.length; i++) {
             System.out.println("ivp[i]= " + i + "ivp[i] Tag= " + ivPlayers[i].getTag());
             //white = curr player
-            if (ivPlayers[i].getTag().equals(this.currentPlayerID))
+            if (this.player.player_id!=this.currentPlayerID && ivPlayers[i].getTag().equals(this.currentPlayerID))
                 ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             else
                 ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
@@ -386,6 +393,12 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     private void renderCurrentCard() {
+        if (this.player.playdeckTop.get_name() != null && !this.player.playdeckTop.get_name().isEmpty()) {
+            System.out.println(this.player.playdeckTop.get_name());
+        }
+        else
+            System.out.println("Top playdeck is null or empty");
+
         ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(this.player.playdeckTop,
                 ivcCurrentCard));
     }
@@ -410,7 +423,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             ivc.setBaselineAlignBottom(true);
             this.addContentView(ivc, ivc.getLayoutParams());
 
-            if (this.thisPlayersTurn){
+            if (this.player.itsmyturn){
                 ivc.setOnTouchListener(this);
                 ivc.getBackground().clearColorFilter();}
             else {

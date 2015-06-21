@@ -10,7 +10,7 @@ import bluetooth.BluetoothService;
 
 public class Gamemanager {
 
-    int							num_players;
+    int							num_players = 0;
     int                         current_player=0;
     int							howManyCardsToTake = 0;
     boolean 					turns_clockwise = true;
@@ -20,7 +20,7 @@ public class Gamemanager {
     GameActivity                gameActivity;
 
     public 						Gamemanager(BluetoothService mBlt,GameActivity gameActivity) {
-        this.num_players = mBlt.mSockets.size();
+        this.num_players = mBlt.mSockets.size()+1;
         this.gameActivity=gameActivity;
 
     }
@@ -82,6 +82,7 @@ public class Gamemanager {
     }
 
     public void serverloop(BluetoothService mBlt) {
+        System.out.println("\n====================\nServerloop active...\n====================\n");
         for (String messagestring: this.gameActivity.stringList) {
 
             if(howManyCardsToTake > 0 )
@@ -135,6 +136,8 @@ public class Gamemanager {
                         }
                         String playdeckString = "playdeck" + color + value;
                         this.gameActivity.sendMessage(playdeckString);
+
+
                         if (value == "S") {
                             this.gameActivity.sendMessage(this.getEndTurnString(1));
                         } else {
@@ -158,6 +161,7 @@ public class Gamemanager {
                 }
             }
         }
+        System.out.println("\n====================\nServerloop ended...\n====================\n");
     }
 
     public String getEndTurnString(int offset) {
@@ -176,7 +180,8 @@ public class Gamemanager {
     }
 
     public void dealCards(BluetoothService mBlt) {
-        if(current_player == 0){
+        System.out.println("\n====================\ndealing cards...\n====================\n");
+        if(this.gameActivity.player.player_id == 0){
             for(int i=0; i<7;i++){
                 this.gameActivity.player.hand.add(this.takedeck.deck.get(0));
                 this.takedeck.deck.remove(0);
@@ -216,18 +221,24 @@ public class Gamemanager {
 
     public void 				putFirstCardDown() {
         System.out.println("\n====================\nPutting first card on playdeck...\n====================\n");
-        this.playdeck.deck.add(0,this.takedeck.deck.get(0));
+        this.playdeck.deck.add(0, this.takedeck.deck.get(0));
+        String cardcode = this.playdeck.deck.get(0).getCodedName();
+        String playdeckString = "playdeck" + cardcode;
+        this.gameActivity.player.playdeckTop = new Card(Card.colors.RED, Card.values.NINE);
+        this.gameActivity.sendMessage(playdeckString);
         this.takedeck.deck.remove(0);
         System.out.println(this.playdeck.deck.size() + " card currently in playdeck, and that card is " + this.playdeck.deck.get(0).get_name());
     }
 
 
     public void					decksinit() {
+        System.out.println("\n====================\nInitializing decks...\n====================\n");
         this.takedeck = new Deck(); 							//create takedeck deck where players take cards from
         this.playdeck = new Deck(); 							// create deck where players put cards down
 
     }
     public void takeManyCards(){
+        System.out.println("\n====================\ntaking many cards...\n====================\n");
         String cStr="";
         while(this.howManyCardsToTake > 0){
             cStr="p"+current_player+"get";

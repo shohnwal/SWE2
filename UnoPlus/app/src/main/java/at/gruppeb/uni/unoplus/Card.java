@@ -82,7 +82,34 @@ public class Card {
 										return false; 
 									}
 								}
+
+	public String getCodedName() {
+		String cStr = "";
+		if(this.color != Card.colors.BLACK){
+			cStr+=this.color.toString().substring(0,1);
+		}else {
+			cStr+='S';
+		}
+		int Ord=this.value.ordinal();
+		if(Ord>=9){
+			cStr+=Ord;
+		}else if(Ord==10){
+			cStr+='S';
+		}else if(Ord==11){
+			cStr+='X';
+		}else if(Ord==12){
+			cStr+='R';
+		}else if(Ord==13){
+			cStr+='Y';
+		}else if(Ord==14){
+			cStr+='C';
+		}
+		return cStr;
+
+	}
 }
+
+
 
 
 
