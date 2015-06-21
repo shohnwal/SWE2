@@ -82,7 +82,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
-    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private BluetoothAdapter mBluetoothAdapter;
     // Member object for the chat services
     protected BluetoothService mBltService = null;
 
@@ -101,15 +101,18 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
         setContentView(R.layout.activity_game);
 
-        mBltService = new BltSingelton(null, null).getInstance();
+        mBltService = new BltSingelton(null,null).getInstance();
         mBltService.setmActivity(this);
+        mBltService.setHandler(mHandler);
         aHelper = mBltService.getmActivity();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-                                                                                    if(this.mBltService.getPlayerId()==0) {
+
+                                                                                    if(this.mBltService.isServer()) {
                                                                                         this.serverinit();
                                                                                     }
                                                                                     this.NumberOfPlayers = this.mBltService.mSockets.size();;
