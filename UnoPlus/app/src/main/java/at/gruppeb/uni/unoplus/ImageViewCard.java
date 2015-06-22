@@ -27,7 +27,7 @@ public class ImageViewCard extends ImageView {
     //TODO look for right place in code
     public static Drawable getDrawableForCard(Card card, ImageView imageView) {
         Drawable img = imageView.getResources().getDrawable(R.drawable.back);
-        if (card.color.equals(Card.colors.RED)) {
+        if (card.color == Card.colors.RED) {
 
             switch (card.value) {
                 case ZERO:
@@ -73,7 +73,7 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
-        } else if (card.color.equals(Card.colors.GREEN)) {
+        } else if (card.color == Card.colors.GREEN) {
             switch (card.value) {
                 case ZERO:
                     img = imageView.getResources().getDrawable(R.drawable.green0);
@@ -118,7 +118,7 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
-        } else if (card.color.equals(Card.colors.BLUE)) {
+        } else if (card.color == Card.colors.BLUE) {
             switch (card.value) {
                 case ZERO:
                     img = imageView.getResources().getDrawable(R.drawable.blue0);
@@ -163,7 +163,7 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
-        } else if (card.color.equals(Card.colors.YELLOW)) {
+        } else if (card.color == Card.colors.YELLOW) {
             switch (card.value) {
                 case ZERO:
                     img = imageView.getResources().getDrawable(R.drawable.yellow0);
@@ -208,7 +208,7 @@ public class ImageViewCard extends ImageView {
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
             }
-        } else if (card.color.equals(Card.colors.BLACK)) {
+        } else if (card.color == Card.colors.BLACK) {
             switch (card.value) {
                 case TAKE_FOUR:
                     img = imageView.getResources().getDrawable(R.drawable.black4);

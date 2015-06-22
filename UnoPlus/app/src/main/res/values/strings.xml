@@ -36,7 +36,7 @@
     <string name="insecure_connect">Connect a device - Insecure</string>
 
     <!-- About Information-->
-    <string name="information">"<b>Spielregeln:</b> <br></br> Die Karten werden gemischt und jeder Spieler erh\u00e4lt 7 Karten, die er auf die Hand nimmt.
+    <string name="information">"Spielregeln:\n Die Karten werden gemischt und jeder Spieler erh\u00e4lt 7 Karten, die er auf die Hand nimmt.
         Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel.
         Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt.
         Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt.
@@ -44,7 +44,7 @@
         Die verbleibenden Karten werden verdeckt in die Mitte gelegt und bilden den Kartenstapel.
         Vom Kartenstapel wird die oberste Karte aufgedeckt und daneben gelegt.
         Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt.
-        Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt. <br></br> <b>Credits:</b> <br></br>"</string>
+        Dieser Stapel bildet den Ablegestapel. Ein Spieler wird ausgelost der die Runde beginnt. Credits:\n Lukas Feistritzer \n Stefan Hohnwald \n Bernhard Nitsch \n Juliane Pergega \n Natascha Rauscher \n Walter Zaninetti"</string>
 
 
 

@@ -82,9 +82,9 @@ public class Gamemanager {
     }
 
     public void serverloop(BluetoothService mBlt) {
-        System.out.println("\n====================\nServerloop active...\n====================\n");
+        System.out.println("Serverloop active...");
         for (String messagestring: this.gameActivity.stringList) {
-
+            System.out.println(messagestring);
             if(howManyCardsToTake > 0 )
                 this.takeManyCards();
 
@@ -161,7 +161,6 @@ public class Gamemanager {
                 }
             }
         }
-        System.out.println("\n====================\nServerloop ended...\n====================\n");
     }
 
     public String getEndTurnString(int offset) {
@@ -224,8 +223,8 @@ public class Gamemanager {
         this.playdeck.deck.add(0, this.takedeck.deck.get(0));
         String cardcode = this.playdeck.deck.get(0).getCodedName();
         String playdeckString = "playdeck" + cardcode;
-        this.gameActivity.player.playdeckTop = new Card(Card.colors.RED, Card.values.NINE);
         this.gameActivity.sendMessage(playdeckString);
+        this.gameActivity.player.playdeckTop = this.playdeck.deck.get(0);
         this.takedeck.deck.remove(0);
         System.out.println(this.playdeck.deck.size() + " card currently in playdeck, and that card is " + this.playdeck.deck.get(0).get_name());
     }
@@ -241,30 +240,36 @@ public class Gamemanager {
         System.out.println("\n====================\ntaking many cards...\n====================\n");
         String cStr="";
         while(this.howManyCardsToTake > 0){
-            cStr="p"+current_player+"get";
-            if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
-                cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
-            }else {
-                cStr+='S';
+            if (this.gameActivity.currentPlayerID == 0) {
+                this.gameActivity.player.takeCard(this.gameActivity.mBltService);
+                this.howManyCardsToTake--;
             }
-            int Ord=takedeck.deck.get(0).value.ordinal();
-            if(Ord>=9){
-                cStr+=Ord;
-            }else if(Ord==10){
-                cStr+='S';
-            }else if(Ord==11){
-                cStr+='X';
-            }else if(Ord==12){
-                cStr+='R';
-            }else if(Ord==13){
-                cStr+='Y';
-            }else if(Ord==14){
-                cStr+='C';
+            else {
+                cStr="p"+current_player+"get";
+                if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
+                    cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                }else {
+                    cStr+='S';
+                }
+                int Ord=takedeck.deck.get(0).value.ordinal();
+                if(Ord>=9){
+                    cStr+=Ord;
+                }else if(Ord==10){
+                    cStr+='S';
+                }else if(Ord==11){
+                    cStr+='X';
+                }else if(Ord==12){
+                    cStr+='R';
+                }else if(Ord==13){
+                    cStr+='Y';
+                }else if(Ord==14){
+                    cStr+='C';
+                }
+                //superstring+=cStr;
+                this.gameActivity.sendMessage(cStr);
+                this.takedeck.deck.remove(0);
+                this.howManyCardsToTake--;
             }
-            //superstring+=cStr;
-            this.gameActivity.sendMessage(cStr);
-            this.takedeck.deck.remove(0);
-            this.howManyCardsToTake--;
         }
 
         }

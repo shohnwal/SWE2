@@ -125,9 +125,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
         System.out.println("\n====================\nnow trying to create player\n====================\n");
 
-                                                                                    // while (this.player.hand.size() < 7) {
-                                                                                     //   player.prepareHand(this.NumberOfPlayers);
-                                                                                    //}
+                                                                                    while (this.player.hand.size() < 6) {
+                                                                                        player.prepareHand(this.NumberOfPlayers);
+                                                                                    }
+
         init();
 
 
@@ -231,12 +232,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
-                                                                                        if (player.player_id == 0 && !game.game_ended) {
-                                                                                            game.serverloop(mBltService);
-                                                                                        }
-                                                                                        player.clientloop();
-
-
+            if (player.player_id == 0 && !game.game_ended) {
+                game.serverloop(mBltService);
+            }
+            player.clientloop();
 
             removeAllViews();
             renderAllViews();
@@ -396,13 +395,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     private void renderCurrentCard() {
-        if (this.player.playdeckTop.get_name() != null && !this.player.playdeckTop.get_name().isEmpty()) {
-            System.out.println(this.player.playdeckTop.get_name());
-        }
-        else
-            System.out.println("Top playdeck is null or empty");
-
-        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(this.player.playdeckTop,
+        ivcCurrentCard.setBackground(ImageViewCard.getDrawableForCard(this.player.getPlaydeckTop(),
                 ivcCurrentCard));
     }
 
