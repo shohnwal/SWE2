@@ -163,7 +163,6 @@ public class HostGame extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Volume");
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     serviceStop();

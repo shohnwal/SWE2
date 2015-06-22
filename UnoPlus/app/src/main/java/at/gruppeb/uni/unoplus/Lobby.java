@@ -174,7 +174,6 @@ public class Lobby extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Create Game");
                 mBltService.setIsServer(true);
                 createNewGame();
             }
@@ -214,7 +213,6 @@ public class Lobby extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                System.out.println("About");
                 informationAbout();
             }
         });
@@ -231,7 +229,6 @@ public class Lobby extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                System.out.println("Volume");
                 v.setActivated(!v.isActivated());
                 if (v.isActivated()) {
                     serviceStop();
