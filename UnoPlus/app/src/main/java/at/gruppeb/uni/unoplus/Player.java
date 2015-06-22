@@ -104,8 +104,17 @@ public class Player {
     }
 
     protected void clientloop() {
+        if (this.player_id == 1) {
+            this.gameActivity.sendMessage("01");
+        }
+        if (this.player_id == 0) {
+            while (this.gameActivity.stringList.size() > 0) {
+                System.out.println(this.gameActivity.stringList.get(0));
+                this.gameActivity.stringList.remove(0);
+            }
+        }
         System.out.println("Clientloop active " + this.player_id);
-
+/*
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
     while (this.gameActivity.stringList.size() > 0) {
@@ -167,7 +176,7 @@ public class Player {
         }
         this.gameActivity.stringList.remove(0);
     }
-
+    */
 }
 
     public void setCurrentPlayerId(int id){
