@@ -49,8 +49,7 @@ public class Player {
     }
 
     public void prepareHand(int NumberOfPlayer){
-        System.out.println("Preparing hand...");
-        System.out.println(this.player_id);
+        System.out.println("Preparing hand..." + this.player_id);
         String temp="p"+this.player_id;
         String superstring="";
         String cStr,color,value;
