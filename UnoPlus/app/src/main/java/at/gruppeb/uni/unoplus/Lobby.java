@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -178,7 +176,7 @@ public class Lobby extends ActionBarActivity {
             public void onClick(View v) {
                 System.out.println("Create Game");
                 mBltService.setIsServer(true);
-                CreateGameDialog();
+                createNewGame();
             }
         });
     }
@@ -217,7 +215,7 @@ public class Lobby extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("About");
-                InformationAbout();
+                informationAbout();
             }
         });
     }
@@ -244,7 +242,7 @@ public class Lobby extends ActionBarActivity {
         });
     }
 
-    public void InformationAbout(){
+    public void informationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
         al.setMessage((getString(R.string.information)));
@@ -258,43 +256,13 @@ public class Lobby extends ActionBarActivity {
         al.show();
     }
 
-    public void CreateGameDialog() {
+    public void createNewGame() {
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lobby.this);
-        alertDialog.setTitle("Neue Spielrunde erstellen");
-        alertDialog.setMessage("Spielname:");
-        final EditText input = new EditText(Lobby.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        alertDialog.setView(input);
-        alertDialog.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-                Toast.makeText(getBaseContext(), input.getText() + " erstellen...", Toast.LENGTH_SHORT).show();
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
-                nextScreen.putExtra("hostName", input.getText().toString());
+                nextScreen.putExtra("hostName", mBltService.getPlayerName());
                 startActivity(nextScreen);
 
-            }
-        });
-        alertDialog.setNegativeButton("Abbruch", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Toast.makeText(getBaseContext(), "Abbruch!", Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-
-        alertDialog.show();
 
     }
 
