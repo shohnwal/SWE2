@@ -240,30 +240,36 @@ public class Gamemanager {
         System.out.println("\n====================\ntaking many cards...\n====================\n");
         String cStr="";
         while(this.howManyCardsToTake > 0){
-            cStr="p"+current_player+"get";
-            if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
-                cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
-            }else {
-                cStr+='S';
+            if (this.gameActivity.currentPlayerID == 0) {
+                this.gameActivity.player.takeCard(this.gameActivity.mBltService);
+                this.howManyCardsToTake--;
             }
-            int Ord=takedeck.deck.get(0).value.ordinal();
-            if(Ord>=9){
-                cStr+=Ord;
-            }else if(Ord==10){
-                cStr+='S';
-            }else if(Ord==11){
-                cStr+='X';
-            }else if(Ord==12){
-                cStr+='R';
-            }else if(Ord==13){
-                cStr+='Y';
-            }else if(Ord==14){
-                cStr+='C';
+            else {
+                cStr="p"+current_player+"get";
+                if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
+                    cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                }else {
+                    cStr+='S';
+                }
+                int Ord=takedeck.deck.get(0).value.ordinal();
+                if(Ord>=9){
+                    cStr+=Ord;
+                }else if(Ord==10){
+                    cStr+='S';
+                }else if(Ord==11){
+                    cStr+='X';
+                }else if(Ord==12){
+                    cStr+='R';
+                }else if(Ord==13){
+                    cStr+='Y';
+                }else if(Ord==14){
+                    cStr+='C';
+                }
+                //superstring+=cStr;
+                this.gameActivity.sendMessage(cStr);
+                this.takedeck.deck.remove(0);
+                this.howManyCardsToTake--;
             }
-            //superstring+=cStr;
-            this.gameActivity.sendMessage(cStr);
-            this.takedeck.deck.remove(0);
-            this.howManyCardsToTake--;
         }
 
         }
