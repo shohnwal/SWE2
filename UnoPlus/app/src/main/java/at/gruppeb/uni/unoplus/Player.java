@@ -124,8 +124,9 @@ public class Player {
         }
         else {
             System.out.println("Errortest"  + messagestring);
-            System.out.println("playernumber in string : " + messagestring.substring(1,2));
-             int playernumber =Integer.parseInt(messagestring.substring(1,2));
+            System.out.println("playernumber in string : " + messagestring.substring(1,2)+".");
+            char playerchar = messagestring.charAt(1);
+            int playernumber =(int)playerchar;
             String command = messagestring.substring(2,5);
             if (playernumber == this.player_id) {
                 switch (command)

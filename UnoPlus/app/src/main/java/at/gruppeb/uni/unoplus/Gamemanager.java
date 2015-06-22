@@ -125,7 +125,7 @@ public class Gamemanager {
                         System.out.println("incoming message : " + sendstring);
                         this.takedeck.deck.remove(0);
                     case "ply":
-                        String color = messagestring.substring(6,7);
+                        String color = messagestring.substring(5,6);
                         String value = messagestring.substring(messagestring.length()-1);
                         this.playdeck.deck.add(new Card(color, value));
                         if (color == "S" && value == "Y"){
@@ -165,7 +165,7 @@ public class Gamemanager {
     }
 
     public String getEndTurnString(int offset) {
-        String endturnString = "";
+        String endturnString = "p";
         if (this.turns_clockwise == true) {
             this.current_player = (this.current_player + offset + 1)%this.num_players;
         } else if(this.turns_clockwise == false) {
@@ -175,7 +175,7 @@ public class Gamemanager {
                 this.current_player = (this.current_player - offset - 1) % this.num_players;
             }
         }
-        endturnString =endturnString + this.current_player + "set";
+        endturnString = endturnString + this.current_player + "set";
         return endturnString;
     }
 
