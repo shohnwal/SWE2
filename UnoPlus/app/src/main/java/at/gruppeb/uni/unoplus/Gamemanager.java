@@ -82,9 +82,9 @@ public class Gamemanager {
     }
 
     public void serverloop(BluetoothService mBlt) {
-        System.out.println("Serverloop active...");
+        System.out.print("Serverloop active...");
         for (String messagestring: this.gameActivity.stringList) {
-            System.out.println(messagestring);
+            System.out.print(messagestring);
             if(howManyCardsToTake > 0 )
                 this.takeManyCards();
 
@@ -122,6 +122,7 @@ public class Gamemanager {
                         this.gameActivity.stringList.remove(messagestring);
                         this.gameActivity.sendMessage(sendstring);
                         this.gameActivity.sendMessage(this.getEndTurnString(0));
+                        System.out.println("incoming message : " + sendstring);
                         this.takedeck.deck.remove(0);
                     case "ply":
                         String color = messagestring.substring(6,7);
@@ -136,7 +137,7 @@ public class Gamemanager {
                         }
                         String playdeckString = "playdeck" + color + value;
                         this.gameActivity.sendMessage(playdeckString);
-
+                        System.out.println(" incoming playdeck info : " + playdeckString);
 
                         if (value == "S") {
                             this.gameActivity.sendMessage(this.getEndTurnString(1));

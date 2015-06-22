@@ -24,11 +24,8 @@ public class ActivityHelper implements Serializable{
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
-<<<<<<< HEAD
     private int playerNR;
-=======
-    public static int playerNR =-1;
->>>>>>> origin/master
+
 
     public boolean isServer;
 

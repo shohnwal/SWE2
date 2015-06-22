@@ -86,6 +86,7 @@ public class Player {
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
         while (this.gameActivity.stringList.size() > 0) {
+            System.out.print(this.gameActivity.stringList.get(0));
             String messagestring = this.gameActivity.stringList.get(0);
             if (messagestring.substring(0,8).equals("gameend")) {
                 int winningPlayer= Integer.parseInt(messagestring.substring(messagestring.length()-1));
@@ -158,10 +159,12 @@ public class Player {
             this.hand.add(this.gameActivity.game.takedeck.deck.get(0));
             this.gameActivity.game.takedeck.deck.remove(0);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+            System.out.println(this.gameActivity.game.getEndTurnString(0));
         }
         else {
             String sendstring = "p" + this.player_id + "tak";
             this.gameActivity.sendMessage(sendstring);
+            System.out.println(sendstring);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
         }
     }
@@ -174,9 +177,13 @@ public class Player {
             this.hand.remove(card);
             if(card.value == Card.values.SKIP) {
                 this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(1));
+                System.out.println(this.gameActivity.game.getEndTurnString(1));
             }
-            else
-            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+            else {
+                this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+                System.out.println(this.gameActivity.game.getEndTurnString(1));
+            }
+
 
         }else {
             String cStr = "";
