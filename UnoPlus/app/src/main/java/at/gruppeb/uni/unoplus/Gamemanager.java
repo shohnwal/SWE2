@@ -20,7 +20,7 @@ public class Gamemanager {
     GameActivity                gameActivity;
 
     public 						Gamemanager(BluetoothService mBlt,GameActivity gameActivity) {
-        this.num_players = mBlt.mSockets.size()+1;
+        this.num_players = mBlt.getNrOfPlayers();
         this.gameActivity=gameActivity;
 
     }
@@ -84,7 +84,7 @@ public class Gamemanager {
     public void serverloop(BluetoothService mBlt) {
         System.out.print("Serverloop active...");
         for (String messagestring: this.gameActivity.stringList) {
-            System.out.print(messagestring);
+            System.out.print("serverloop untersucht nachricht : " + messagestring);
             if(howManyCardsToTake > 0 )
                 this.takeManyCards();
 
@@ -105,7 +105,7 @@ public class Gamemanager {
                             cStr+='S';
                         }
                         int Ord=takedeck.deck.get(0).value.ordinal();
-                        if(Ord>=9){
+                        if(Ord<=9){
                             cStr+=Ord;
                         }else if(Ord==10){
                             cStr+='S';
@@ -165,7 +165,7 @@ public class Gamemanager {
     }
 
     public String getEndTurnString(int offset) {
-        String endturnString = "P";
+        String endturnString = "";
         if (this.turns_clockwise == true) {
             this.current_player = (this.current_player + offset + 1)%this.num_players;
         } else if(this.turns_clockwise == false) {
@@ -188,9 +188,32 @@ public class Gamemanager {
             }
         }
         for (int i=1 ; i<this.num_players;i++){
-            String superstring= "p"+mBlt.getPlayerId();
-            String cStr="";
             for (int j=0;j<7;j++){
+                String sendstring = "p" + i + "get";
+                String cStr="";
+                if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
+                    cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                }else {
+                    cStr+='S';
+                }
+                int Ord=takedeck.deck.get(0).value.ordinal();
+                if(Ord<=9){
+                    cStr+=Ord;
+                }else if(Ord==10){
+                    cStr+='S';
+                }else if(Ord==11){
+                    cStr+='X';
+                }else if(Ord==12){
+                    cStr+='R';
+                }else if(Ord==13){
+                    cStr+='Y';
+                }else if(Ord==14){
+                    cStr+='C';
+                }
+                sendstring += cStr;
+                this.gameActivity.sendMessage(sendstring);
+                System.out.println("message sent while dealing cards : " + sendstring);
+                this.takedeck.deck.remove(0);
             /*    cStr="";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
                     cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
@@ -212,10 +235,7 @@ public class Gamemanager {
                     cStr+='C';
                 }
                 superstring+=cStr; */
-                this.takedeck.deck.remove(0);
             }
-            System.out.println(superstring);
-            this.gameActivity.sendMessage(superstring);
         }
 
     }
@@ -254,7 +274,7 @@ public class Gamemanager {
                     cStr+='S';
                 }
                 int Ord=takedeck.deck.get(0).value.ordinal();
-                if(Ord>=9){
+                if(Ord<=9){
                     cStr+=Ord;
                 }else if(Ord==10){
                     cStr+='S';

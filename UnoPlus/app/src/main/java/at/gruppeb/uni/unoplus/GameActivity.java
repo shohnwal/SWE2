@@ -133,10 +133,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         init();
 
 
-
-        sendMessage("Test");
-
-
     }
     protected void serverinit() {
         this.game = new Gamemanager(this.mBltService, this);
@@ -635,7 +631,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
                     stringList.add(readMessage);
-                    Log.i(TAG,readMessage);
+                    Log.i(TAG,"incoming message : " + readMessage);
                 }
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {

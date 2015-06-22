@@ -49,8 +49,32 @@ public class Player {
     }
 
     public void prepareHand(int NumberOfPlayer){
-        System.out.println("Preparing hand..." + this.player_id);
-        String temp="p"+this.player_id;
+        System.out.print("Preparing hand..." + this.player_id);
+        this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
+
+        if (this.gameActivity.stringList.size() > 0) {
+            //String messagestring = this.gameActivity.stringList.get(0);
+            System.out.println("incoming message : " + this.gameActivity.stringList.get(0));
+            this.gameActivity.stringList.remove(0);
+        }
+         /*   int playernumber =Integer.parseInt(messagestring.substring(1, 2));
+            if (playernumber == this.player_id) {
+                String command = messagestring.substring(3,6);
+                switch (command) {
+                    case "get":
+                        String color = messagestring.substring(6, 7);
+                        String value = messagestring.substring(messagestring.length() - 1);
+                        this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            this.gameActivity.stringList.remove(0);
+
+        }*/
+
+/*        String temp="p"+this.player_id;
         String superstring="";
         String cStr,color,value;
         for(int i=0;i<NumberOfPlayer-1;i++){
@@ -65,7 +89,7 @@ public class Player {
             value = cStr.substring(1,2);
             this.hand.add(new Card (color,value));
             superstring=superstring.substring(2);
-        }
+        } */
     }
 
 
@@ -84,64 +108,66 @@ public class Player {
 
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
-        while (this.gameActivity.stringList.size() > 0) {
-            System.out.print(this.gameActivity.stringList.get(0));
-            String messagestring = this.gameActivity.stringList.get(0);
-            if (messagestring.substring(0,8).equals("gameend")) {
-                int winningPlayer= Integer.parseInt(messagestring.substring(messagestring.length()-1));
-                //TODO implement windows with the winning player
-            }
-            else if (messagestring.substring(0,5) == "playd") {
-                String color = messagestring.substring(8,9);
-                String value = messagestring.substring(messagestring.length()-1);
-                Card tempcard = new Card(color, value);
-                this.setPlaydeckCard(tempcard);
-
-            }
-            else {
-                 int playernumber =Integer.parseInt(messagestring.substring(1,2));
-                String command = messagestring.substring(3,6);
-                if (playernumber == this.player_id) {
-                    switch (command)
-                    {
-                        case "get":
-                            String color = messagestring.substring(6,7);
-                            String value = messagestring.substring(messagestring.length()-1);
-                            this.hand.add( new Card(color, value) );
-                            break;
-                        case "set":
-                            this.itsmyturn = true;
-                            this.setCurrentPlayerId(playernumber);
-                            break;
-                        case "ply":
-                            break;
-                        case "tak":
-                            break;
-                        case "uno":
-                            int unonr = Integer.parseInt(messagestring.substring(messagestring.length()-1));
-                            if (unonr == 1) {
-                                //..
-                            } else if (unonr == 2) {
-                                //...
-                            }
-                         default:break;
-                    }
-                } else {
-                    switch (command) {
-                        case "set":
-                            this.itsmyturn = false;
-                            this.setCurrentPlayerId(playernumber);
-                            break;
-                        default: break;
-                    }
-                }
-
-
-            }
-            this.gameActivity.stringList.remove(0);
+    while (this.gameActivity.stringList.size() > 0) {
+        System.out.print(this.gameActivity.stringList.get(0));
+        String messagestring = this.gameActivity.stringList.get(0);
+        if (messagestring.substring(0,5).equals("gameend")) {
+            int winningPlayer= Integer.parseInt(messagestring.substring(messagestring.length()-1));
+            //TODO implement windows with the winning player
         }
+        else if (messagestring.substring(0,5) == "playd") {
+            String color = messagestring.substring(8,9);
+            String value = messagestring.substring(messagestring.length()-1);
+            Card tempcard = new Card(color, value);
+            this.setPlaydeckCard(tempcard);
 
+        }
+        else {
+            System.out.println("Errortest"  + messagestring);
+            System.out.println("playernumber in string : " + messagestring.substring(1,2));
+             int playernumber =Integer.parseInt(messagestring.substring(1,2));
+            String command = messagestring.substring(2,5);
+            if (playernumber == this.player_id) {
+                switch (command)
+                {
+                    case "get":
+                        String color = messagestring.substring(6,7);
+                        String value = messagestring.substring(messagestring.length()-1);
+                        this.hand.add( new Card(color, value) );
+                        break;
+                    case "set":
+                        this.itsmyturn = true;
+                        this.setCurrentPlayerId(playernumber);
+                        break;
+                    case "ply":
+                        break;
+                    case "tak":
+                        break;
+                    case "uno":
+                        int unonr = Integer.parseInt(messagestring.substring(messagestring.length()-1));
+                        if (unonr == 1) {
+                            //..
+                        } else if (unonr == 2) {
+                            //...
+                        }
+                     default:break;
+                }
+            } else {
+                switch (command) {
+                    case "set":
+                        this.itsmyturn = false;
+                        this.setCurrentPlayerId(playernumber);
+                        break;
+                    default: break;
+                }
+            }
+
+
+        }
+        this.gameActivity.stringList.remove(0);
     }
+
+}
 
     public void setCurrentPlayerId(int id){
         this.gameActivity.currentPlayerID=id;
@@ -158,12 +184,12 @@ public class Player {
             this.hand.add(this.gameActivity.game.takedeck.deck.get(0));
             this.gameActivity.game.takedeck.deck.remove(0);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
-            System.out.println(this.gameActivity.game.getEndTurnString(0));
+            System.out.println("take card method, endturnstring : " + this.gameActivity.game.getEndTurnString(0));
         }
         else {
             String sendstring = "p" + this.player_id + "tak";
             this.gameActivity.sendMessage(sendstring);
-            System.out.println(sendstring);
+            System.out.println("take card method, endturnstring : " + sendstring);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
         }
     }
@@ -176,11 +202,11 @@ public class Player {
             this.hand.remove(card);
             if(card.value == Card.values.SKIP) {
                 this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(1));
-                System.out.println(this.gameActivity.game.getEndTurnString(1));
+                System.out.println("play card method, endturnstring : " + this.gameActivity.game.getEndTurnString(1));
             }
             else {
                 this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
-                System.out.println(this.gameActivity.game.getEndTurnString(1));
+                System.out.println("play card method, endturnstring : " + this.gameActivity.game.getEndTurnString(1));
             }
 
 
@@ -193,7 +219,7 @@ public class Player {
                 cStr += 'S';
             }
             int Ord = card.value.ordinal();
-            if (Ord >= 9) {
+            if (Ord <= 9) {
                 cStr += Ord;
             } else if (Ord == 10) {
                 cStr += 'S';
