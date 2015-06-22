@@ -559,7 +559,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                     }
                 })
                 .create();
-        d.setCanceledOnTouchOutside(true);
+        d.setCanceledOnTouchOutside(false);
         d.show();
 
     }
