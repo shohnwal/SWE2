@@ -260,7 +260,7 @@ public class Lobby extends ActionBarActivity {
 
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
-                nextScreen.putExtra("hostName", mBltService.getPlayerName());
+                nextScreen.putExtra("hostName", (mBltService.getPlayerName()+" "+"ID: "+mBltService.getPlayerId()) );
                 startActivity(nextScreen);
 
 
