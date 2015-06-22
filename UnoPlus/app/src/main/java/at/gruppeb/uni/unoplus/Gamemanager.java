@@ -100,7 +100,7 @@ public class Gamemanager {
                         String sendstring = "p" + current_player + "get";
                         String cStr="";
                         if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
-                            cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                            cStr+=takedeck.deck.get(0).color.toString().charAt(0);
                         }else {
                             cStr+='S';
                         }
@@ -125,8 +125,8 @@ public class Gamemanager {
                         System.out.println("incoming message : " + sendstring);
                         this.takedeck.deck.remove(0);
                     case "ply":
-                        String color = messagestring.substring(5,6);
-                        String value = messagestring.substring(messagestring.length()-1);
+                        String color = ""+messagestring.charAt(5);
+                        String value = ""+messagestring.charAt(6);
                         this.playdeck.deck.add(new Card(color, value));
                         if (color == "S" && value == "Y"){
                             this.howManyCardsToTake += 4;
@@ -192,7 +192,7 @@ public class Gamemanager {
                 String sendstring = "p" + i + "get";
                 String cStr="";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
-                    cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                    cStr+=takedeck.deck.get(0).color.toString().charAt(0);
                 }else {
                     cStr+='S';
                 }
@@ -213,12 +213,6 @@ public class Gamemanager {
                 sendstring += cStr;
                 this.gameActivity.sendMessage(sendstring);
                 System.out.println("message sent while dealing cards : " + sendstring);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Sleep vorbei");
                 this.takedeck.deck.remove(0);
             /*    cStr="";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
@@ -275,7 +269,7 @@ public class Gamemanager {
             else {
                 cStr="p"+current_player+"get";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
-                    cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
+                    cStr+=takedeck.deck.get(0).color.toString().charAt(0);
                 }else {
                     cStr+='S';
                 }

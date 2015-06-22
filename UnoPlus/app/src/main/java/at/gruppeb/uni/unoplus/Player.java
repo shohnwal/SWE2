@@ -111,20 +111,20 @@ public class Player {
     while (this.gameActivity.stringList.size() > 0) {
         System.out.print(this.gameActivity.stringList.get(0));
         String messagestring = this.gameActivity.stringList.get(0);
-        if (messagestring.substring(0,5).equals("gameend")) {
-            int winningPlayer= Integer.parseInt(messagestring.substring(messagestring.length()-1));
+        if (messagestring.substring(0,5).equals("gamee")) {
+            int winningPlayer= (int)messagestring.charAt(7);
             //TODO implement windows with the winning player
         }
         else if (messagestring.substring(0,5) == "playd") {
-            String color = messagestring.substring(8,9);
-            String value = messagestring.substring(messagestring.length()-1);
+            String color = ""+messagestring.charAt(7);
+            String value = ""+messagestring.charAt(8);
             Card tempcard = new Card(color, value);
             this.setPlaydeckCard(tempcard);
 
         }
         else {
             System.out.println("Errortest"  + messagestring);
-            System.out.println("playernumber in string : " + messagestring.substring(1,2)+".");
+            System.out.println("playernumber in string : " + messagestring.charAt(1));
             char playerchar = messagestring.charAt(1);
             int playernumber =(int)playerchar;
             String command = messagestring.substring(2,5);
@@ -132,8 +132,8 @@ public class Player {
                 switch (command)
                 {
                     case "get":
-                        String color = messagestring.substring(6,7);
-                        String value = messagestring.substring(messagestring.length()-1);
+                        String color = ""+ messagestring.charAt(5);
+                        String value = ""+ messagestring.charAt(6);
                         this.hand.add( new Card(color, value) );
                         break;
                     case "set":
@@ -145,7 +145,7 @@ public class Player {
                     case "tak":
                         break;
                     case "uno":
-                        int unonr = Integer.parseInt(messagestring.substring(messagestring.length()-1));
+                        int unonr = (int)(messagestring.charAt(5));
                         if (unonr == 1) {
                             //..
                         } else if (unonr == 2) {
