@@ -187,11 +187,11 @@ public class Gamemanager {
                 this.takedeck.deck.remove(0);
             }
         }
-        for (int i=1 ; i<this.num_players-1;i++){
+        for (int i=1 ; i<this.num_players;i++){
             String superstring= "p"+mBlt.getPlayerId();
             String cStr="";
             for (int j=0;j<7;j++){
-                cStr="";
+            /*    cStr="";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
                     cStr+=takedeck.deck.get(0).color.toString().substring(0,1);
                 }else {
@@ -211,9 +211,10 @@ public class Gamemanager {
                 }else if(Ord==14){
                     cStr+='C';
                 }
-                superstring+=cStr;
+                superstring+=cStr; */
                 this.takedeck.deck.remove(0);
             }
+            System.out.println(superstring);
             this.gameActivity.sendMessage(superstring);
         }
 

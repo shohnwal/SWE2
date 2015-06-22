@@ -123,7 +123,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     }
         System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
                                                                                     this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
-        System.out.println("\n====================\nnow trying to create player\n====================\n");
+        System.out.println("\n====================\nplayers will now wait for cardsr\n====================\n");
 
                                                                                     while (this.player.hand.size() < 6) {
                                                                                         player.prepareHand(this.NumberOfPlayers);
