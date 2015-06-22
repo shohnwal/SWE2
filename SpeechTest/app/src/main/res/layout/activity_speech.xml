@@ -21,4 +21,13 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="85dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="vibrate"
+        android:id="@+id/btn_vibrate"
+        android:layout_below="@+id/record_speech"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

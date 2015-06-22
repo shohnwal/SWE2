@@ -1,7 +1,9 @@
 package at.gruppeb.uni.speechtest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -18,6 +20,9 @@ public class SpeechActivity extends ActionBarActivity {
 
     public TextView speechtxt;
 
+    public Vibrator vibrator;
+    public boolean vibrate = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,29 @@ public class SpeechActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Record_Speech.recordSpeech(SpeechActivity.this);
+            }
+        });
+
+
+
+        Button btn_vibrate = (Button)findViewById(R.id.btn_vibrate);
+        btn_vibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(vibrate){
+                    vibrate = false;
+                    //Set the pattern for vibration
+                    long pattern[]={0,50,100,200,300,400,500,600};
+
+                    //Start the vibration
+                    vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+                    //start vibration with repeated count, use -1 if you don't want to repeat the vibration
+                    vibrator.vibrate(pattern, 0);
+                }
+                else{
+                    vibrate = true;
+                    vibrator.cancel();
+                }
             }
         });
     }
