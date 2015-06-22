@@ -213,6 +213,12 @@ public class Gamemanager {
                 sendstring += cStr;
                 this.gameActivity.sendMessage(sendstring);
                 System.out.println("message sent while dealing cards : " + sendstring);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Sleep vorbei");
                 this.takedeck.deck.remove(0);
             /*    cStr="";
                 if(this.takedeck.deck.get(0).color != Card.colors.BLACK){
