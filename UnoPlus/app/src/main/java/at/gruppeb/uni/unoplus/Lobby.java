@@ -159,6 +159,7 @@ public class Lobby extends ActionBarActivity {
         });
         al.setNegativeButton("Nein", null);
         al.show();
+
     }
 
     public void init() {
@@ -246,7 +247,7 @@ public class Lobby extends ActionBarActivity {
     public void InformationAbout(){
         AlertDialog.Builder al = new AlertDialog.Builder(Lobby.this);
         al.setTitle("Information");
-        al.setMessage(Html.fromHtml(getString(R.string.information)));
+        al.setMessage((getString(R.string.information)));
         al.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
