@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,6 +17,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -34,6 +36,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Dictate.Record_Speech;
 import bluetooth.ActivityHelper;
 import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
@@ -492,28 +495,49 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //TODO GUI + GameMech Say Uno
                                                                         if(this.player.hand.size() == 1) {
                                                                             //TODO offer so say uno
-                                                                            boolean saysuno = true;
-                                                                            if (saysuno) {
-                                                                                String sendstring = "p" + this.player.player_id + "uno1";
-                                                                                this.sendMessage(sendstring);
-                                                                            }else
-                                                                            {
-                                                                                this.player.takeCard(mBltService);
+
+                                                                            //startet sprachaufzeichnung
+                                                                            Record_Speech.recordSpeech(GameActivity.this);
+
+                                                                            //wenn uno gesagt wurde
+                                                                            if(_uno_said){
+                                                                                _uno_said = false;
+                                                                                boolean saysuno = true;
+                                                                                if (saysuno) {
+                                                                                    String sendstring = "p" + this.player.player_id + "uno1";
+                                                                                    this.sendMessage(sendstring);
+                                                                                }else
+                                                                                {
+                                                                                    this.player.takeCard(mBltService);
+                                                                                }
                                                                             }
+
+
 
                                                                         } else if (this.player.hand.size() == 0) {
-                                                                            boolean saysuno = true;
 
-                                                                            if (saysuno) {
-                                                                            //TODO offer to say unouno (Button)
-                                                                            String sendstring = "p" + this.player.player_id + "uno2";
-                                                                            this.sendMessage(sendstring);
+                                                                            //startet sprachaufzeichnung
+                                                                            Record_Speech.recordSpeech(GameActivity.this);
+
+                                                                            //wenn unouno gesagt wurde
+                                                                            if(_uno_said){
+                                                                                _uno_said = false;
+
+                                                                                boolean saysuno = true;
+
+                                                                                if (saysuno) {
+                                                                                    //TODO offer to say unouno (Button)
+                                                                                    String sendstring = "p" + this.player.player_id + "uno2";
+                                                                                    this.sendMessage(sendstring);
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    this.player.takeCard(mBltService);
+                                                                                    //maybe TODO : implement so player takes 2 cards
+                                                                                }
                                                                             }
-                                                                            else
-                                                                            {
-                                                                                this.player.takeCard(mBltService);
-                                                                                //maybe TODO : implement so player takes 2 cards
-                                                                            }
+
+
                                                                         }
                 break;
             default:
@@ -657,6 +681,23 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
+        }
+    }
+    private  boolean _uno_said = false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == Record_Speech.SPEECH_RECOGNIZED){
+            if(data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if(!result.isEmpty()){
+                    if(result.get(0).toLowerCase().contains("uno")){
+                        _uno_said = true;
+                    }
+                }
+            }
         }
     }
 
