@@ -24,19 +24,17 @@ public class ActivityHelper implements Serializable{
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
-    public static int playerNR =-2;
+    private int playerNR;
 
     public boolean isServer;
 
     public ActivityHelper(Activity a,Handler h){
         activity = a;
         handler = h;
-        playerNR++;
     }
 
     public ActivityHelper(Activity a){
         activity = a;
-        playerNR++;
     }
 
     public int getMessageState() {
@@ -73,5 +71,9 @@ public class ActivityHelper implements Serializable{
 
     public void setIsServer(boolean isServer) {
         this.isServer = isServer;
+    }
+
+    public void setPlayerNr(int i) {
+        this.playerNR = i;
     }
 }

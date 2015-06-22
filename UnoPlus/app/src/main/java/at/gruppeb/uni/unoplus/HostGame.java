@@ -5,16 +5,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,6 +58,8 @@ public class HostGame extends ActionBarActivity {
     private ActivityHelper aHelper;
 
 
+    public static int playerNr = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +89,9 @@ public class HostGame extends ActionBarActivity {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mBltService.initializePlayerNr();
+                mBltService.setPlayerNr(0);
                 sendMessage("start_game");
                 startNextActivity();
             }
@@ -199,6 +203,24 @@ public class HostGame extends ActionBarActivity {
         }
     }
 
+    private void sendMessageToSingle(String message ,int pos) {
+        // Check that we're actually connected before trying anything
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            mBltService.writeToSingle(send,pos);
+
+            // Reset out string buffer to zero and clear the edit text field
+            mOutStringBuffer.setLength(0);
+        }
+    }
+
     // The action listener for the EditText widget, to listen for the return key
     private TextView.OnEditorActionListener mWriteListener =
             new TextView.OnEditorActionListener() {
@@ -247,6 +269,9 @@ public class HostGame extends ActionBarActivity {
 
                     if(readMessage.equals("start_game")){
                         startNextActivity();
+                    }
+                    if(readMessage.contains("PlayerNr;")){
+                        mBltService.setPlayerNr(Integer.parseInt(readMessage.split(";")[1]));
                     }
                 }
             }

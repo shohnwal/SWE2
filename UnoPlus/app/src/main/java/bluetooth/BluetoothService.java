@@ -21,7 +21,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,12 +29,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
-
-import at.gruppeb.uni.unoplus.Lobby;
-
-import java.io.Serializable;
 
 public class BluetoothService implements Serializable {
     // Debugging
@@ -279,6 +275,39 @@ public class BluetoothService implements Serializable {
         }
     }
 
+
+
+    public void initializePlayerNr(){
+        int h = 1;
+        for (int i = 0; i < mConnThreads.size(); i++) {
+            byte[] send = ("PlayerNr;"+h).getBytes();
+            writeToSingle(send,i);
+            h++;
+        }
+    }
+
+    /**
+     * Write to the ConnectedThread in an unsynchronized manner
+     *
+     * @param out The bytes to write
+     * @see BluetoothService.ConnectedThread#write(byte[])
+     */
+    public void writeToSingle(byte[] out,int pos) {
+        try {
+            // Create temporary object
+            ConnectedThread r;
+            // Synchronize a copy of the ConnectedThread
+            synchronized (this) {
+                if (mState != STATE_CONNECTED) return;
+                r = mConnThreads.get(pos);
+            }
+            // Perform the write unsynchronized
+            r.write(out);
+        } catch (Exception e) {
+        }
+
+    }
+
     /**
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
@@ -329,6 +358,9 @@ public class BluetoothService implements Serializable {
         this.mHandler = handler;
     }
 
+    public void setPlayerNr(int i) {
+        this.mActivity.setPlayerNr(i);
+    }
 
 
     /**
@@ -517,14 +549,6 @@ public class BluetoothService implements Serializable {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
-        }
-
-        /**
-         * returns the actual number of connected player
-         */
-
-        public int getNrOfPlayer() {
-            return mSockets.size();
         }
 
 
