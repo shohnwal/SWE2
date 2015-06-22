@@ -559,10 +559,10 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                             playdeckColor=Card.colors.GREEN;
                             dlg.cancel();
                         }
-
                     }
                 })
                 .create();
+        d.setCanceledOnTouchOutside(true);
         d.show();
 
     }
@@ -693,10 +693,4 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             }
         }
     }
-
 }
-
-
-
-//
-
