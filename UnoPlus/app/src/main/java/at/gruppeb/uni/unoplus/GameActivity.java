@@ -686,7 +686,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             if(data != null){
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 if(!result.isEmpty()){
-                    if(result.get(0).toLowerCase().contains("uno")){
+                    if(result.get(0).toLowerCase().contains("uno") || result.get(0).toLowerCase().contains("u") || result.get(0).toLowerCase().contains("o")){
                         _uno_said = true;
                     }
                 }
