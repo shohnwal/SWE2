@@ -69,6 +69,9 @@ public class ImageViewCard extends ImageView {
                 case SKIP:
                     img = imageView.getResources().getDrawable(R.drawable.red_skip);
                     break;
+                case TAKE_FOUR:
+                    img = imageView.getResources().getDrawable(R.drawable.red_plus4);
+                    break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
@@ -113,6 +116,9 @@ public class ImageViewCard extends ImageView {
                     break;
                 case SKIP:
                     img = imageView.getResources().getDrawable(R.drawable.green_skip);
+                    break;
+                case TAKE_FOUR:
+                    img = imageView.getResources().getDrawable(R.drawable.green_plus4);
                     break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
@@ -159,6 +165,9 @@ public class ImageViewCard extends ImageView {
                 case SKIP:
                     img = imageView.getResources().getDrawable(R.drawable.blue_skip);
                     break;
+                case TAKE_FOUR:
+                    img = imageView.getResources().getDrawable(R.drawable.blue_plus4);
+                    break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
@@ -203,6 +212,9 @@ public class ImageViewCard extends ImageView {
                     break;
                 case SKIP:
                     img = imageView.getResources().getDrawable(R.drawable.yellow_skip);
+                    break;
+                case TAKE_FOUR:
+                    img = imageView.getResources().getDrawable(R.drawable.yellow_plus4);
                     break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
