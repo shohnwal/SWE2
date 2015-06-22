@@ -575,7 +575,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 // draged image
                 View.DragShadowBuilder sb = new View.DragShadowBuilder(v);
                 v.startDrag(cd, sb, v, 0);
-            } else if (v.getId() == ivcStackCard.getId()) {
+            } else if (v.getId() == ivcStackCard.getId()&& this.player.itsmyturn) {
                 this.player.takeCard(mBltService);
                 removeHandCards();
                 renderHandCards();
