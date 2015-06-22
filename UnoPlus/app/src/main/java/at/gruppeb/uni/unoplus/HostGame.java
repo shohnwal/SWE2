@@ -35,6 +35,7 @@ public class HostGame extends ActionBarActivity {
     String hostNameString;
     private ImageView iBVolumeOn;
     private Button btn_start;
+    private TextView spielErstellenTV;
 
     //Bluetooth
     private static final boolean D = true;
@@ -85,6 +86,7 @@ public class HostGame extends ActionBarActivity {
         mConversationArrayAdapter = new ArrayList<>();
 
         btn_start = (Button)findViewById(R.id.btnStart);
+        spielErstellenTV = (TextView) findViewById(R.id.textView_SpielErstellen);
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +105,8 @@ public class HostGame extends ActionBarActivity {
         super.onStart();
         init();
 
-        btn_start.setVisibility(mBltService.isServer()?View.VISIBLE:View.INVISIBLE);
+        btn_start.setVisibility(mBltService.isServer() ? View.VISIBLE : View.INVISIBLE);
+        spielErstellenTV.setText(mBltService.isServer()?"Spiel Erstellen":"Spiel Beitreten");
 
         if(mBltService.isServer()){
             ensureDiscoverable();
