@@ -82,9 +82,9 @@ public class Gamemanager {
     }
 
     public void serverloop(BluetoothService mBlt) {
-        System.out.println("\n====================\nServerloop active...\n====================\n");
+        System.out.println("Serverloop active...");
         for (String messagestring: this.gameActivity.stringList) {
-
+            System.out.println(messagestring);
             if(howManyCardsToTake > 0 )
                 this.takeManyCards();
 
@@ -161,7 +161,6 @@ public class Gamemanager {
                 }
             }
         }
-        System.out.println("\n====================\nServerloop ended...\n====================\n");
     }
 
     public String getEndTurnString(int offset) {
@@ -224,8 +223,8 @@ public class Gamemanager {
         this.playdeck.deck.add(0, this.takedeck.deck.get(0));
         String cardcode = this.playdeck.deck.get(0).getCodedName();
         String playdeckString = "playdeck" + cardcode;
-        this.gameActivity.player.playdeckTop = new Card(Card.colors.RED, Card.values.NINE);
         this.gameActivity.sendMessage(playdeckString);
+        this.gameActivity.player.playdeckTop = this.playdeck.deck.get(0);
         this.takedeck.deck.remove(0);
         System.out.println(this.playdeck.deck.size() + " card currently in playdeck, and that card is " + this.playdeck.deck.get(0).get_name());
     }
