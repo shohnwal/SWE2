@@ -93,8 +93,7 @@ public class HostGame extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                mBltService.initializePlayerNr();
-                mBltService.setPlayerNr(0);
+
                 sendMessage("start_game");
                 startNextActivity();
             }

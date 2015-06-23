@@ -111,6 +111,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mOutStringBuffer = new StringBuffer("");
         mConversationArrayAdapter = new ArrayList<>();
+        if(mBltService.isServer()){
+            mBltService.initializePlayerNr();
+            mBltService.setPlayerNr(0);
+        }
         Toast.makeText(this.getApplicationContext(),"Player "+this.mBltService.getPlayerId() + this.mBltService.getPlayerName(),Toast.LENGTH_LONG).show();
         Log.i(TAG, "Game startet");
     }
