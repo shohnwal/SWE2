@@ -667,9 +667,6 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
             }
 
-            if(msg.what == ActivityHelper.MESSAGE_READ_OBJECT){
-                setGameObject((GameObject)msg.obj);
-            }
 
 
         }
