@@ -636,6 +636,9 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 if (readMessage.length() > 0) {
                     stringList.add(readMessage);
                     Log.i(TAG,"incoming message : " + readMessage);
+                    if(readMessage.startsWith("PlaNr;")){
+                        mBltService.setPlayerNr(Integer.parseInt(readMessage.split(";")[1]));
+                    }
                 }
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
