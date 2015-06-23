@@ -725,7 +725,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         if (!gameObject.equals(null)) {
             // Get the message bytes and tell the BluetoothChatService to write
             mBltService.write(gameObject);
-
+            Log.d(TAG,"object send : " + gameObject.toString());
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
