@@ -52,7 +52,7 @@ public class Player {
         System.out.print("Preparing hand..." + this.player_id);
         //this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
 
-        while (this.gameActivity.stringList.size() > 0) {
+        if (this.gameActivity.stringList.size() > 0) {
             //String messagestring = this.gameActivity.stringList.get(0);
             String messagestring = this.gameActivity.stringList.get(0);
             System.out.println("incoming message : " + messagestring);
