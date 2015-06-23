@@ -69,7 +69,6 @@ public class Lobby extends ActionBarActivity {
         getSupportActionBar().hide();
         //Remove the notification Bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_lobby);
         serviceStart();
 
