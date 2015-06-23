@@ -301,6 +301,7 @@ public class BluetoothService implements Serializable {
                 synchronized (this) {
                     if (mState != STATE_CONNECTED) return;
                     r = mConnThreads.get(i);
+                    Log.d(TAG,"send to : " + r.getName());
                 }
                 // Perform the write unsynchronized
                 r.write(go);
@@ -335,6 +336,7 @@ public class BluetoothService implements Serializable {
             synchronized (this) {
                 if (mState != STATE_CONNECTED) return;
                 r = mConnThreads.get(pos);
+
             }
             // Perform the write unsynchronized
             r.write(out);
@@ -569,7 +571,7 @@ public class BluetoothService implements Serializable {
                 try {
                     // Read from the ObjectInputStream
                     object = ois.readObject();
-                    Log.d(TAG, "received data : " + ((GameObject)object).toString());
+                    Log.d(TAG, "received data : " + ((GameObject) object).toString());
                     mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
                     oos.flush();
 
@@ -606,6 +608,7 @@ public class BluetoothService implements Serializable {
             try {
                 oos.writeObject(go);
                 oos.flush();
+                oos.close();
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write

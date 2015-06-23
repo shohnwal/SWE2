@@ -102,6 +102,7 @@ public class Player {
         this.itsmyturn = false;
         this.gameActivity.gameObject.setChanged(true);
         this.gameActivity.gameObject.setHandcards(this.player_id, hand);
+        GameObject go = this.gameActivity.gameObject;
         this.gameActivity.sendMessage(this.gameActivity.gameObject);
         this.gameActivity.sendMessage(this.gameActivity.gameObject);
     }
