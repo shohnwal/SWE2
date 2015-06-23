@@ -141,19 +141,24 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     @Override
     protected void onStart() {
         super.onStart();
-                                                                                   this.player=new Player(this.mBltService.getPlayerId(),this);
-                                                                                   if(this.mBltService.isServer()) {
-                                                                                        this.serverinit();
-                                                                                    }
+        this.player=new Player(this.mBltService.getPlayerId(),this);
+        if(this.mBltService.isServer()) {
+            this.serverinit();
+        }
         System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
-                                                                                    this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
+        this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
         System.out.println("\n====================\nplayers will now wait for cardsr\n====================\n");
 
-                                                                                    while (this.player.hand.size() < 6) {
-                                                                                        player.prepareHand();
-                                                                                    }
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                while (player.hand.size() < 6) {
+                    player.prepareHand();
+                }
+            }
+        });
+        thread.start();
 
-        init();
+                init();
 
 
     }
