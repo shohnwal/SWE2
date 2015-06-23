@@ -118,6 +118,9 @@ public class Gamemanager {
 
     public void putFirstCardDown() {
         this.playdeck.deck.add(0, this.takedeck.deck.get(0));
+        if (this.playdeck.deck.get(0).color == Card.colors.BLACK) {
+            
+        }
         this.takedeck.deck.remove(0);
         System.out.println(this.playdeck.deck.size() + " card currently in playdeck, and that card is " + this.playdeck.deck.get(0).get_name());
     }

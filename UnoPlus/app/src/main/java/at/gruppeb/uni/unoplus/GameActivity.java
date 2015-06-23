@@ -70,7 +70,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     //Game mechanics variables
     protected int currentPlayerID = 0;
-    protected Card.colors playdeckColor;        //Color of the top playdeck card after CHOOSE_COLOR event
 
     //Bluetooth
     private static final boolean D = true;
@@ -548,16 +547,16 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                     @Override
                     public void onClick(DialogInterface dlg, int position) {
                         if (position == 0) {
-                           playdeckColor=Card.colors.RED;
+                           player.playdeckTop.color=Card.colors.RED;
                             dlg.cancel();
                         } else if (position == 1) {
-                            playdeckColor=Card.colors.BLUE;
+                            player.playdeckTop.color=Card.colors.BLUE;
                             dlg.cancel();
                         } else if (position == 2) {
-                            playdeckColor=Card.colors.YELLOW;
+                            player.playdeckTop.color=Card.colors.YELLOW;
                             dlg.cancel();
                         } else if (position == 3) {
-                            playdeckColor=Card.colors.GREEN;
+                            player.playdeckTop.color=Card.colors.GREEN;
                             dlg.cancel();
                         }
                     }
