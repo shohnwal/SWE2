@@ -61,6 +61,7 @@ public class Player {
             this.takeCard();
             this.hand.add(this.gameActivity.gameObject.takeTakeDeckTopCard());
         }
+        this.isallowedtocheat = false;
     }
 
     public void takeManyCards(int anz){
