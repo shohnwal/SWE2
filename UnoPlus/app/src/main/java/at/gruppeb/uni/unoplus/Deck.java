@@ -26,4 +26,11 @@ public class Deck implements Serializable {
             return true;
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "deck=" + deck +
+                '}';
+    }
 }

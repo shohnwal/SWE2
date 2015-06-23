@@ -1,7 +1,5 @@
 package at.gruppeb.uni.unoplus;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 public class Card implements Serializable {
@@ -42,6 +40,14 @@ public class Card implements Serializable {
 			return this.actionCard;
 	}
 
+	@Override
+	public String toString() {
+		return "Card{" +
+				"color=" + color +
+				", value=" + value +
+				", actionCard=" + actionCard +
+				'}';
+	}
 }
 
 
