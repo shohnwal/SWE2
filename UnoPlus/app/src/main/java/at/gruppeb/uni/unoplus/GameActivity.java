@@ -355,7 +355,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     private void renderAllViews() {
         renderHandCards();
         renderCurrentCard();
-        renderPlayers();
+       // renderPlayers();
         //renderCurrentPlayer();
 
     }
