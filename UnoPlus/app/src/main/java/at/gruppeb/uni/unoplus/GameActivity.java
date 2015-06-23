@@ -288,37 +288,40 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     }
 
     private void initIvPlayers() {
+        ivPlayers = new ImageView[NumberOfPlayers];
 
 
-        if (NumberOfPlayers == 2) {
-            ivPlayers = new ImageView[1];
+        if (NumberOfPlayers == 1) {
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-        } else if (NumberOfPlayers == 1) { //TODO Debug
-            ivPlayers = new ImageView[0];
-            //ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerFour);
-        }else if (NumberOfPlayers == 3) {
-            ivPlayers = new ImageView[2];
+
+        } else if (NumberOfPlayers == 2) {
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-        } else if (NumberOfPlayers == 4) {
-            ivPlayers = new ImageView[3];
+
+        }else if (NumberOfPlayers == 3) {
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
             ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-        } else if (NumberOfPlayers == 5) {
-            ivPlayers = new ImageView[4];
+
+        } else if (NumberOfPlayers == 4) {
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
             ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
             ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
             ivPlayers[3] = (ImageView) findViewById(R.id.iview_playerFour);
+
+        } else if (NumberOfPlayers == 5) {
+            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
+            ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
+            ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
+            ivPlayers[3] = (ImageView) findViewById(R.id.iview_playerFour);
+            ivPlayers[4] = (ImageView) findViewById(R.id.iview_playerFive);
+
         }
 
         for (int i = 0,j=0; i < ivPlayers.length; i++, j++) {
             ivPlayers[i].setVisibility(View.VISIBLE);
             ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
-            if (!(this.player.player_id == i)){
-                ivPlayers[i].setTag(j);
-            }else j++;
+
 //TODO GUI Set position & size of other players
             /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f),
 Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
@@ -356,7 +359,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     private void renderAllViews() {
         renderHandCards();
         renderCurrentCard();
-       // renderPlayers();
+        renderPlayers();
         //renderCurrentPlayer();
 
     }
@@ -365,12 +368,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         //TODO GUI highlight player
 
         for (int i = 0; i < ivPlayers.length; i++) {
-            System.out.println("ivp[i]= " + i + "ivp[i] Tag= " + ivPlayers[i].getTag());
             //white = curr player
-            if (this.player.player_id!=
-                    this.currentPlayerID &&
-                    (int)ivPlayers[i].getTag()
-                            ==(this.currentPlayerID))
+            if (currentPlayerID== i )
                 ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             else
                 ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
