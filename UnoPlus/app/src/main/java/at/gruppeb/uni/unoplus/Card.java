@@ -6,7 +6,7 @@ public class Card {
 
 	static enum 				colors { RED, BLUE, GREEN, YELLOW, BLACK;
 									public static colors getRandom() {
-									return values()[(int) (Math.random() * values().length)];
+									return values()[(int) (Math.random() * (values().length)-1)];
 								}}
 	static enum 				values { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, SKIP, TAKE_TWO, RETOUR, TAKE_FOUR, CHOOSE_COLOR;
 									public static values getRandom() {
