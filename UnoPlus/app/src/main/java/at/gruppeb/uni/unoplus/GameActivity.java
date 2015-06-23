@@ -366,7 +366,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         for (int i = 0; i < ivPlayers.length; i++) {
             System.out.println("ivp[i]= " + i + "ivp[i] Tag= " + ivPlayers[i].getTag());
             //white = curr player
-            if (this.player.player_id!=this.currentPlayerID && ivPlayers[i].getTag().equals(this.currentPlayerID))
+            if (this.player.player_id!=this.currentPlayerID && ivPlayers[i].getTag() ==(this.currentPlayerID))
                 ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             else
                 ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
