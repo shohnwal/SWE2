@@ -92,6 +92,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private ActivityHelper aHelper;
     protected ArrayList<String> stringList=new ArrayList<String>();
 
+    private int ready=0;
+    private boolean allReady = true;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -143,6 +146,13 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         super.onStart();
         this.player=new Player(this.mBltService.getPlayerId(),this);
         if(this.mBltService.isServer()) {
+            while (allReady){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             this.serverinit();
         }
         System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
@@ -158,7 +168,11 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         });
         thread.start();
 
-                init();
+        init();
+
+        if(!mBltService.isServer()){
+            sendMessage("i_ready");
+        }
 
 
     }
@@ -632,6 +646,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new Handler() {
         @Override
@@ -659,7 +675,15 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
                     if(readMessage.length() == 7) {
-                        stringList.add(readMessage);
+                        if(readMessage.startsWith("i_ready")){
+                            ready++;
+                            if(ready == mBltService.getNrOfPlayers()-1){
+                                allReady = false;
+                            }
+                        }else{
+                            stringList.add(readMessage);
+                        }
+
                         Log.i(TAG, "incoming message : " + readMessage);
                     }
                     else{
