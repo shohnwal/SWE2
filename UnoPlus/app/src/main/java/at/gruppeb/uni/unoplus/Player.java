@@ -64,7 +64,7 @@ public class Player {
                     case "get":
                         String color = messagestring.substring(6, 7);
                         String value = messagestring.substring(messagestring.length() - 1);
-                        this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
+                        this.hand.add(new Card(Card.colors.valueOf(color), Card.values.valueOf(value)));
                         break;
                     default:
                         break;
