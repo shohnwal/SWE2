@@ -1,5 +1,6 @@
 package bluetooth;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -9,7 +10,7 @@ import at.gruppeb.uni.unoplus.Deck;
 /**
  * Created by Luki on 23.06.2015.
  */
-public class GameObject {
+public class GameObject implements Serializable {
     int current_player;
     int howManyCardsToTake;
     boolean turns_clockwise;
