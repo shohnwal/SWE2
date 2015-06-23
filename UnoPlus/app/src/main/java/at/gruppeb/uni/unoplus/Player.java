@@ -57,7 +57,7 @@ public class Player {
             this.gameActivity.gameObject.getTakedeck().deck.add(this.hand.get(0));
             this.hand.remove(0);
         }
-        for (int i = 0; i < handsize_temp) {
+        for (int i = 0; i < handsize_temp;i++) {
             this.takeCard();
             this.hand.add(this.gameActivity.gameObject.takeTakeDeckTopCard());
         }
