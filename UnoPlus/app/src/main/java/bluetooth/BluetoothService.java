@@ -27,8 +27,8 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -53,6 +53,8 @@ public class BluetoothService implements Serializable {
     private ArrayList<String> mDeviceAddresses;
     private ArrayList<ConnectedThread> mConnThreads;
     public ArrayList<BluetoothSocket> mSockets;
+
+    public ArrayList<String> messageList;
     /**
      * A bluetooth piconet can support up to 7 connections. This array holds 7 unique UUIDs.
      * When attempting to make a connection, the UUID on the client must match one that the server
@@ -92,6 +94,7 @@ public class BluetoothService implements Serializable {
         mUuids.add(UUID.fromString("aa91eab1-d8ad-448e-abdb-95ebba4a9b55"));
         mUuids.add(UUID.fromString("4d34da73-d0a4-4f40-ac38-917e0a9dee97"));
         mUuids.add(UUID.fromString("5e14d4df-9c8a-4db7-81e4-c937564c86e0"));
+        messageList = new ArrayList<String>();
     }
 
     /**
@@ -113,6 +116,10 @@ public class BluetoothService implements Serializable {
 
     public int getNrOfPlayers(){
         return mSockets.size() +1;
+    }
+
+    public ArrayList<String> getMessageList(){
+        return messageList;
     }
 
     /**
@@ -271,6 +278,30 @@ public class BluetoothService implements Serializable {
                 }
                 // Perform the write unsynchronized
                 r.write(out);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    /**
+     * Write to the ConnectedThread in an unsynchronized manner
+     *
+     * @param go The bytes to write
+     * @see BluetoothService.ConnectedThread#write(GameObject)
+     */
+    public void write(GameObject go) {
+        // When writing, try to write out to all connected threads
+        for (int i = 0; i < mConnThreads.size(); i++) {
+            try {
+                // Create temporary object
+                ConnectedThread r;
+                // Synchronize a copy of the ConnectedThread
+                synchronized (this) {
+                    if (mState != STATE_CONNECTED) return;
+                    r = mConnThreads.get(i);
+                }
+                // Perform the write unsynchronized
+                r.write(go);
             } catch (Exception e) {
             }
         }
@@ -490,19 +521,19 @@ public class BluetoothService implements Serializable {
      */
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
+        private final ObjectInputStream mmInStream;
+        private final ObjectOutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
+            ObjectInputStream tmpIn = null;
+            ObjectOutputStream tmpOut = null;
 
             // Get the BluetoothSocket input and output streams
             try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
+                tmpIn =new ObjectInputStream(socket.getInputStream());
+                tmpOut =new ObjectOutputStream(socket.getOutputStream());
             } catch (IOException e) {
                 Log.e(TAG, "temp sockets not created", e);
             }
@@ -514,21 +545,29 @@ public class BluetoothService implements Serializable {
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[7];
-            int bytes;
+            Object object;
 
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
 
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                    object = mmInStream.readObject(); //.read(buffer);
+
+                    if(object instanceof String){
+                        int bytes = ((String) object).length();
+                        // Send the obtained bytes to the UI Activity
+                        mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, (String)object).sendToTarget();
+                    }else{
+                        mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
+                    }
+
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     break;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -544,6 +583,20 @@ public class BluetoothService implements Serializable {
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        public void write(GameObject go) {
+            try {
+                mmOutStream.writeObject(go);
+                /**
+                 * Write to the connected OutStream.
+                 * @param buffer  The bytes to write
+                 */
+                // Share the sent message back to the UI Activity
+                mHandler.obtainMessage(mActivity.MESSAGE_WRITE_OBJECT, -1, -1, go).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }

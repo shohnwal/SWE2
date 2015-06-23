@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import Dictate.Record_Speech;
 import bluetooth.ActivityHelper;
 import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
+import bluetooth.GameObject;
 
 /**
  * Created by Natascha on 28/05/2015.
@@ -705,9 +707,19 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //}
             }
 
+            if(msg.what == ActivityHelper.MESSAGE_WRITE_OBJECT){
+
+            }
+
+            if(msg.what == ActivityHelper.MESSAGE_READ_OBJECT){
+
+            }
+
 
         }
     };
+
+    List<GameObject> objectList = new Vector<GameObject>();
 
     /**
      * Sends a message.
@@ -731,6 +743,27 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 e.printStackTrace();
             }
 
+            // Reset out string buffer to zero and clear the edit text field
+            mOutStringBuffer.setLength(0);
+        }
+    }
+
+    /**
+     * Sends a object.
+     *
+     * @param go A string of text to send.
+     */
+    protected void sendObject(GameObject go) {
+        // Check that we're actually connected before trying anything
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (!go.equals(null)) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            mBltService.write(go);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
