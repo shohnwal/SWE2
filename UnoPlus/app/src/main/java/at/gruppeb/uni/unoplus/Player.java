@@ -73,6 +73,7 @@ public class Player {
 
         } else {
             System.out.println("No element list in array list for prepare hand method");
+            this.gameActivity.sendMessage("player" + this.player_id + "is waiting for cards");
         }
 
 
