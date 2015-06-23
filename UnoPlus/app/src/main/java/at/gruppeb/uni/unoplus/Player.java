@@ -48,6 +48,7 @@ public class Player {
             if(itsmyturn){
                 takeManyCards(gameObject.getHowManyCardsToTake());
             }
+            this.gameActivity.currentPlayerID = gameObject.getCurrent_player();
         }
     }
 
@@ -101,10 +102,8 @@ public class Player {
         this.itsmyturn = false;
         this.gameActivity.gameObject.setChanged(true);
         this.gameActivity.gameObject.setHandcards(this.player_id, hand);
-        if(this.player_id == 0){
-        }else {
-            this.gameActivity.sendMessage(this.gameActivity.gameObject);
-        }
+        this.gameActivity.sendMessage(this.gameActivity.gameObject);
+
     }
 
         //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
