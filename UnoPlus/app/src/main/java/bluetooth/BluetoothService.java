@@ -32,7 +32,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -265,9 +264,9 @@ public class BluetoothService implements Serializable {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see BluetoothService.ConnectedThread#write(byte[])
+     * @see BluetoothService.ConnectedThread#write(String)
      */
-    public void write(byte[] out) {
+    public void write(String out) {
         // When writing, try to write out to all connected threads
         for (int i = 0; i < mConnThreads.size(); i++) {
             try {
@@ -314,12 +313,8 @@ public class BluetoothService implements Serializable {
     public void initializePlayerNr(){
         int h = 1;
         for (int i = 0; i < mConnThreads.size(); i++) {
-            try {
-                byte[] send = ("PlaNr;"+h).getBytes("UTF-8");
-                writeToSingle(send,i);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            String send = "PlaNr;"+h;
+            writeToSingle(send,i);
 
             h++;
         }
@@ -329,9 +324,9 @@ public class BluetoothService implements Serializable {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see BluetoothService.ConnectedThread#write(byte[])
+     * @see BluetoothService.ConnectedThread#writeToSingle(String,int)
      */
-    public void writeToSingle(byte[] out,int pos) {
+    public void writeToSingle(String out,int pos) {
         try {
             // Create temporary object
             ConnectedThread r;
@@ -742,16 +737,16 @@ public class BluetoothService implements Serializable {
         }
 
 
-        public void write(byte[] buffer) {
+        public void write(String send) {
             try {
-                mmOutStream.write(buffer);
-                mmOutStream.flush();
+                oos.writeUTF(send);
+                oos.flush();
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write
                  */
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, buffer)
+                mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, send)
                         .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

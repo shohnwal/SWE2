@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -132,12 +131,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
-            try {
-                byte[] send = message.getBytes("UTF-8");
-                mBltService.write(send);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            String send = message;
+            mBltService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -631,9 +626,9 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 String writeMessage = new String(writeBuf);
             }
             if (msg.what == ActivityHelper.MESSAGE_READ) {
-                byte[] readBuf = (byte[]) msg.obj;
+
                 // construct a string from the valid bytes in the buffer
-                String readMessage = new String(readBuf, 0, msg.arg1);
+                String readMessage = (String)msg.obj;
                 if (readMessage.length() > 0) {
                     if(readMessage.length() == 7) {
                         if(readMessage.startsWith("i_ready") && mBltService.isServer()){
@@ -701,12 +696,8 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
-            try {
-                byte[] send = message.getBytes("UTF-8");
-                mBltService.write(send);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            String send = message;
+            mBltService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
