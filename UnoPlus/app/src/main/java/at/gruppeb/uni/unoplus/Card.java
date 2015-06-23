@@ -21,7 +21,6 @@ public class Card implements Serializable {
 
 
 	public Card(Card.colors color, Card.values value) {
-									Log.i(DEBUGTAG, " card created ");
 									this.color = color;
 									this.value = value;
 									if 	(this.color.equals(Card.colors.BLACK)

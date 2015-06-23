@@ -82,16 +82,16 @@ public class Player {
        if (this.checkCard(card, this.playdeckTop)) {
            this.hand.remove(card);
            this.gameActivity.gameObject.setPlayDeckTop(card);
-           if(card.value.equals(Card.values.TAKE_TWO)){
+           if(card.value == Card.values.TAKE_TWO){
                this.gameActivity.gameObject.setHowManyCardsToTake(2);
            }
-           if(card.value.equals(Card.values.TAKE_FOUR)){
+           if(card.value == Card.values.TAKE_FOUR){
                this.gameActivity.gameObject.setHowManyCardsToTake(4);
            }
-           if(card.value.equals(Card.values.RETOUR)) {
+           if(card.value == Card.values.RETOUR) {
                this.gameActivity.gameObject.changeTurns_clockwise();
            }
-           this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value.equals(Card.values.SKIP)?1:0);
+           this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value == Card.values.SKIP?1:0);
            endTurn();
        }
 

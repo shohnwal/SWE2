@@ -32,7 +32,6 @@ public class Gamemanager {
 
 
     public void createCards() {
-        System.out.println("\n====================\n" + "Creating cards...\n====================\n");
         createZeroCards();
         createNormalCards();
         createSpecialCards();
@@ -44,7 +43,6 @@ public class Gamemanager {
         for (int color = 0; color < 4; color++) {                        // create basic cards with number 0, 1 of each kind
             Card temp = new Card(Card.colors.values()[color], Card.values.ZERO);
             this.takedeck.deck.add(temp);
-            System.out.println("Card " + temp.get_name() + " created");
         }
     }
 
@@ -54,7 +52,6 @@ public class Gamemanager {
                 for (int amount = 0; amount < 2; amount++) {
                     Card temp = new Card(Card.colors.values()[color], Card.values.values()[type]);
                     this.takedeck.deck.add(temp);
-                    System.out.println("Card " + temp.get_name() + " created");
                 }
             }
         }
@@ -66,7 +63,6 @@ public class Gamemanager {
                 for (int amount = 0; amount < 2; amount++) {
                     Card temp = new Card(Card.colors.values()[color], Card.values.values()[type]);
                     this.takedeck.deck.add(temp);
-                    System.out.println("Card " + temp.get_name() + " created");
                 }
                 }
         }
@@ -74,7 +70,6 @@ public class Gamemanager {
             for (int amount = 0; amount < 4; amount++) {
                 Card temp = new Card(Card.colors.BLACK, Card.values.values()[type]);
                 this.takedeck.deck.add(temp);
-                System.out.println("Card " + temp.get_name() + " created");
             }
         }
     }
