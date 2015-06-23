@@ -168,7 +168,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             cStr += 'C';
         }
         this.sendMessage("playdeck" + cStr);
-        this.sendMessage("p0set");
+        this.sendMessage("p0seton");
         this.player.itsmyturn = true;
     }
     @Override
@@ -498,7 +498,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                                 _uno_said = false;
                                                                                 boolean saysuno = true;
                                                                                 if (saysuno) {
-                                                                                    String sendstring = "p" + this.player.player_id + "uno1";
+                                                                                    String sendstring = "p" + this.player.player_id + "uno11";
                                                                                     this.sendMessage(sendstring);
                                                                                 }else
                                                                                 {
@@ -521,7 +521,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
                                                                                 if (saysuno) {
                                                                                     //TODO offer to say unouno (Button)
-                                                                                    String sendstring = "p" + this.player.player_id + "uno2";
+                                                                                    String sendstring = "p" + this.player.player_id + "uno22";
                                                                                     this.sendMessage(sendstring);
                                                                                 }
                                                                                 else

@@ -135,7 +135,7 @@ public class Gamemanager {
                         } else if (value== "R"){
                             turns_clockwise=!turns_clockwise;
                         }
-                        String playdeckString = "playdeck" + color + value;
+                        String playdeckString = "playd" + color + value;
                         this.gameActivity.sendMessage(playdeckString);
                         System.out.println(" incoming playdeck info : " + playdeckString);
 
@@ -151,11 +151,11 @@ public class Gamemanager {
                     case "set":
                         break;
                     case "uno":
-                        int unonr = Integer.parseInt(messagestring.substring(messagestring.length() - 1));
+                        int unonr = (int)messagestring.charAt(5);
                         if (unonr == 1) {
 
                         } else if (unonr == 2) {
-                            String temp="gameend"+current_player;
+                            String temp="gamend"+current_player;
                             this.gameActivity.sendMessage(temp);
                         } break;
                     default:break;
@@ -175,7 +175,7 @@ public class Gamemanager {
                 this.current_player = (this.current_player - offset - 1) % this.num_players;
             }
         }
-        endturnString = endturnString + this.current_player + "set";
+        endturnString = endturnString + this.current_player + "seton";
         return endturnString;
     }
 

@@ -105,30 +105,18 @@ public class Player {
 
     protected void clientloop() {
         System.out.println("Clientloop active " + this.player_id);
-        if (this.player_id == 1) {
-            for (int i = 0; i < 5; i++) {
-                this.gameActivity.sendMessage("01");
-            }
-        }
-        if (this.player_id == 0) {
-            while (this.gameActivity.stringList.size() > 0) {
-                System.out.println(this.gameActivity.stringList.get(0));
-                this.gameActivity.stringList.remove(0);
-            }
-        }
-/*
         //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
     while (this.gameActivity.stringList.size() > 0) {
         System.out.print(this.gameActivity.stringList.get(0));
         String messagestring = this.gameActivity.stringList.get(0);
-        if (messagestring.substring(0,5).equals("gamee")) {
+        if (messagestring.equals("gamend1")) {
             int winningPlayer= (int)messagestring.charAt(7);
             //TODO implement windows with the winning player
         }
         else if (messagestring.substring(0,5) == "playd") {
-            String color = ""+messagestring.charAt(7);
-            String value = ""+messagestring.charAt(8);
+            String color = ""+messagestring.charAt(5);
+            String value = ""+messagestring.charAt(6);
             Card tempcard = new Card(color, value);
             this.setPlaydeckCard(tempcard);
 
@@ -178,7 +166,7 @@ public class Player {
         }
         this.gameActivity.stringList.remove(0);
     }
-    */
+
 }
 
     public void setCurrentPlayerId(int id){
