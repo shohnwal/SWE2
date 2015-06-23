@@ -52,6 +52,8 @@ public class ActivityHelper implements Serializable{
         return activity;
     }
 
+    public String getActivityName(){return this.activity.getLocalClassName();}
+
     public void setActivity(Activity activity) {
         this.activity = activity;
     }

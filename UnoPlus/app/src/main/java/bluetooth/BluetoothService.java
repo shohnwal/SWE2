@@ -560,23 +560,24 @@ public class BluetoothService implements Serializable {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[7];
             Object object = new Object();
+            String string = "";
 
             // Keep listening to the InputStream while connected
             while (true) {
                 Log.d(TAG, "while(true)");
                 try {
                     // Read from the ObjectInputStream
-                    object = ois.readObject(); //.read(buffer);
-                    Log.d(TAG, "send data : " + object.toString());
-                    Log.i(TAG,object.toString());
-
-                    if(object instanceof String){
+                    Log.d(TAG,"Activity Name : " + mActivity.getActivityName());
+                    if(mActivity.getActivityName().equals("HostGame")){
+                        string = ois.readUTF();
+                        Log.d(TAG, "received data : " + object.toString());
                         int bytes = ((String) object).length();
                         // Send the obtained bytes to the UI Activity
-                        mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, (String)object).sendToTarget();
-                    }else{
+                        mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, string).sendToTarget();
+                    }else {
+                        object = ois.readObject(); //.read(buffer);
+                        Log.d(TAG, "received data : " + object.toString());
                         mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
-
                     }
 
                 } catch (IOException e) {
