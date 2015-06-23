@@ -185,12 +185,14 @@ public class Player {
             this.gameActivity.game.takedeck.deck.remove(0);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
             System.out.println("take card method, endturnstring : " + this.gameActivity.game.getEndTurnString(0));
+            this.itsmyturn = false;
         }
         else {
             String sendstring = "p" + this.player_id + "tak";
             this.gameActivity.sendMessage(sendstring);
             System.out.println("take card method, endturnstring : " + sendstring);
             this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
+            this.itsmyturn = false;
         }
     }
 
@@ -208,7 +210,7 @@ public class Player {
                 this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
                 System.out.println("play card method, endturnstring : " + this.gameActivity.game.getEndTurnString(1));
             }
-
+            this.itsmyturn = false;
 
         }else {
             String cStr = "";
@@ -233,8 +235,8 @@ public class Player {
                 cStr += 'C';
             }
             this.removeCardFromPlayer(card);
-
             this.gameActivity.sendMessage(cStr);
+            this.itsmyturn = false;
         }
    }
 
