@@ -72,6 +72,9 @@ public class ImageViewCard extends ImageView {
                 case TAKE_FOUR:
                     img = imageView.getResources().getDrawable(R.drawable.red_plus4);
                     break;
+                case CHOOSE_COLOR:
+                    img = imageView.getResources().getDrawable(R.drawable.red_blackcolor);
+                    break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
@@ -119,6 +122,9 @@ public class ImageViewCard extends ImageView {
                     break;
                 case TAKE_FOUR:
                     img = imageView.getResources().getDrawable(R.drawable.green_plus4);
+                    break;
+                case CHOOSE_COLOR:
+                    img = imageView.getResources().getDrawable(R.drawable.green_blackcolor);
                     break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
@@ -168,6 +174,9 @@ public class ImageViewCard extends ImageView {
                 case TAKE_FOUR:
                     img = imageView.getResources().getDrawable(R.drawable.blue_plus4);
                     break;
+                case CHOOSE_COLOR:
+                    img = imageView.getResources().getDrawable(R.drawable.blue_blackcolor);
+                    break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
                     break;
@@ -215,6 +224,9 @@ public class ImageViewCard extends ImageView {
                     break;
                 case TAKE_FOUR:
                     img = imageView.getResources().getDrawable(R.drawable.yellow_plus4);
+                    break;
+                case CHOOSE_COLOR:
+                    img = imageView.getResources().getDrawable(R.drawable.yellow_blackcolor);
                     break;
                 default:
                     img = imageView.getResources().getDrawable(R.drawable.back);
