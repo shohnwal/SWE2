@@ -184,31 +184,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
 
         this.game.dealCards(this.mBltService);
-        System.out.println("this player now has so many cards : " + this.player.hand.size());
 
-        String cStr = "";
-        if (this.game.playdeck.deck.get(0).color != Card.colors.BLACK) {
-            cStr += this.game.playdeck.deck.get(0).color.toString().substring(0, 1);
-        } else {
-            cStr += 'S';
-        }
-        int Ord = this.game.playdeck.deck.get(0).value.ordinal();
-        if (Ord >= 9) {
-            cStr += Ord;
-        } else if (Ord == 10) {
-            cStr += 'S';
-        } else if (Ord == 11) {
-            cStr += 'X';
-        } else if (Ord == 12) {
-            cStr += 'R';
-        } else if (Ord == 13) {
-            cStr += 'Y';
-        } else if (Ord == 14) {
-            cStr += 'C';
-        }
-        this.sendMessage("playdeck" + cStr);
-        this.sendMessage("p0seton");
-        this.player.itsmyturn = true;
     }
     @Override
     public void onDestroy() {

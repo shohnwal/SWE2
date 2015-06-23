@@ -8,7 +8,6 @@ import bluetooth.BluetoothService;
 
 
 public class Player {
-
     List<Card> hand;
     public int player_id = 0;
     boolean itsmyturn = false; // TALK TO NATASHA ABOUT THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -41,58 +40,13 @@ public class Player {
             return errorcard;
         }
         else {
-            System.out.println("Playdeck top card is not null");
             return this.playdeckTop;
         }
 
     }
 
     public void prepareHand(){
-        System.out.print("Preparing hand..." + this.player_id);
-        //this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
 
-        if (this.gameActivity.stringList.size() > 0) {
-            //String messagestring = this.gameActivity.stringList.get(0);
-            String messagestring = this.gameActivity.stringList.get(0);
-            System.out.println("preparing handcard : " + messagestring);
-
-            int playernumber =(int)messagestring.charAt(1);
-            if (playernumber == this.player_id) {
-                String command = messagestring.substring(2,5);
-                switch (command) {
-                    case "get":
-                        String color = messagestring.substring(5, 6);
-                        String value = messagestring.substring(messagestring.length() - 1);
-                        this.hand.add(new Card(Card.colors.valueOf(color), Card.values.valueOf(value)));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            this.gameActivity.stringList.remove(0);
-
-        } else {
-            System.out.println("No element list in array list for prepare hand method");
-            this.gameActivity.sendMessage("player" + this.player_id + "is waiting for cards");
-        }
-
-
-/*        String temp="p"+this.player_id;
-        String superstring="";
-        String cStr,color,value;
-        for(int i=0;i<NumberOfPlayer-1;i++){
-            if(temp==(this.gameActivity.stringList.get(i).substring(0,2))){
-                superstring=this.gameActivity.stringList.get(i).substring(2,this.gameActivity.stringList.get(i).length());
-                this.gameActivity.stringList.remove(i);
-            } else this.gameActivity.stringList.remove(i);
-        }
-        while(superstring.length() > 0){
-            cStr=superstring.substring(0,2);
-            color = cStr.substring(0,1);
-            value = cStr.substring(1,2);
-            this.hand.add(new Card (color,value));
-            superstring=superstring.substring(2);
-        } */
     }
 
 
@@ -100,151 +54,20 @@ public class Player {
         return this.hand;
     }
 
-    public Card					layCard() {
-        Card help = this.hand.get(0);
-        this.hand.remove(0);
-        return help;
-    }
-
     protected void clientloop() {
-        System.out.println("Clientloop active " + this.player_id);
-        //TODO : protected Card.colors playdeckColor; von gameactivity setzen, falls choosecolor gespielt wurde
 
-    while (this.gameActivity.stringList.size() > 0) {
-        System.out.print(this.gameActivity.stringList.get(0));
-        String messagestring = this.gameActivity.stringList.get(0);
-        if (messagestring.equals("gamend1")) {
-            int winningPlayer= (int)messagestring.charAt(7);
-            //TODO implement windows with the winning player
-        }
-        else if (messagestring.substring(0,5) == "playd") {
-            String color = ""+messagestring.charAt(5);
-            String value = ""+messagestring.charAt(6);
-            Card tempcard = new Card(color, value);
-            this.setPlaydeckCard(tempcard);
-
-        }
-        else {
-            System.out.println("Errortest"  + messagestring);
-            System.out.println("playernumber in string : " + messagestring.charAt(1));
-            char playerchar = messagestring.charAt(1);
-            int playernumber =(int)playerchar;
-            String command = messagestring.substring(2,5);
-            if (playernumber == this.player_id) {
-                switch (command)
-                {
-                    case "get":
-                        String color = ""+ messagestring.charAt(5);
-                        String value = ""+ messagestring.charAt(6);
-                        this.hand.add( new Card(color, value) );
-                        break;
-                    case "set":
-                        this.itsmyturn = true;
-                        this.setCurrentPlayerId(playernumber);
-                        break;
-                    case "ply":
-                        break;
-                    case "tak":
-                        break;
-                    case "uno":
-                        int unonr = (int)(messagestring.charAt(5));
-                        if (unonr == 1) {
-                            //..
-                        } else if (unonr == 2) {
-                            //...
-                        }
-                     default:break;
-                }
-            } else {
-                switch (command) {
-                    case "set":
-                        this.itsmyturn = false;
-                        this.setCurrentPlayerId(playernumber);
-                        break;
-                    default: break;
-                }
-            }
-
-
-        }
-        this.gameActivity.stringList.remove(0);
     }
-
-}
-
-    public void setCurrentPlayerId(int id){
-        this.gameActivity.currentPlayerID=id;
-    }
-
-
-
-
-
 
     public void					takeCard (BluetoothService mBlt) {				// take card from takedec
-        System.out.println("Player takes card");
-        if(this.gameActivity.currentPlayerID==0){
-            this.hand.add(this.gameActivity.game.takedeck.deck.get(0));
-            this.gameActivity.game.takedeck.deck.remove(0);
-            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
-            System.out.println("take card method, endturnstring : " + this.gameActivity.game.getEndTurnString(0));
-            this.itsmyturn = false;
-        }
-        else {
-            String sendstring = "p" + this.player_id + "tak";
-            this.gameActivity.sendMessage(sendstring);
-            System.out.println("take card method, endturnstring : " + sendstring);
-            this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
-            this.itsmyturn = false;
-        }
+
     }
 
    public void					playCard (Card card) {
-       System.out.println("Player plays card...");
-        if(player_id==0){
-            this.gameActivity.game.playdeck.deck.add(card);
-            this.gameActivity.player.setPlaydeckCard(card);
-            this.hand.remove(card);
-            if(card.value == Card.values.SKIP) {
-                this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(1));
-                System.out.println("play card method, endturnstring : " + this.gameActivity.game.getEndTurnString(1));
-            }
-            else {
-                this.gameActivity.sendMessage(this.gameActivity.game.getEndTurnString(0));
-                System.out.println("play card method, endturnstring : " + this.gameActivity.game.getEndTurnString(1));
-            }
-            this.itsmyturn = false;
 
-        }else {
-            String cStr = "";
-            cStr += "p" + this.player_id + "ply";
-            if (card.color != Card.colors.BLACK) {
-                cStr += card.toString().substring(0, 1);
-            } else {
-                cStr += 'S';
-            }
-            int Ord = card.value.ordinal();
-            if (Ord <= 9) {
-                cStr += Ord;
-            } else if (Ord == 10) {
-                cStr += 'S';
-            } else if (Ord == 11) {
-                cStr += 'X';
-            } else if (Ord == 12) {
-                cStr += 'R';
-            } else if (Ord == 13) {
-                cStr += 'Y';
-            } else if (Ord == 14) {
-                cStr += 'C';
-            }
-            this.removeCardFromPlayer(card);
-            this.gameActivity.sendMessage(cStr);
-            this.itsmyturn = false;
-        }
    }
 
         //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
-        public boolean CheckCard(Card playCard,Card topCard){
+   public boolean CheckCard(Card playCard,Card topCard){
 
         if (playCard.color == topCard.color) {					// if color matches
             return true;
@@ -257,13 +80,5 @@ public class Player {
         return false;
         }
 
-    public void					removeCardFromPlayer(Card card) {
-        for (Card i : this.hand) {
-            if ((i.color == card.color) && (i.value == card.value)) {
-                this.hand.remove(this.hand.indexOf(i));
-                break;
-            }
-        }
-    }
 
 }
