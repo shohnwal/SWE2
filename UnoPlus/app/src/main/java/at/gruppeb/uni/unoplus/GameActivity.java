@@ -675,7 +675,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
                     if(readMessage.length() == 7) {
-                        if(readMessage.startsWith("i_ready")){
+                        if(readMessage.startsWith("i_ready") && mBltService.isServer()){
                             ready++;
                             if(ready == mBltService.getNrOfPlayers()-1){
                                 allReady = false;
