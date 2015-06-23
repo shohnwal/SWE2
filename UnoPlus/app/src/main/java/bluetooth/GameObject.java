@@ -16,6 +16,7 @@ public class GameObject implements Serializable {
     boolean turns_clockwise;
     boolean game_ended;
     boolean changed;
+    String FLAG = "";
     Deck playdeck;
     Deck takedeck;
     Vector<ArrayList<Card>> handCards;
@@ -30,6 +31,15 @@ public class GameObject implements Serializable {
         this.howManyCardsToTake=0;
         this.game_ended = false;
         this.changed = false;
+    }
+
+    public GameObject(int current_player, String FLAG){
+        this.current_player = current_player;
+        this.FLAG = FLAG;
+    }
+
+    public GameObject(String FLAG) {
+        this.FLAG = FLAG;
     }
 
     public int getCurrent_player() {
@@ -74,6 +84,14 @@ public class GameObject implements Serializable {
 
     public int getNumPlayer(){
         return handCards.size();
+    }
+
+    public String getFLAG() {
+        return FLAG;
+    }
+
+    public void setFLAG(String FLAG) {
+        this.FLAG = FLAG;
     }
 
     public void setCurrent_player(int offset) {

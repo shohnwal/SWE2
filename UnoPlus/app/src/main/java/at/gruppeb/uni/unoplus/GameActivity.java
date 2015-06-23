@@ -121,7 +121,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         Log.i(TAG, "Game startet");
     }
 
-    private void sendMessageToSingle(String message ,int pos) {
+    /*private void sendMessageToSingle(String message ,int pos) {
         // Check that we're actually connected before trying anything
         if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -137,7 +137,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
-    }
+    }*/
 
     @Override
     protected void onStart() {
@@ -495,7 +495,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                                 boolean saysuno = true;
                                                                                 if (saysuno) {
                                                                                     String sendstring = "p" + this.player.player_id + "uno11";
-                                                                                    this.sendMessage(sendstring);
+                                                                                    //this.sendMessage(sendstring);
                                                                                 }else
                                                                                 {
                                                                                     this.player.takeCard();
@@ -518,7 +518,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                                 if (saysuno) {
                                                                                     //TODO offer to say unouno (Button)
                                                                                     String sendstring = "p" + this.player.player_id + "uno22";
-                                                                                    this.sendMessage(sendstring);
+                                                                                    //this.sendMessage(sendstring);
                                                                                 }
                                                                                 else
                                                                                 {
@@ -688,7 +688,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
      *
      * @param message A string of text to send.
      */
-    protected void sendMessage(String message) {
+    /*protected void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -704,7 +704,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
-    }
+    }*/
 
     /**
      * Sends a GameObject.

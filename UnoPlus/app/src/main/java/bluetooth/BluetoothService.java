@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -266,7 +267,7 @@ public class BluetoothService implements Serializable {
      * @param out The bytes to write
      * @see BluetoothService.ConnectedThread#write(String)
      */
-    public void write(String out) {
+   /* public void write(String out) {
         // When writing, try to write out to all connected threads
         for (int i = 0; i < mConnThreads.size(); i++) {
             try {
@@ -282,7 +283,7 @@ public class BluetoothService implements Serializable {
             } catch (Exception e) {
             }
         }
-    }
+    }*/
 
     /**
      * Write to the ConnectedThread in an unsynchronized manner
@@ -314,7 +315,7 @@ public class BluetoothService implements Serializable {
         int h = 1;
         for (int i = 0; i < mConnThreads.size(); i++) {
             String send = "PlaNr;"+h;
-            writeToSingle(send,i);
+            writeToSingle(new GameObject(h,"PlaNr;"),i);
 
             h++;
         }
@@ -324,9 +325,9 @@ public class BluetoothService implements Serializable {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see BluetoothService.ConnectedThread#writeToSingle(String,int)
+     * @see BluetoothService.ConnectedThread#writeToSingle(GameObject,int)
      */
-    public void writeToSingle(String out,int pos) {
+    public void writeToSingle(GameObject out,int pos) {
         try {
             // Create temporary object
             ConnectedThread r;
@@ -568,30 +569,26 @@ public class BluetoothService implements Serializable {
                 try {
                     // Read from the ObjectInputStream
                     Log.d(TAG,"Activity Name : " + mActivity.getActivityName());
-                    if(mActivity.getActivityName().equals("HostGame")){
-                        string = ois.readUTF();
-                        Log.d(TAG, "received data : " + object.toString());
-                        int bytes = string.length();
-                        // Send the obtained bytes to the UI Activity
-                        mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, string).sendToTarget();
-                    }else {
-                        object = ois.readObject(); //.read(buffer);
-                        Log.d(TAG, "received data : " + object.toString());
-                        mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
-                    }
 
+                    object = ois.readObject(); //.read(buffer);
+                    Log.d(TAG, "received data : " + object.toString());
+                    mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
+
+
+                }catch (EOFException eof) {
+                    eof.printStackTrace();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     break;
-                } catch (ClassNotFoundException e) {
+                }catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
 
 
-        public void write(String send) {
+      /*  public void write(String send) {
             try {
                 oos.writeUTF(send);
                 oos.flush();
@@ -600,12 +597,12 @@ public class BluetoothService implements Serializable {
                  * @param buffer  The bytes to write
                  */
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, send)
+                /*mHandler.obtainMessage(mActivity.MESSAGE_WRITE, -1, -1, send)
                         .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
-        }
+        }*/
 
         public void write(GameObject go) {
             try {

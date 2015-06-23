@@ -12,14 +12,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import bluetooth.ActivityHelper;
@@ -283,7 +280,7 @@ public class Lobby extends ActionBarActivity {
      * Sends a message.
      * @param message  A string of text to send.
      */
-    private void sendMessage(String message) {
+    /*private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -299,21 +296,9 @@ public class Lobby extends ActionBarActivity {
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
-    }
+    }*/
 
-    // The action listener for the EditText widget, to listen for the return key
-    private TextView.OnEditorActionListener mWriteListener =
-            new TextView.OnEditorActionListener() {
-                public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-                    // If the action is a key-up event on the return key, send the message
-                    if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                        String message = view.getText().toString();
-                        sendMessage(message);
-                    }
-                    if(D) Log.i(TAG, "END onEditorAction");
-                    return true;
-                }
-            };
+    
 
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new Handler() {
