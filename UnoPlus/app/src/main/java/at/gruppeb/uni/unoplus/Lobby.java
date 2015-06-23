@@ -22,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+
 import bluetooth.ActivityHelper;
 import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
@@ -255,7 +257,7 @@ public class Lobby extends ActionBarActivity {
 
                 Intent nextScreen = new Intent("at.gruppeb.uni.unoplus.HostGame");
                 //Sending the Host- Player- name to the new Activity
-                nextScreen.putExtra("hostName", (mBltService.getPlayerName()+", "+"Spieler ID: "+mBltService.getPlayerId()) );
+                nextScreen.putExtra("hostName", (mBltService.getPlayerName() + ", " + "Spieler ID: " + mBltService.getPlayerId()));
                 startActivity(nextScreen);
 
 
@@ -293,8 +295,12 @@ public class Lobby extends ActionBarActivity {
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mBltService.write(send);
+            try {
+                byte[] send = message.getBytes("UTF-8");
+                mBltService.write(send);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);

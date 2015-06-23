@@ -280,7 +280,7 @@ public class BluetoothService implements Serializable {
     public void initializePlayerNr(){
         int h = 1;
         for (int i = 0; i < mConnThreads.size(); i++) {
-            byte[] send = ("PlayerNr;"+h).getBytes();
+            byte[] send = ("PlaNr;"+h).getBytes();
             writeToSingle(send,i);
             h++;
         }
@@ -507,7 +507,7 @@ public class BluetoothService implements Serializable {
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[7];
             int bytes;
 
             // Keep listening to the InputStream while connected
