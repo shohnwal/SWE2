@@ -27,8 +27,10 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -520,16 +522,161 @@ public class BluetoothService implements Serializable {
      * It handles all incoming and outgoing transmissions.
      */
     private class ConnectedThread extends Thread {
+
+        //private final BluetoothSocket mmSocket;
+        //private final InputStream mmInStream;
+        //private final OutputStream mmOutStream;
+        /*private final ObjectOutputStream oos;
+
+        public ConnectedThread(BluetoothSocket socket) {
+        mmSocket=socket;
+        //mHandler=h;
+        oos = null;
+        InputStream tmpIn = null;
+        OutputStream tmpOut = null;
+
+        // Get the input and output streams, using temp objects because
+        // member streams are final
+        try
+
+        {
+            tmpIn = socket.getInputStream();
+            tmpOut = socket.getOutputStream();
+        }
+
+        catch(
+        Exception e
+        )
+
+        {
+            Log.d(TAG, "Error in getting Input Streams");
+            Log.w(TAG, e);
+
+        }
+
+        mmInStream=tmpIn;
+        mmOutStream=tmpOut;
+
+
+        Log.d(TAG,"The socket is: "+mmSocket);
+        Log.d(TAG,"The streams are: "+mmInStream+mmOutStream);
+        Log.d(TAG,"attempting to create BufStreams");
+
+        final BufferedOutputStream bufo = new BufferedOutputStream(mmOutStream);
+        final BufferedInputStream bufi = new BufferedInputStream(mmInStream);
+
+        Log.d(TAG,"attempting to create OOS");
+
+        try{
+            oos = new ObjectOutputStream(bufo);
+        }catch(StreamCorruptedException e){
+            Log.d(TAG, "Caught Corrupted Stream Exception");
+            Log.w(TAG, e);
+
+        }catch(IOException e){
+            Log.d(TAG, "Caught IOException");
+            Log.w(TAG, e);
+        }
+
+        Log.d(TAG,"done OOS");
+
+        if(oos==null){
+            Log.d(TAG, "oos is null!!!!");
+        }
+
+
+        Thread s = new Thread() {
+            public void run() {
+                Log.d(TAG, "attempting to create OIS");
+                try {
+                    ois = new ObjectInputStream(bufi);
+                } catch (StreamCorruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "completed OIS");
+                if (ois == null) {
+                    Log.d(TAG, "OIS is null");
+                }
+            }
+
+
+        };
+        s.start();
+        try
+
+        {
+            Log.d(TAG, "writing and flushing 1");
+            oos.write(1);
+            oos.flush();
+        }
+
+        catch(
+        IOException e1
+        )
+
+        {
+            Log.d(TAG, "CaugtIOexception");
+            Log.w(TAG, e1);
+        }
+
+        Log.d(TAG,"sleeping to make sure stream is set up");
+        while(ois==null)
+
+        {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+
+
+        }
+
+        Log.d(TAG,"done Sleeping");
+
+        // Read out the 1 to make sure everything is okay
+
+        int i = 0;
+
+        try
+
+        {
+            i = ois.read();
+        }
+
+        catch(
+        IOException e
+        )
+
+        {
+            Log.d(TAG, "error reading");
+            e.printStackTrace();
+        }
+
+
+        Log.d(TAG,"I received an i of: "+i);
+        Log.d(TAG,"OO Streams set up");
+
+
+    }*/
+
         private final BluetoothSocket mmSocket;
-        private final ObjectInputStream mmInStream;
-        private final ObjectOutputStream mmOutStream;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+        private ObjectInputStream ois;
+        private ObjectOutputStream oos;
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
             Log.d(TAG, "mmSocket = socket;");
-            ObjectInputStream tmpIn = null;
-            ObjectOutputStream tmpOut = null;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
             Log.d(TAG, "mmSocket = socket;");
 
             // Get the BluetoothSocket input and output streams
@@ -543,7 +690,15 @@ public class BluetoothService implements Serializable {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
 
-            Log.d(TAG,"finish init connected tread");
+
+            try {
+                oos = new ObjectOutputStream(mmOutStream);
+                oos.flush();
+                ois = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         public void run() {
@@ -556,14 +711,14 @@ public class BluetoothService implements Serializable {
                 Log.d(TAG, "while(true)");
                 try {
                     // Read from the InputStream
-                    if(mmInStream != null && mmInStream.readObject() instanceof String){
-                        object = mmInStream.read(buffer);
+                    if(ois != null && ois.readObject() instanceof String){
+                        object = ois.read(buffer);
 
-                    }else if(mmInStream != null){
-                        object = mmInStream.readObject(); //.read(buffer);
+                    }else if(ois != null){
+                        object = ois.readObject(); //.read(buffer);
                     }
                     
-                    object = mmInStream.readObject(); //.read(buffer);
+                    object = ois.readObject(); //.read(buffer);
 
                     Log.i(TAG,object.toString());
 
@@ -590,6 +745,7 @@ public class BluetoothService implements Serializable {
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
+                mmOutStream.flush();
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write
@@ -604,7 +760,8 @@ public class BluetoothService implements Serializable {
 
         public void write(GameObject go) {
             try {
-                mmOutStream.writeObject(go);
+                oos.writeObject(go);
+                oos.flush();
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write
