@@ -95,6 +95,10 @@ public class GameObject {
         this.turns_clockwise = turns_clockwise;
     }
 
+    public void changeTurns_clockwise() {
+        this.turns_clockwise = !this.turns_clockwise;
+    }
+
     public void setGame_ended(boolean game_ended) {
         this.game_ended = game_ended;
     }

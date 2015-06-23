@@ -75,6 +75,9 @@ public class Player {
            if(card.value.equals(Card.values.TAKE_FOUR)){
                this.gameActivity.gameObject.setHowManyCardsToTake(4);
            }
+           if(card.value.equals(Card.values.RETOUR)) {
+               this.gameActivity.gameObject.changeTurns_clockwise();
+           }
            this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value.equals(Card.values.SKIP)?1:0);
            endTurn();
        }

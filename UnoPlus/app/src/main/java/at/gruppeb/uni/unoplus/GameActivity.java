@@ -471,7 +471,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 //TODO : check : is playcard compatible with playdeck card (-> player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop))
                 if(player.checkCard(view.getCard(), this.player.playdeckTop)) {
                     //TODO : Implement action card mechanics (game mechanics)
-                    if (view.getCard().actionCard && (view.getCard().value == Card.values.CHOOSE_COLOR) || (view.getCard().value == Card.values.TAKE_FOUR))
+                    if (view.getCard().isActionCard() && (view.getCard().value == Card.values.CHOOSE_COLOR) || (view.getCard().value == Card.values.TAKE_FOUR))
                         this.playerColorChoice();
 
                     this.player.playCard(view.getCard());
