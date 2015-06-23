@@ -527,8 +527,10 @@ public class BluetoothService implements Serializable {
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
+            Log.d(TAG, "mmSocket = socket;");
             ObjectInputStream tmpIn = null;
             ObjectOutputStream tmpOut = null;
+            Log.d(TAG, "mmSocket = socket;");
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -540,19 +542,30 @@ public class BluetoothService implements Serializable {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+
+            Log.d(TAG,"finish init connected tread");
         }
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[7];
-            Object object;
+            Object object = new Object();
 
             // Keep listening to the InputStream while connected
             while (true) {
+                Log.d(TAG, "while(true)");
                 try {
                     // Read from the InputStream
+                    if(mmInStream != null && mmInStream.readObject() instanceof String){
+                        object = mmInStream.read(buffer);
 
+                    }else if(mmInStream != null){
+                        object = mmInStream.readObject(); //.read(buffer);
+                    }
+                    
                     object = mmInStream.readObject(); //.read(buffer);
+
+                    Log.i(TAG,object.toString());
 
                     if(object instanceof String){
                         int bytes = ((String) object).length();
