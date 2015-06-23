@@ -608,7 +608,7 @@ public class BluetoothService implements Serializable {
             try {
                 oos.writeObject(go);
                 oos.flush();
-                oos.close();
+                oos.reset();
                 /**
                  * Write to the connected OutStream.
                  * @param buffer  The bytes to write
