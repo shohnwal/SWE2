@@ -569,7 +569,7 @@ public class BluetoothService implements Serializable {
                 try {
                     // Read from the ObjectInputStream
                     Log.d(TAG,"Activity Name : " + mActivity.getActivityName());
-
+                    oos.flush();
                     object = ois.readObject(); //.read(buffer);
                     Log.d(TAG, "received data : " + ((GameObject)object).toString());
                     mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();

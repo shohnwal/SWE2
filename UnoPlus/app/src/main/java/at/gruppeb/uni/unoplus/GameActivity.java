@@ -635,7 +635,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 setGameObject((GameObject)msg.obj);
                 Log.d(TAG,"game object : " + gameObject.toString());
 
-                
+
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
                 // save the connected device's name
