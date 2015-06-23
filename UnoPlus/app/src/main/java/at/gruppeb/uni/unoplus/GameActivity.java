@@ -632,26 +632,10 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             }
             if (msg.what == ActivityHelper.MESSAGE_READ) {
 
-                // construct a string from the valid bytes in the buffer
-                String readMessage = (String)msg.obj;
-                if (readMessage.length() > 0) {
-                    if(readMessage.length() == 7) {
-                        if(readMessage.startsWith("i_ready") && mBltService.isServer()){
-                            ready++;
-                            if(ready == mBltService.getNrOfPlayers()-1){
-                                allReady = false;
-                            }
-                        }else{
-                            stringList.add(readMessage);
-                        }
+                setGameObject((GameObject)msg.obj);
+                Log.d(TAG,"game object : " + gameObject.toString());
 
-                        Log.i(TAG, "incoming message : " + readMessage);
-                    }
-                    else{
-                        Log.e(TAG, "error on message : " + readMessage);
-                    }
-
-                }
+                
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
                 // save the connected device's name
