@@ -564,14 +564,7 @@ public class BluetoothService implements Serializable {
             while (true) {
                 Log.d(TAG, "while(true)");
                 try {
-                    // Read from the InputStream
-                    if(ois != null && ois.readObject() instanceof String){
-                        object = ois.read(buffer);
-
-                    }else if(ois != null){
-                        object = ois.readObject(); //.read(buffer);
-                    }
-                    
+                    // Read from the ObjectInputStream
                     object = ois.readObject(); //.read(buffer);
 
                     Log.i(TAG,object.toString());
