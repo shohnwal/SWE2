@@ -68,7 +68,7 @@ public class Gamemanager {
                     this.takedeck.deck.add(temp);
                     System.out.println("Card " + temp.get_name() + " created");
                 }
-            }
+                }
         }
         for (int type = 13; type < 15; type++) {                        // create TAKEFOUR and CHOOSECOLOR cards, four of each kind
             for (int amount = 0; amount < 4; amount++) {

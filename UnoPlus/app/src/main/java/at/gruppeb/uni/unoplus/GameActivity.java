@@ -236,7 +236,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
             Log.i(DEBUGTAG, "loop refresh");
             //TODO finde where to check uno was shaked
-            if (mAccel > 5) {
+            if (mAccel > 0.3) {
+                if (player.itsmyturn && player.isallowedtocheat) {
+                    player.cheat();
+                }
                 Log.i(DEBUGTAG, "shake it!!! ~(^o^~) (~^o^)~");
                 //TODO  cheat mechanics
             }

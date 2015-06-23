@@ -11,7 +11,7 @@ public class Player {
     public int player_id = 0;
     boolean itsmyturn = false; // TALK TO NATASHA ABOUT THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     GameActivity gameActivity;
-    boolean isallowedtocheat = false;
+    boolean isallowedtocheat = true;
     Card playdeckTop;
 
 
@@ -53,12 +53,11 @@ public class Player {
 
     public void cheat() {
         int handsize_temp = this.hand.size();
-        for (int i = 0; i < this.hand.size(); i++) {
+        for (int i = 0; i < handsize_temp; i++) {
             this.gameActivity.gameObject.getTakedeck().deck.add(this.hand.get(0));
             this.hand.remove(0);
         }
         for (int i = 0; i < handsize_temp;i++) {
-            this.takeCard();
             this.hand.add(this.gameActivity.gameObject.takeTakeDeckTopCard());
         }
         this.isallowedtocheat = false;
