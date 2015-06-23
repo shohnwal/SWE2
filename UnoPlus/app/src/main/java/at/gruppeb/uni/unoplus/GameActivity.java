@@ -291,8 +291,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             ivPlayers = new ImageView[1];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
         } else if (NumberOfPlayers == 1) { //TODO Debug
-            ivPlayers = new ImageView[1];
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerFour);
+            ivPlayers = new ImageView[0];
+            //ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerFour);
         }else if (NumberOfPlayers == 3) {
             ivPlayers = new ImageView[2];
             ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
