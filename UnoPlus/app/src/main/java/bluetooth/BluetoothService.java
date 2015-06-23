@@ -571,7 +571,7 @@ public class BluetoothService implements Serializable {
                     if(mActivity.getActivityName().equals("HostGame")){
                         string = ois.readUTF();
                         Log.d(TAG, "received data : " + object.toString());
-                        int bytes = ((String) object).length();
+                        int bytes = string.length();
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, string).sendToTarget();
                     }else {
