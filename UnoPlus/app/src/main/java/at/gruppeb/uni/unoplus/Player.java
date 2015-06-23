@@ -50,14 +50,14 @@ public class Player {
 
     public void prepareHand(int NumberOfPlayer){
         System.out.print("Preparing hand..." + this.player_id);
-        this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
+        //this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
 
-        if (this.gameActivity.stringList.size() > 0) {
+        while (this.gameActivity.stringList.size() > 0) {
             //String messagestring = this.gameActivity.stringList.get(0);
-            System.out.println("incoming message : " + this.gameActivity.stringList.get(0));
-            this.gameActivity.stringList.remove(0);
-        }
-         /*   int playernumber =Integer.parseInt(messagestring.substring(1, 2));
+            String messagestring = this.gameActivity.stringList.get(0);
+            System.out.println("incoming message : " + messagestring);
+
+            int playernumber =(int)messagestring.charAt(1);
             if (playernumber == this.player_id) {
                 String command = messagestring.substring(3,6);
                 switch (command) {
@@ -72,7 +72,8 @@ public class Player {
             }
             this.gameActivity.stringList.remove(0);
 
-        }*/
+        }
+
 
 /*        String temp="p"+this.player_id;
         String superstring="";
