@@ -59,10 +59,10 @@ public class Player {
 
             int playernumber =(int)messagestring.charAt(1);
             if (playernumber == this.player_id) {
-                String command = messagestring.substring(3,6);
+                String command = messagestring.substring(2,5);
                 switch (command) {
                     case "get":
-                        String color = messagestring.substring(6, 7);
+                        String color = messagestring.substring(5, 6);
                         String value = messagestring.substring(messagestring.length() - 1);
                         this.hand.add(new Card(Card.colors.valueOf(color), Card.values.valueOf(value)));
                         break;
