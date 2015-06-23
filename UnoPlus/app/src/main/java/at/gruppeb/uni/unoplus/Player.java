@@ -17,7 +17,6 @@ public class Player {
 
 
     public Player(int id,GameActivity gameActivity) {
-        System.out.println("creating player");
         this.player_id = id;
         this.hand = new ArrayList<Card>();
         this.gameActivity=gameActivity;
@@ -48,14 +47,14 @@ public class Player {
 
     }
 
-    public void prepareHand(int NumberOfPlayer){
+    public void prepareHand(){
         System.out.print("Preparing hand..." + this.player_id);
         //this.hand.add(new Card(Card.colors.RED, Card.values.ZERO));
 
         if (this.gameActivity.stringList.size() > 0) {
             //String messagestring = this.gameActivity.stringList.get(0);
             String messagestring = this.gameActivity.stringList.get(0);
-            System.out.println("incoming message : " + messagestring);
+            System.out.println("preparing handcard : " + messagestring);
 
             int playernumber =(int)messagestring.charAt(1);
             if (playernumber == this.player_id) {
@@ -72,6 +71,8 @@ public class Player {
             }
             this.gameActivity.stringList.remove(0);
 
+        } else {
+            System.out.println("No element list in array list for prepare hand method");
         }
 
 

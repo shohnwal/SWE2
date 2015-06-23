@@ -150,7 +150,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         System.out.println("\n====================\nplayers will now wait for cardsr\n====================\n");
 
                                                                                     while (this.player.hand.size() < 6) {
-                                                                                        player.prepareHand(this.NumberOfPlayers);
+                                                                                        player.prepareHand();
                                                                                     }
 
         init();
