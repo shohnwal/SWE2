@@ -653,8 +653,13 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
-                    stringList.add(readMessage);
-                    Log.i(TAG,"incoming message : " + readMessage);
+                    if(readMessage.length() == 7) {
+                        stringList.add(readMessage);
+                        Log.i(TAG, "incoming message : " + readMessage);
+                    }
+                    else{
+                        Log.e(TAG, "error on message : " + readMessage);
+                    }
 
                 }
             }
