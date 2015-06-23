@@ -524,6 +524,7 @@ public class BluetoothService implements Serializable {
         private final OutputStream mmOutStream;
         private ObjectInputStream ois;
         private ObjectOutputStream oos;
+        private final static String TAG = "ConnectedThread";
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -566,7 +567,7 @@ public class BluetoothService implements Serializable {
                 try {
                     // Read from the ObjectInputStream
                     object = ois.readObject(); //.read(buffer);
-
+                    Log.d(TAG, "send data : " + object.toString());
                     Log.i(TAG,object.toString());
 
                     if(object instanceof String){
