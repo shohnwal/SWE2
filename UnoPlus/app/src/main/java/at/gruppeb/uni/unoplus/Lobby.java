@@ -18,16 +18,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import bluetooth.ActivityHelper;
+import bluetooth.BltSingelton;
 import bluetooth.BluetoothService;
 import bluetooth.DeviceListActivity;
-import bluetooth.BltSingelton;
 
 
 /**
@@ -326,7 +324,7 @@ public class Lobby extends ActionBarActivity {
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                     case BluetoothService.STATE_CONNECTED:
-                        mConversationArrayAdapter.clear();
+                        //mConversationArrayAdapter.clear();
                         break;
                     case BluetoothService.STATE_CONNECTING:
                         break;
