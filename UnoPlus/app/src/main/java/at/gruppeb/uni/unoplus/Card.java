@@ -2,7 +2,9 @@ package at.gruppeb.uni.unoplus;
 
 import android.util.Log;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
 
 	static enum 				colors { RED, BLUE, GREEN, YELLOW, BLACK;
 									public static colors getRandom() {

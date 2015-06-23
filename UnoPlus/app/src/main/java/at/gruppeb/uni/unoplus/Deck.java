@@ -1,10 +1,11 @@
 package at.gruppeb.uni.unoplus;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Deck {
+public class Deck implements Serializable {
     public List<Card> deck;
 
     public Deck () {
