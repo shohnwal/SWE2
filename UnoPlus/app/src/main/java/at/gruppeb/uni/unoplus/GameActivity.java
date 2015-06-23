@@ -111,10 +111,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mOutStringBuffer = new StringBuffer("");
         mConversationArrayAdapter = new ArrayList<>();
-        if(mBltService.isServer()){
-            mBltService.initializePlayerNr();
-            mBltService.setPlayerNr(0);
-        }
+
         Toast.makeText(this.getApplicationContext(),"Player "+this.mBltService.getPlayerId() + this.mBltService.getPlayerName(),Toast.LENGTH_LONG).show();
         Log.i(TAG, "Game startet");
     }
@@ -658,9 +655,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 if (readMessage.length() > 0) {
                     stringList.add(readMessage);
                     Log.i(TAG,"incoming message : " + readMessage);
-                    if(readMessage.startsWith("PlaNr;")){
-                        mBltService.setPlayerNr(Integer.parseInt(readMessage.split(";")[1]));
-                    }
+
                 }
             }
             if (msg.what == ActivityHelper.MESSAGE_DEVICE_NAME) {
