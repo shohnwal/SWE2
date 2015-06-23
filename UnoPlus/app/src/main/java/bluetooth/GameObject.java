@@ -145,4 +145,19 @@ public class GameObject implements Serializable {
     public void setChanged(boolean changed) {
         this.changed = changed;
     }
+
+    @Override
+    public String toString() {
+        return "GameObject{" +
+                "current_player=" + current_player +
+                ", howManyCardsToTake=" + howManyCardsToTake +
+                ", turns_clockwise=" + turns_clockwise +
+                ", game_ended=" + game_ended +
+                ", changed=" + changed +
+                ", FLAG='" + FLAG + '\'' +
+                ", playdeck=" + playdeck +
+                ", takedeck=" + takedeck +
+                ", handCards=" + handCards +
+                '}';
+    }
 }
