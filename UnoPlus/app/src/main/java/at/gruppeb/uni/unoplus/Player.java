@@ -103,7 +103,7 @@ public class Player {
         this.gameActivity.gameObject.setChanged(true);
         this.gameActivity.gameObject.setHandcards(this.player_id, hand);
         this.gameActivity.sendMessage(this.gameActivity.gameObject);
-
+        this.gameActivity.sendMessage(this.gameActivity.gameObject);
     }
 
         //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)

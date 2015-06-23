@@ -161,6 +161,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.gameObject = new GameObject(0,true,false,this.game.playdeck,this.game.takedeck,this.game.dealCards(this.mBltService));
 
         this.sendMessage(gameObject);
+        this.sendMessage(gameObject);
     }
     @Override
     public void onDestroy() {
@@ -633,7 +634,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             if (msg.what == ActivityHelper.MESSAGE_READ) {
 
                 setGameObject((GameObject)msg.obj);
-                Log.d(TAG,"game object : " + gameObject.toString());
+                Log.d(TAG, "game object : " + gameObject.toString());
 
 
             }
@@ -649,11 +650,6 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                         Toast.LENGTH_SHORT).show();
                 //}
             }
-
-            if(msg.what == ActivityHelper.MESSAGE_WRITE_OBJECT){
-
-            }
-
             if(msg.what == ActivityHelper.MESSAGE_READ_OBJECT){
                 setGameObject((GameObject)msg.obj);
                 Log.d(TAG,"game object : " + gameObject.toString());
@@ -663,11 +659,11 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     };
 
     public GameObject getGameObject() {
-        return gameObject;
+        return this.gameObject;
     }
 
-    public void setGameObject(GameObject gameObject) {
-        this.gameObject = gameObject;
+    public void setGameObject(GameObject go) {
+        this.gameObject = go;
     }
 
     /**
