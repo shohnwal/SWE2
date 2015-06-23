@@ -240,21 +240,6 @@ public class Player {
         }
    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
         public boolean CheckCard(Card playCard,Card topCard){
 
