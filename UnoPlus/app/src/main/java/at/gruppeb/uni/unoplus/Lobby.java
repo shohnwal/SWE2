@@ -337,14 +337,12 @@ public class Lobby extends ActionBarActivity {
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
-                mConversationArrayAdapter.add("Me:  " + writeMessage);
             }
             if(msg.what== ActivityHelper.MESSAGE_READ){
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if (readMessage.length() > 0) {
-                    mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 }
             }
             if(msg.what== ActivityHelper.MESSAGE_DEVICE_NAME){
