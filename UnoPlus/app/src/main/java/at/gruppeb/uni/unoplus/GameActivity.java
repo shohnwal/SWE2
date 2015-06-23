@@ -60,6 +60,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private int height, width, NumberOfPlayers;
     protected Gamemanager game;
     protected Player player;
+    protected GameObject gameObject;
 
     //TODO GUI grey out HandCards not curentPlayer
 
@@ -117,6 +118,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         mOutStringBuffer = new StringBuffer("");
         mConversationArrayAdapter = new ArrayList<>();
 
+
+
         Toast.makeText(this.getApplicationContext(),"Player "+this.mBltService.getPlayerId() + this.mBltService.getPlayerName(),Toast.LENGTH_LONG).show();
         Log.i(TAG, "Game startet");
     }
@@ -148,13 +151,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         super.onStart();
         this.player=new Player(this.mBltService.getPlayerId(),this);
         if(this.mBltService.isServer()) {
-            while (allReady){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+
             this.serverinit();
         }
         System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
@@ -183,6 +180,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.game.decksinit();
         this.game.createCards();
         this.game.putFirstCardDown();
+
+
 
         this.game.dealCards(this.mBltService);
         System.out.println("this player now has so many cards : " + this.player.hand.size());

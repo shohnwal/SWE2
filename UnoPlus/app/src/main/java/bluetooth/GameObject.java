@@ -52,6 +52,14 @@ public class GameObject {
         return howManyCardsToTake;
     }
 
+    public Card getPlayDeckTopCard(){
+        return this.playdeck.getTopCard();
+    }
+
+    public Card getTakeDeckTopCard(){
+        return this.takedeck.getTopCard();
+    }
+
     public void setCurrent_player(int current_player) {
         this.current_player = current_player;
     }
