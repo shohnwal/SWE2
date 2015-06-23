@@ -560,6 +560,7 @@ public class BluetoothService implements Serializable {
                         mHandler.obtainMessage(mActivity.MESSAGE_READ, bytes, -1, (String)object).sendToTarget();
                     }else{
                         mHandler.obtainMessage(mActivity.MESSAGE_READ_OBJECT, -1, -1, object).sendToTarget();
+
                     }
 
                 } catch (IOException e) {

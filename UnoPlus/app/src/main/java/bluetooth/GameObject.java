@@ -14,6 +14,7 @@ public class GameObject {
     int howManyCardsToTake;
     boolean turns_clockwise;
     boolean game_ended;
+    boolean changed;
     Deck playdeck;
     Deck takedeck;
     Vector<ArrayList<Card>> handCards;
@@ -26,6 +27,8 @@ public class GameObject {
         this.takedeck = takedeck;
         this.handCards = handCards;
         this.howManyCardsToTake=0;
+        this.game_ended = false;
+        this.changed = false;
     }
 
     public int getCurrent_player() {
@@ -60,8 +63,32 @@ public class GameObject {
         return this.takedeck.getTopCard();
     }
 
-    public void setCurrent_player(int current_player) {
-        this.current_player = current_player;
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public Card takeTakeDeckTopCard(){
+        return this.takedeck.takeTopCard();
+    }
+
+    public int getNumPlayer(){
+        return handCards.size();
+    }
+
+    public void setCurrent_player(int offset) {
+        if (this.turns_clockwise == true) {
+            this.current_player = (this.current_player + offset + 1) % this.getNumPlayer();
+        } else if (this.turns_clockwise == false) {
+            if (this.current_player == 0) {
+                this.current_player = this.getNumPlayer() - 1 - offset;
+            } else {
+                this.current_player = (this.current_player - offset - 1) % this.getNumPlayer();
+            }
+        }
+    }
+
+    public ArrayList<Card> getHandcards(int playerNr){
+        return handCards.get(playerNr);
     }
 
     public void setTurns_clockwise(boolean turns_clockwise) {
@@ -84,11 +111,15 @@ public class GameObject {
         this.howManyCardsToTake = howManyCardsToTake;
     }
 
-    public ArrayList<Card> getHandcards(int playerNr){
-        return handCards.get(playerNr);
+    public void setPlayDeckTop(Card card){
+        this.playdeck.deck.add(0,card);
     }
 
     public void setHandcards(int playerNr,ArrayList<Card> handCards){
         this.handCards.set(playerNr,handCards);
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
 }

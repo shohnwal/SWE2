@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import Dictate.Record_Speech;
 import bluetooth.ActivityHelper;
@@ -151,40 +150,24 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         super.onStart();
         this.player=new Player(this.mBltService.getPlayerId(),this);
         if(this.mBltService.isServer()) {
-
             this.serverinit();
         }
         System.out.println("\n====================\nnow trying to get number of connected players\n====================\n");
         this.NumberOfPlayers = this.mBltService.getNrOfPlayers();
         System.out.println("\n====================\nplayers will now wait for cardsr\n====================\n");
 
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                while (player.hand.size() < 6) {
-                    player.prepareHand();
-                }
-            }
-        });
-        thread.start();
-
         init();
-
-        if(!mBltService.isServer()){
-            sendMessage("i_ready");
-        }
-
-
     }
+
     protected void serverinit() {
         this.game = new Gamemanager(this.mBltService, this);
         this.game.decksinit();
         this.game.createCards();
         this.game.putFirstCardDown();
 
+        this.gameObject = new GameObject(0,true,false,this.game.playdeck,this.game.takedeck,this.game.dealCards(this.mBltService));
 
-
-        this.game.dealCards(this.mBltService);
-
+        this.sendMessage(gameObject);
     }
     @Override
     public void onDestroy() {
@@ -248,9 +231,11 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
-            if (player.player_id == 0 && !game.game_ended) {
+            if (mBltService.isServer() && !game.game_ended) {
                 game.serverloop(mBltService);
             }
+
+
             player.clientloop();
 
             removeAllViews();
@@ -485,7 +470,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
                 //view.getCard() = card that the player wants to play
                 //TODO : check : is playcard compatible with playdeck card (-> player.checkIfCardsMatch(view.getCard(), this.player.playdeckTop))
-                if(player.CheckCard(view.getCard(), this.player.playdeckTop)) {
+                if(player.checkCard(view.getCard(), this.player.playdeckTop)) {
                     //TODO : Implement action card mechanics (game mechanics)
                     if (view.getCard().actionCard && (view.getCard().value == Card.values.CHOOSE_COLOR) || (view.getCard().value == Card.values.TAKE_FOUR))
                         this.playerColorChoice();
@@ -517,7 +502,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                                     this.sendMessage(sendstring);
                                                                                 }else
                                                                                 {
-                                                                                    this.player.takeCard(mBltService);
+                                                                                    this.player.takeCard();
                                                                                 }
                                                                             }
 
@@ -541,7 +526,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    this.player.takeCard(mBltService);
+                                                                                    this.player.takeCard();
                                                                                     //maybe TODO : implement so player takes 2 cards
                                                                                 }
                                                                             }
@@ -595,7 +580,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                 View.DragShadowBuilder sb = new View.DragShadowBuilder(v);
                 v.startDrag(cd, sb, v, 0);
             } else if (v.getId() == ivcStackCard.getId()&& this.player.itsmyturn) {
-                this.player.takeCard(mBltService);
+                this.player.takeCard();
                 removeHandCards();
                 renderHandCards();
             }
@@ -687,14 +672,20 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             }
 
             if(msg.what == ActivityHelper.MESSAGE_READ_OBJECT){
-
+                setGameObject((GameObject)msg.obj);
             }
 
 
         }
     };
 
-    List<GameObject> objectList = new Vector<GameObject>();
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
+    }
 
     /**
      * Sends a message.
@@ -717,6 +708,28 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+
+            // Reset out string buffer to zero and clear the edit text field
+            mOutStringBuffer.setLength(0);
+        }
+    }
+
+    /**
+     * Sends a GameObject.
+     *
+     * @param gameObject A GameObject to send.
+     */
+    protected void sendMessage(GameObject gameObject) {
+        // Check that we're actually connected before trying anything
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (!gameObject.equals(null)) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            mBltService.write(gameObject);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);

@@ -3,12 +3,11 @@ package at.gruppeb.uni.unoplus;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.gruppeb.uni.unoplus.Card;
-import bluetooth.BluetoothService;
+import bluetooth.GameObject;
 
 
 public class Player {
-    List<Card> hand;
+    ArrayList<Card> hand;
     public int player_id = 0;
     boolean itsmyturn = false; // TALK TO NATASHA ABOUT THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     GameActivity gameActivity;
@@ -22,17 +21,6 @@ public class Player {
         System.out.println("player " + this.player_id + " created");
     }
 
-    public void setPlaydeckCard(Card card) {
-        this.playdeckTop.color = card.color;
-        this.playdeckTop.value = card.value;
-     /*   if (this.gameActivity.playdeckColor != this.playdeckTop.color) {
-            this.playdeckTop.color = this.gameActivity.playdeckColor;
-        }
-        */
-        //TODO SEND IT TO OTHER PLAYERS
-        System.out.println("Playdeckcard set...");
-    }
-
     public Card getPlaydeckTop() {
         if (this.playdeckTop == null) {
             System.out.println("Error : no playdeck top");
@@ -40,34 +28,67 @@ public class Player {
             return errorcard;
         }
         else {
-            return this.playdeckTop;
+            return this.gameActivity.gameObject.getPlayDeckTopCard();
         }
 
     }
-
-    public void prepareHand(){
-
-    }
-
 
     public List<Card>			getHand() {
         return this.hand;
     }
 
     protected void clientloop() {
+        GameObject gameObject = this.gameActivity.getGameObject();
+
+        if(gameObject != null){
+            this.hand = gameObject.getHandcards(this.player_id);
+            this.itsmyturn = gameObject.getCurrent_player()==this.player_id?true:false;
+            this.playdeckTop = gameObject.getPlayDeckTopCard();
+            if(itsmyturn){
+                takeManyCards(gameObject.getHowManyCardsToTake());
+            }
+        }
+    }
+
+    public void takeManyCards(int anz){
+        for(int i = 0; i<anz;i++){
+            this.hand.add(this.gameActivity.gameObject.takeTakeDeckTopCard());
+            this.gameActivity.gameObject.setCurrent_player(0);
+        }
+        this.gameActivity.gameObject.setHowManyCardsToTake(0);
+    }
+
+    public void takeCard() {				// take card from takedec
+        this.hand.add(this.gameActivity.gameObject.takeTakeDeckTopCard());
+        this.gameActivity.gameObject.setCurrent_player(0);
+        endTurn();
 
     }
 
-    public void					takeCard (BluetoothService mBlt) {				// take card from takedec
-
-    }
-
-   public void					playCard (Card card) {
+   public void playCard(Card card) {
+       if (this.checkCard(card, this.playdeckTop)) {
+           this.hand.remove(card);
+           this.gameActivity.gameObject.setPlayDeckTop(card);
+           if(card.value.equals(Card.values.TAKE_TWO)){
+               this.gameActivity.gameObject.setHowManyCardsToTake(2);
+           }
+           if(card.value.equals(Card.values.TAKE_FOUR)){
+               this.gameActivity.gameObject.setHowManyCardsToTake(4);
+           }
+           this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value.equals(Card.values.SKIP)?1:0);
+           endTurn();
+       }
 
    }
 
+    private void endTurn(){
+        this.itsmyturn = false;
+        this.gameActivity.gameObject.setHandcards(this.player_id,hand);
+        this.gameActivity.sendMessage(this.gameActivity.gameObject);
+    }
+
         //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
-   public boolean CheckCard(Card playCard,Card topCard){
+   public boolean checkCard(Card playCard,Card topCard){
 
         if (playCard.color == topCard.color) {					// if color matches
             return true;

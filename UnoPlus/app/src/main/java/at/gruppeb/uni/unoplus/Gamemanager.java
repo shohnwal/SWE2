@@ -1,10 +1,8 @@
 package at.gruppeb.uni.unoplus;
 
-import java.lang.String;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
-import java.math.*;
+import java.util.Vector;
 
 import bluetooth.BluetoothService;
 
@@ -82,7 +80,12 @@ public class Gamemanager {
     }
 
     public void serverloop(BluetoothService mBlt) {
-
+        if(gameActivity.gameObject != null){
+            if(gameActivity.gameObject.isChanged()){
+                gameActivity.gameObject.setChanged(false);
+                gameActivity.sendMessage(gameActivity.gameObject);
+            }
+        }
     }
 
     public void endTurn(int offset) {
@@ -97,16 +100,24 @@ public class Gamemanager {
         }
     }
 
-    public void dealCards(BluetoothService mBlt) {
+    public Vector<ArrayList<Card>> dealCards(BluetoothService mBlt) {
+        Vector<ArrayList<Card>> hands = new Vector<>();
+        ArrayList<Card> hand = new ArrayList<>();
+        Card c = null;
+        for(int i = 0; i<mBlt.getNrOfPlayers();i++){
+            for(int j = 0; j<7;j++){
+                hand.add(this.takedeck.takeTopCard());
+            }
+            hands.add(hand);
+            hand = new ArrayList<>();
+        }
+
+        return hands;
 
     }
 
     public void putFirstCardDown() {
         this.playdeck.deck.add(0, this.takedeck.deck.get(0));
-        String cardcode = this.playdeck.deck.get(0).getCodedName();
-        String playdeckString = "playdeck" + cardcode;
-        this.gameActivity.sendMessage(playdeckString);
-        this.gameActivity.player.playdeckTop = this.playdeck.deck.get(0);
         this.takedeck.deck.remove(0);
         System.out.println(this.playdeck.deck.size() + " card currently in playdeck, and that card is " + this.playdeck.deck.get(0).get_name());
     }
