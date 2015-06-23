@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public class BluetoothService implements Serializable {
     private static final boolean D = true;
 
     // Name for the SDP record when creating server socket
-    private static final String NAME = "BluetoothChatMulti";
+    private static final String NAME = "BluetoothMulti";
 
     // Member fields
     private final BluetoothAdapter mAdapter;
@@ -280,8 +281,13 @@ public class BluetoothService implements Serializable {
     public void initializePlayerNr(){
         int h = 1;
         for (int i = 0; i < mConnThreads.size(); i++) {
-            byte[] send = ("PlaNr;"+h).getBytes();
-            writeToSingle(send,i);
+            try {
+                byte[] send = ("PlaNr;"+h).getBytes("UTF-8");
+                writeToSingle(send,i);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
             h++;
         }
     }

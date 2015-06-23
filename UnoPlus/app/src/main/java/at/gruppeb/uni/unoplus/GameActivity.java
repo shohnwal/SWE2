@@ -119,6 +119,28 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         Log.i(TAG, "Game startet");
     }
 
+    private void sendMessageToSingle(String message ,int pos) {
+        // Check that we're actually connected before trying anything
+        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            try {
+                byte[] send = message.getBytes("UTF-8");
+                mBltService.write(send);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            // Reset out string buffer to zero and clear the edit text field
+            mOutStringBuffer.setLength(0);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
