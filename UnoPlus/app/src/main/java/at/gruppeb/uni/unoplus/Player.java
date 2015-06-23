@@ -92,13 +92,16 @@ public class Player {
            if(card.value == Card.values.RETOUR) {
                this.gameActivity.gameObject.changeTurns_clockwise();
            }
-           this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value == Card.values.SKIP?1:0);
-           endTurn();
+           this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value == Card.values.SKIP ? 1 : 0);
+           if (card.color != Card.colors.BLACK) {
+               endTurn();
+           }
+
        }
 
    }
 
-    private void endTurn(){
+    public void endTurn(){
         this.itsmyturn = false;
         this.gameActivity.gameObject.setChanged(true);
         this.gameActivity.gameObject.setHandcards(this.player_id, hand);

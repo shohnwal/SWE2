@@ -548,17 +548,22 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
                     public void onClick(DialogInterface dlg, int position) {
                         if (position == 0) {
                            player.playdeckTop.color=Card.colors.RED;
+                            gameObject.getPlaydeck().getTopCard().color = Card.colors.RED;
                             dlg.cancel();
                         } else if (position == 1) {
                             player.playdeckTop.color=Card.colors.BLUE;
+                            gameObject.getPlaydeck().getTopCard().color = Card.colors.BLUE;
                             dlg.cancel();
                         } else if (position == 2) {
                             player.playdeckTop.color=Card.colors.YELLOW;
+                            gameObject.getPlaydeck().getTopCard().color = Card.colors.YELLOW;
                             dlg.cancel();
                         } else if (position == 3) {
                             player.playdeckTop.color=Card.colors.GREEN;
+                            gameObject.getPlaydeck().getTopCard().color = Card.colors.GREEN;
                             dlg.cancel();
                         }
+                        player.endTurn();
                     }
                 })
                 .create();
