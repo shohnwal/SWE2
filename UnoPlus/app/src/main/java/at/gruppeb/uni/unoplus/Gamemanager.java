@@ -83,20 +83,6 @@ public class Gamemanager {
         }
     }
 
-    public void endTurn(int offset) {
-        if (this.num_players > 1) {
-            if (this.turns_clockwise == true) {
-                this.current_player = (this.current_player + offset + 1) % this.num_players;
-            } else if (this.turns_clockwise == false) {
-                if (this.current_player == 0) {
-                    this.current_player = num_players - 1 - offset;
-                } else {
-                    this.current_player = (this.current_player - offset - 1) % this.num_players;
-                }
-            }
-        }
-    }
-
     public Vector<ArrayList<Card>> dealCards(BluetoothService mBlt) {
         Vector<ArrayList<Card>> hands = new Vector<>();
         ArrayList<Card> hand = new ArrayList<>();

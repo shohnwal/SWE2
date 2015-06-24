@@ -576,7 +576,10 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                             gameObject.getPlaydeck().getTopCard().color = Card.colors.GREEN;
                             dlg.cancel();
                         }
-                        player.endTurn();
+                        if (player.hand.size() > 1) {
+                            player.endTurn();
+                        }
+
                     }
                 })
                 .create();

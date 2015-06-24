@@ -93,7 +93,7 @@ public class Player {
                this.gameActivity.gameObject.changeTurns_clockwise();
            }
            this.gameActivity.gameObject.setCurrent_player(getPlaydeckTop().value == Card.values.SKIP ? 1 : 0);
-           if (card.color != Card.colors.BLACK) {
+           if (card.color != Card.colors.BLACK && this.hand.size() > 1) {
                endTurn();
            }
 
