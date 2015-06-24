@@ -53,7 +53,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private TextView tvYouAre, tvCurrentPlayer;
     private ImageView ivcCurrentCard, ivcStackCard;
-    private ImageView[] ivPlayers;
+    private ImageView ivPlayer;
     private ArrayList<ImageViewCard> ivcHandCards;
     private ViewGroup ivCurrentCardParent;
     private Timer Timer;
@@ -179,7 +179,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.initTvCurrentPlayer();
         this.initIvCurrentCard();
         this.initivcStackCard();
-        this.initIvPlayers();
+        this.initIvPlayer();
         initShakeListener();
 
 
@@ -305,46 +305,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         ivcCurrentCard.setOnDragListener(this);
     }
 
-    private void initIvPlayers() {
-        ivPlayers = new ImageView[NumberOfPlayers];
+    private void initIvPlayer() {
+
+            ivPlayer = (ImageView) findViewById(R.id.iview_playerOne);
+
+            ivPlayer.setVisibility(View.VISIBLE);
+            ivPlayer.setX(width * .25f);
 
 
-        if (NumberOfPlayers == 1) {
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-
-        } else if (NumberOfPlayers == 2) {
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-            ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-
-        }else if (NumberOfPlayers == 3) {
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-            ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-            ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-
-        } else if (NumberOfPlayers == 4) {
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-            ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-            ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-            ivPlayers[3] = (ImageView) findViewById(R.id.iview_playerFour);
-
-        } else if (NumberOfPlayers == 5) {
-            ivPlayers[0] = (ImageView) findViewById(R.id.iview_playerOne);
-            ivPlayers[1] = (ImageView) findViewById(R.id.iview_playerTwo);
-            ivPlayers[2] = (ImageView) findViewById(R.id.iview_playerThree);
-            ivPlayers[3] = (ImageView) findViewById(R.id.iview_playerFour);
-            ivPlayers[4] = (ImageView) findViewById(R.id.iview_playerFive);
-
-        }
-
-        for (int i = 0,j=0; i < ivPlayers.length; i++, j++) {
-            ivPlayers[i].setVisibility(View.VISIBLE);
-            ivPlayers[i].setX(ivPlayers[i].getX() + (i+1) * 100);
-
-            ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f), Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
-            ivPlayers[i].setBaselineAlignBottom(true);
-
-
-        }
     }
 
     public void setHeight(int height) {
@@ -383,16 +351,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     }
 
     private void renderPlayers() {
-
-        for (int i = 0; i < ivPlayers.length; i++) {
-            //white = curr player
-            if (currentPlayerID== i) {
-                ivPlayers[i].getBackground().clearColorFilter();
-            }
-            else {
-                ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
-            }
-        }
+                ivPlayer.getBackground().setColorFilter(getCurrentPlayerColor(currentPlayerID), PorterDuff.Mode.MULTIPLY);
     }
 
     private int getCurrentPlayerColor(int id) {
