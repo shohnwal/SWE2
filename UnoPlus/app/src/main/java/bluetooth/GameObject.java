@@ -13,6 +13,16 @@ import at.gruppeb.uni.unoplus.Deck;
 public class GameObject implements Serializable {
     int current_player;
     int howManyCardsToTake;
+
+    public int getPlayerwhowon() {
+        return playerwhowon;
+    }
+
+    public void setPlayerwhowon(int playerwhowon) {
+        this.playerwhowon = playerwhowon;
+    }
+
+    int playerwhowon = -1;
     boolean turns_clockwise;
     boolean game_ended;
     boolean changed;

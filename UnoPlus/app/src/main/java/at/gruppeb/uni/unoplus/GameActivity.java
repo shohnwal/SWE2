@@ -121,24 +121,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         Log.i(TAG, "Game startet");
     }
 
-    /*private void sendMessageToSingle(String message ,int pos) {
-        // Check that we're actually connected before trying anything
-        if (mBltService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothChatService to write
-            String send = message;
-            mBltService.write(send);
-
-            // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
-        }
-    }*/
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -242,6 +224,25 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             //This method runs in the same thread as the UI.
 
             //TODO GameMech GameLoop (in mehtode initTimer -> refreschTime)
+
+            if (gameObject != null) {
+                if (gameObject.getPlayerwhowon() > -1) {
+                    AlertDialog.Builder al = new AlertDialog.Builder(GameActivity.this);
+                    al.setTitle("Spiel zu Ende!");
+                    al.setMessage("Der gewinner ist: "+ gameObject.getPlayerwhowon());
+                    al.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent toLobby = new Intent("at.gruppeb.uni.unoplus.Lobby");
+                            startActivity(toLobby);
+                        }
+                    });
+                    al.show();
+                }
+            }
+
+
             if (mBltService.isServer() && !game.game_ended) {
                 game.serverloop(mBltService);
             }
@@ -508,7 +509,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                             Record_Speech.recordSpeech(GameActivity.this);
 
                                                                             //wenn uno gesagt wurde
+/*
                                                                             if(_uno_said){
+
                                                                                 _uno_said = false;
                                                                                 boolean saysuno = true;
                                                                                 if (saysuno) {
@@ -518,6 +521,15 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                     gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
 
                                                                                 }
+                                                                            }
+                                                                            */
+                                                                            if(_uno_said){
+                                                                               {
+                                                                                    player.hand.add(gameObject.getTakeDeckTopCard());
+                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
+
+                                                                               }
+                                                                                _uno_said = false;
                                                                             }
                                                                             sendMessage(gameObject);
 
@@ -535,7 +547,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
                                                                                 if (saysuno) {
                                                                                     //TODO offer to say unouno (Button)
+                                                                                    this.gameObject.setPlayerwhowon(this.gameObject.getCurrent_player());
                                                                                     this.gameObject.setGame_ended(true);
+
                                                                                 }
                                                                                 else
                                                                                 {

@@ -110,17 +110,17 @@ public class Player {
         this.gameActivity.sendMessage(this.gameActivity.gameObject);
     }
 
-        //TODO : implement bool method that takes 2 cards (Card cardtoplay, Card playdecktop)
+
    public boolean checkCard(Card playCard,Card topCard){
 
         if (playCard.color == topCard.color) {					// if color matches
             return true;
         } else if (playCard.value== topCard.value) {			// if amount matches
             return true;
-        } else if (playCard.color == Card.colors.BLACK) {
+        } else if (playCard.color == Card.colors.BLACK) {       // black cards can be played on ever other card
             return true;
         }
-            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!That's not possible!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // if card playing is not possible
         return false;
         }
 
