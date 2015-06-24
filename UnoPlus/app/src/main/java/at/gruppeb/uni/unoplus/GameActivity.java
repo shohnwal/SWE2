@@ -499,7 +499,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
 
             } else if (this.player.hand.size() == 0) {
-                this.gameObject.setPlayerwhowon(this.gameObject.getCurrent_player());
+                this.gameObject.setPlayerwhowon(this.player.player_id);
                 /*
                 //startet sprachaufzeichnung
                 Record_Speech.recordSpeech(GameActivity.this);
