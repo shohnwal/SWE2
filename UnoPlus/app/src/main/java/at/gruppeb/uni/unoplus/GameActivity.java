@@ -502,65 +502,66 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
             case DragEvent.ACTION_DRAG_ENDED:
                 initTimer();
                 //TODO GUI + GameMech Say Uno
-                                                                        if(this.player.hand.size() == 1) {
-                                                                            //TODO offer so say uno
+            if(this.player.hand.size() == 1) {
+                //TODO offer so say uno
 
-                                                                            //startet sprachaufzeichnung
-                                                                            Record_Speech.recordSpeech(GameActivity.this);
+                //startet sprachaufzeichnung
+                Record_Speech.recordSpeech(GameActivity.this);
 
-                                                                            //wenn uno gesagt wurde
+                //wenn uno gesagt wurde
 /*
-                                                                            if(_uno_said){
+                if(_uno_said){
 
-                                                                                _uno_said = false;
-                                                                                boolean saysuno = true;
-                                                                                if (saysuno) {
-                                                                                }else
-                                                                                {
-                                                                                    player.hand.add(gameObject.getTakeDeckTopCard());
-                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
+                    _uno_said = false;
+                    boolean saysuno = true;
+                    if (saysuno) {
+                    }else
+                    {
+                        player.hand.add(gameObject.getTakeDeckTopCard());
+                        gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
 
-                                                                                }
-                                                                            }
-                                                                            */
-                                                                            if(_uno_said){
-                                                                               {
-                                                                                    player.hand.add(gameObject.getTakeDeckTopCard());
-                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
+                    }
+                }
+                */
+                if(_uno_said){
+                   {
+                        player.hand.add(gameObject.getTakeDeckTopCard());
+                        gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
 
-                                                                               }
-                                                                                _uno_said = false;
-                                                                            }
-                                                                            sendMessage(gameObject);
-
-
-                                                                        } else if (this.player.hand.size() == 0) {
-
-                                                                            //startet sprachaufzeichnung
-                                                                            Record_Speech.recordSpeech(GameActivity.this);
-
-                                                                            //wenn unouno gesagt wurde
-                                                                            if(_uno_said){
-                                                                                _uno_said = false;
-
-                                                                                boolean saysuno = true;
-
-                                                                                if (saysuno) {
-                                                                                    //TODO offer to say unouno (Button)
-                                                                                    this.gameObject.setPlayerwhowon(this.gameObject.getCurrent_player());
-                                                                                    this.gameObject.setGame_ended(true);
-
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
-                                                                                }
-
-                                                                                sendMessage(gameObject);
-                                                                            }
+                   }
+                    _uno_said = false;
+                }
+                sendMessage(gameObject);
 
 
-                                                                        }
+            } else if (this.player.hand.size() == 0) {
+                this.gameObject.setPlayerwhowon(this.gameObject.getCurrent_player());
+                /*
+                //startet sprachaufzeichnung
+                Record_Speech.recordSpeech(GameActivity.this);
+
+                //wenn unouno gesagt wurde
+                if(_uno_said){
+                    _uno_said = false;
+
+                    boolean saysuno = true;
+
+                    if (saysuno) {
+                        //TODO offer to say unouno (Button)
+                        this.gameObject.setGame_ended(true);
+
+                    }
+                    else
+                    {
+                        gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
+                    }
+                    */
+
+                    sendMessage(gameObject);
+
+
+
+            }
                 break;
             default:
                 break;
