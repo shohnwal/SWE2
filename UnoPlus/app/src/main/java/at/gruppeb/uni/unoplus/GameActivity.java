@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private static final String DEBUGTAG = "at.gruppeb.uni.unoplus";
 
+    private TextView tvYouAre, tvCurrentPlayer;
     private ImageView ivcCurrentCard, ivcStackCard;
     private ImageView[] ivPlayers;
     private ArrayList<ImageViewCard> ivcHandCards;
@@ -59,8 +61,6 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     protected Gamemanager game;
     protected Player player;
     protected GameObject gameObject;
-
-    //TODO GUI grey out HandCards not curentPlayer
 
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
@@ -193,7 +193,8 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         this.setWidth(displayMetrics.widthPixels);
 
 
-
+        this.initTvYouAre();
+        this.initTvCurrentPlayer();
         this.initIvCurrentCard();
         this.initivcStackCard();
         this.initIvPlayers();
@@ -203,6 +204,22 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         initTimer();
 
     }
+
+    private void initTvCurrentPlayer() {
+        tvCurrentPlayer = (TextView) findViewById(R.id.textView_currentPlayer);
+        tvCurrentPlayer.setTextSize(25);
+        tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
+        tvCurrentPlayer.setText("Spieler "+ gameObject.getCurrent_player()+" ist dran ");
+    }
+
+    private void initTvYouAre() {
+
+        tvYouAre = (TextView) findViewById(R.id.textView_YouAre);
+        tvYouAre.setTextSize(25);
+        tvYouAre.setTextColor(this.getCurrentPlayerColor(this.player.player_id));
+        tvYouAre.setText("Du bist Spieler " + this.player.player_id + " ");
+    }
+
     private void initTimer() {
         int refreshTime = 1000;
         Timer = new Timer();
@@ -320,15 +337,12 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
         for (int i = 0,j=0; i < ivPlayers.length; i++, j++) {
             ivPlayers[i].setVisibility(View.VISIBLE);
-            ivPlayers[i].setX(ivPlayers[i].getX() + i * 100);
+            ivPlayers[i].setX(ivPlayers[i].getX() + (i+1) * 100);
 
-//TODO GUI Set position & size of other players
-            /*ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f),
-Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
+            ivPlayers[i].layout(Math.round(this.width / NumberOfPlayers),  (int) Math.round(this.height * .99f), Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height * .99f));
             ivPlayers[i].setBaselineAlignBottom(true);
 
-            this.addContentView(ivPlayers[i], ivPlayers[i].getLayoutParams());
-            */
+
         }
     }
 
@@ -342,9 +356,7 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private void removeAllViews() {
-        //TODO GUI remove:
         removeHandCards();
-        //TODO GUI Players
     }
 
     private void removeHandCards() {
@@ -360,20 +372,25 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         renderHandCards();
         renderCurrentCard();
         renderPlayers();
-        //renderCurrentPlayer();
+        renderTvCurrentPlayer();
 
     }
 
+    private void renderTvCurrentPlayer() {
+        tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
+        tvCurrentPlayer.setText("Spieler "+ gameObject.getCurrent_player()+" ist dran ");
+    }
+
     private void renderPlayers() {
-        //TODO GUI highlight player
 
         for (int i = 0; i < ivPlayers.length; i++) {
             //white = curr player
-            if (currentPlayerID== i )
-                ivPlayers[i].getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-            else
+            if (gameObject.getCurrent_player()== i) {
+                ivPlayers[i].getBackground().clearColorFilter();
+            }
+            else {
                 ivPlayers[i].getBackground().setColorFilter(getCurrentPlayerColor(i), PorterDuff.Mode.MULTIPLY);
-
+            }
         }
     }
 
@@ -381,15 +398,15 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
         int temp = 0;
 
         if (id == 0) {
-            temp = Color.GREEN;
-        } else if (id == 1) {
-            temp = Color.BLUE;
-        } else if (id == 2) {
-            temp = Color.RED;
-        } else if (id == 3) {
-            temp = Color.YELLOW;
-        } else if (id == 4) {
             temp = Color.CYAN;
+        } else if (id == 1) {
+            temp = Color.GREEN;
+        } else if (id == 2) {
+            temp = Color.YELLOW;
+        } else if (id == 3) {
+            temp = Color.BLUE;
+        } else if (id == 4) {
+            temp = Color.RED;
         }
         return temp;
     }
@@ -429,12 +446,10 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
     }
 
     private int getCardSize() {
-        //TODO GUI fix Scaling size
         int cardSizeH = (int) Math.floor(height * .94f / 3);
-        //int cardSizeW = (int) Math.floor(width *.94f / ivcHandCards.size());
-        //int cardSize= cardSizeH;
-        //cardSize = ((cardSizeW*.3f*ivcHandCards.size() < cardSizeH) ? cardSizeW : cardSizeH);
-        return cardSizeH;
+        int cardSizeW = (int) Math.floor(width  *2.9f / ivcHandCards.size());
+        int cardSize = ((cardSizeH*.3f*ivcHandCards.size()>width*.90f) ? cardSizeW : cardSizeH);
+        return cardSize;
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -543,23 +558,23 @@ Math.round((i + 1) * this.width / NumberOfPlayers), (int) Math.round(this.height
 
         Dialog d = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT)
                 .setTitle("Choose a Color")
-                .setItems(new String[]{"Red", "Blue", "Yellow", "Green"}, new DialogInterface.OnClickListener() {
+                .setItems(new String[]{"Rot", "Blau", "Gelb", "Gr" + '\u00FC' + "n"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dlg, int position) {
                         if (position == 0) {
-                           player.playdeckTop.color=Card.colors.RED;
+                            player.playdeckTop.color = Card.colors.RED;
                             gameObject.getPlaydeck().getTopCard().color = Card.colors.RED;
                             dlg.cancel();
                         } else if (position == 1) {
-                            player.playdeckTop.color=Card.colors.BLUE;
+                            player.playdeckTop.color = Card.colors.BLUE;
                             gameObject.getPlaydeck().getTopCard().color = Card.colors.BLUE;
                             dlg.cancel();
                         } else if (position == 2) {
-                            player.playdeckTop.color=Card.colors.YELLOW;
+                            player.playdeckTop.color = Card.colors.YELLOW;
                             gameObject.getPlaydeck().getTopCard().color = Card.colors.YELLOW;
                             dlg.cancel();
                         } else if (position == 3) {
-                            player.playdeckTop.color=Card.colors.GREEN;
+                            player.playdeckTop.color = Card.colors.GREEN;
                             gameObject.getPlaydeck().getTopCard().color = Card.colors.GREEN;
                             dlg.cancel();
                         }

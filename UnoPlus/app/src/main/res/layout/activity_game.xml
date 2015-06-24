@@ -18,7 +18,7 @@
         android:id="@+id/iview_playerTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/player1"
+        android:background="@drawable/player2"
         android:visibility="invisible"/>
     />
 
@@ -27,7 +27,7 @@
         android:id="@+id/iview_playerThree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/player1"
+        android:background="@drawable/player3"
         android:visibility="invisible"/>
     />
 
@@ -35,7 +35,7 @@
         android:id="@+id/iview_playerFour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/player1"
+        android:background="@drawable/player4"
         android:visibility="invisible"/>
     />
 
@@ -43,7 +43,7 @@
         android:id="@+id/iview_playerFive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/player1"
+        android:background="@drawable/player5"
         android:visibility="invisible"/>
     />
 
@@ -67,6 +67,22 @@
         android:layout_toLeftOf="@+id/iview_playerFour"
         android:layout_toStartOf="@+id/iview_playerFour"
         android:background="#ff59ff74" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textView_YouAre"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="2dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textView_currentPlayer"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="3dp" />
 
     <LinearLayout
         android:id="@+id/ll_handCards"
