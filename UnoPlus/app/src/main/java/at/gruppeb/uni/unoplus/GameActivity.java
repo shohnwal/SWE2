@@ -209,7 +209,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         tvCurrentPlayer = (TextView) findViewById(R.id.textView_currentPlayer);
         tvCurrentPlayer.setTextSize(25);
         tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
-        tvCurrentPlayer.setText("Spieler " + gameObject.getCurrent_player() + " ist dran ");
+        tvCurrentPlayer.setText("Spieler " + currentPlayerID + " ist dran ");
     }
 
     private void initTvYouAre() {
@@ -378,14 +378,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private void renderTvCurrentPlayer() {
         tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
-        tvCurrentPlayer.setText("Spieler " + gameObject.getCurrent_player() + " ist dran ");
+        tvCurrentPlayer.setText("Spieler " + currentPlayerID + " ist dran ");
     }
 
     private void renderPlayers() {
 
         for (int i = 0; i < ivPlayers.length; i++) {
             //white = curr player
-            if (gameObject.getCurrent_player()== i) {
+            if (currentPlayerID== i) {
                 ivPlayers[i].getBackground().clearColorFilter();
             }
             else {
@@ -555,7 +555,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     private void playerColorChoice() {
 
         Dialog d = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT)
-                .setTitle("Choose a Color")
+                .setTitle("Such eine Farbe aus!")
                 .setItems(new String[]{"Rot", "Blau", "Gelb", "Gr" + '\u00FC' + "n"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dlg, int position) {
