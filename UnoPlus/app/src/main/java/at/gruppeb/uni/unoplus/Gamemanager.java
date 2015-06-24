@@ -77,11 +77,24 @@ public class Gamemanager {
     public void serverloop(BluetoothService mBlt) {
         if(gameActivity.gameObject != null){
             if(gameActivity.gameObject.isChanged()){
+                if (gameActivity.gameObject.getTakedeck().deck.size() == 0) {
+                   this.fillEmptyTakeDeck();
+                }
                 gameActivity.gameObject.setChanged(false);
                 gameActivity.sendMessage(gameActivity.gameObject);
             }
         }
     }
+
+    public void fillEmptyTakeDeck() {
+        for (int i = this.gameActivity.gameObject.getPlaydeck().deck.size()-1; i > 1 ; i--) {
+            this.gameActivity.gameObject.getTakedeck().deck.add(this.gameActivity.gameObject.getPlaydeck().deck.get(i));
+            this.gameActivity.gameObject.getPlaydeck().deck.remove(i);
+        }
+        Collections.shuffle(this.gameActivity.gameObject.getTakedeck().deck);
+    }
+
+
 
     public Vector<ArrayList<Card>> dealCards(BluetoothService mBlt) {
         Vector<ArrayList<Card>> hands = new Vector<>();
