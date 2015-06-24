@@ -95,13 +95,21 @@ public class GameObject implements Serializable {
     }
 
     public void setCurrent_player(int offset) {
-        if (this.turns_clockwise == true) {
-            this.current_player = (this.current_player + offset + 1) % this.getNumPlayer();
-        } else if (this.turns_clockwise == false) {
-            if (this.current_player == 0) {
-                this.current_player = this.getNumPlayer() - 1 - offset;
-            } else {
-                this.current_player = (this.current_player - offset - 1) % this.getNumPlayer();
+        if (this.getNumPlayer() == 1) {
+            this.current_player = 0;
+        }
+        else if (this.getNumPlayer() == 2 ) {
+            this.current_player = (this.current_player + offset + 1) % 2;
+        }
+        else {
+            if (this.turns_clockwise == true) {
+                this.current_player = (this.current_player + offset + 1) % this.getNumPlayer();
+            } else if (this.turns_clockwise == false) {
+                if (this.current_player == 0) {
+                    this.current_player = this.getNumPlayer() - 1 - offset;
+                } else {
+                    this.current_player = (this.current_player - offset - 1) % this.getNumPlayer();
+                }
             }
         }
     }

@@ -514,7 +514,9 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                 if (saysuno) {
                                                                                 }else
                                                                                 {
+                                                                                    player.hand.add(gameObject.getTakeDeckTopCard());
                                                                                     gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
+
                                                                                 }
                                                                             }
                                                                             sendMessage(gameObject);
