@@ -468,9 +468,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 //startet sprachaufzeichnung
                 GameActivity.this.recordspeedwasexecuted = false;
                 Record_Speech.recordSpeech(GameActivity.this);
-                while(!GameActivity.this.recordspeedwasexecuted) {
 
-                }
 
 
                 //wenn uno gesagt wurde
@@ -488,11 +486,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                     }
                 }
                 */
-                if(!_uno_said){
+                /*
+                if(_uno_said){
                    {
                         gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
                    }
                 }
+                */
+
                 sendMessage(gameObject);
                 GameActivity.this.recordspeedwasexecuted = false;
 
