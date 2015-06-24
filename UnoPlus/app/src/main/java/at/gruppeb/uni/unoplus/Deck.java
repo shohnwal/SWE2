@@ -21,6 +21,7 @@ public class Deck implements Serializable {
     public Card getTopCard() {
         return this.deck.get(0);
     }
+
     public boolean                  checkEmptyDeck(){
         if(this.deck.size()==0)
             return true;

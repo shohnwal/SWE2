@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class Card implements Serializable {
 
-	static enum 				colors { RED, BLUE, GREEN, YELLOW, BLACK;
+	public enum 				colors { RED, BLUE, GREEN, YELLOW, BLACK;
 									public static colors getRandom() {
 									return values()[(int) (Math.random() * (values().length)-1)];
 								}}
-	static enum 				values { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, SKIP, TAKE_TWO, RETOUR, TAKE_FOUR, CHOOSE_COLOR;
+	public enum 				values { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, SKIP, TAKE_TWO, RETOUR, TAKE_FOUR, CHOOSE_COLOR;
 									public static values getRandom() {
 										return values()[(int) (Math.random() * values().length)];
 								}}
-	colors 						color;
-	values 						value;
+	public colors 				color;
+	public values 				value;
 	boolean						actionCard = false;
 	private static final String DEBUGTAG = "at.gruppeb.uni.unoplus";
 

@@ -99,7 +99,9 @@ public class GameObject implements Serializable {
             this.current_player = 0;
         }
         else if (this.getNumPlayer() == 2 ) {
-            this.current_player = (this.current_player + offset + 1) % 2;
+            if (this.getPlaydeck().getTopCard().value != Card.values.RETOUR) {
+                this.current_player = (this.current_player + offset + 1) % 2;
+            }
         }
         else {
             if (this.turns_clockwise == true) {
