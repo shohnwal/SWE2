@@ -209,7 +209,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
         tvCurrentPlayer = (TextView) findViewById(R.id.textView_currentPlayer);
         tvCurrentPlayer.setTextSize(25);
         tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
-        tvCurrentPlayer.setText("Spieler "+ gameObject.getCurrent_player()+" ist dran ");
+        tvCurrentPlayer.setText("Spieler " + gameObject.getCurrent_player() + " ist dran ");
     }
 
     private void initTvYouAre() {
@@ -378,7 +378,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
     private void renderTvCurrentPlayer() {
         tvCurrentPlayer.setTextColor(this.getCurrentPlayerColor(currentPlayerID));
-        tvCurrentPlayer.setText("Spieler "+ gameObject.getCurrent_player()+" ist dran ");
+        tvCurrentPlayer.setText("Spieler " + gameObject.getCurrent_player() + " ist dran ");
     }
 
     private void renderPlayers() {
@@ -512,14 +512,12 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                                                                                 _uno_said = false;
                                                                                 boolean saysuno = true;
                                                                                 if (saysuno) {
-                                                                                    String sendstring = "p" + this.player.player_id + "uno11";
-                                                                                    //this.sendMessage(sendstring);
                                                                                 }else
                                                                                 {
-                                                                                    this.player.takeCard();
+                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
                                                                                 }
                                                                             }
-
+                                                                            sendMessage(gameObject);
 
 
                                                                         } else if (this.player.hand.size() == 0) {
@@ -535,14 +533,14 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
 
                                                                                 if (saysuno) {
                                                                                     //TODO offer to say unouno (Button)
-                                                                                    String sendstring = "p" + this.player.player_id + "uno22";
-                                                                                    //this.sendMessage(sendstring);
+                                                                                    this.gameObject.setGame_ended(true);
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    this.player.takeCard();
-                                                                                    //maybe TODO : implement so player takes 2 cards
+                                                                                    gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
                                                                                 }
+
+                                                                                sendMessage(gameObject);
                                                                             }
 
 

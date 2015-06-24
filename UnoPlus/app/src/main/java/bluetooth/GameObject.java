@@ -142,6 +142,10 @@ public class GameObject implements Serializable {
         this.handCards.set(playerNr,handCards);
     }
 
+    public void addHandCard(int playerNr,Card c){
+        this.handCards.get(playerNr).add(c);
+    }
+
     public void setChanged(boolean changed) {
         this.changed = changed;
     }
