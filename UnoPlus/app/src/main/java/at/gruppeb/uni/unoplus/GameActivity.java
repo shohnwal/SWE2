@@ -61,6 +61,7 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
     protected Gamemanager game;
     protected Player player;
     protected GameObject gameObject;
+    public static boolean recordspeedwasexecuted = false;
 
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
@@ -465,7 +466,12 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 //TODO offer so say uno
 
                 //startet sprachaufzeichnung
+                GameActivity.this.recordspeedwasexecuted = false;
                 Record_Speech.recordSpeech(GameActivity.this);
+                while(!GameActivity.this.recordspeedwasexecuted) {
+
+                }
+
 
                 //wenn uno gesagt wurde
 /*
@@ -482,15 +488,13 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                     }
                 }
                 */
-                if(_uno_said){
+                if(!_uno_said){
                    {
-                        player.hand.add(gameObject.getTakeDeckTopCard());
                         gameObject.addHandCard(mBltService.getPlayerId(), gameObject.takeTakeDeckTopCard());
-
                    }
-                    _uno_said = false;
                 }
                 sendMessage(gameObject);
+                GameActivity.this.recordspeedwasexecuted = false;
 
 
             } else if (this.player.hand.size() == 0) {
@@ -739,8 +743,11 @@ public class GameActivity extends ActionBarActivity implements View.OnTouchListe
                 if(!result.isEmpty()){
                     if(result.get(0).toLowerCase().contains("uno") || result.get(0).toLowerCase().contains("u") || result.get(0).toLowerCase().contains("o")){
                         _uno_said = true;
+
                     }
+
                 }
+
             }
         }
     }
